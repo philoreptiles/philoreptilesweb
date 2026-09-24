@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Philoreptiles</title>
+<meta name="description" content="Artículos de divulgación sobre el género Boa: taxonomía, comportamiento y fotografía de campo.">
+
+<link rel="stylesheet" href="./css/design.css">
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de blog.html — lo que no cubren design.css/styles.css
+   ========================================================================== */
+
+/* Línea de metadatos (fecha + tiempo de lectura) dentro de cada .card */
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-small);
+  color: var(--accent-dim);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+/*Botones del final*/
+.cta-close {
+  text-align: center;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm, 1rem);
+  flex-wrap: wrap;
+}
+
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-content">
+    <a href="index.html" class="logo-text">Philoreptiles</a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="boas.html" class="nav-link">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="boas/genetica.html">Genética</a></li>
+            <li><a href="boas/morfos.html">Morfos</a></li>
+            <li><a href="boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. HERO CORTO -->
+  <section class="page-title reveal">
+    <div class="container">
+      <h1>Blog</h1>
+      <p>Un espacio para acercarte un poco más a nosotros y al mundo de las boas.</p>
+    </div>
+  </section>
+
+  <!-- 2. LISTA DE ARTÍCULOS -->
+  <section>
+    <div class="container">
+      <div class="cards-grid stagger">
+
+        <a href="./posts/post-1.html" class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/800/600?random=1" alt="[IMAGEN DEL POST 1]">
+          </div>
+          <div class="card-body">
+            <h2>[TÍTULO DEL POST 1]</h2>
+            <p>[EXTRACTO DEL POST 1: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
+            <div class="card-meta">
+              <span>12 Sep 2026 · 5 min</span>
+              <span class="card-cta">Leer más →</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="./posts/post-2.html" class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/800/600?random=2" alt="[IMAGEN DEL POST 2]">
+          </div>
+          <div class="card-body">
+            <h2>[TÍTULO DEL POST 2]</h2>
+            <p>[EXTRACTO DEL POST 2: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
+            <div class="card-meta">
+              <span>28 Ago 2026 · 7 min</span>
+              <span class="card-cta">Leer más →</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="./posts/post-3.html" class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/800/600?random=3" alt="[IMAGEN DEL POST 3]">
+          </div>
+          <div class="card-body">
+            <h2>[TÍTULO DEL POST 3]</h2>
+            <p>[EXTRACTO DEL POST 3: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
+            <div class="card-meta">
+              <span>05 Ago 2026 · 4 min</span>
+              <span class="card-cta">Leer más →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+    <!-- 3. CIERRE CON LLAMADA A LA ACCIÓN -->
+  <section class="cta-close reveal">
+    <div class="container">
+      <div class="block-separator" aria-hidden="true">◆</div>
+      <div class="cta-buttons">
+        <a href="boas.html" class="btn btn-primary">Género Boa</a>
+        <a href="sobre-nosotros.html" class="btn btn-primary">Sobre nosotros</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="./js/main.js"></script>
+</body>
+</html>

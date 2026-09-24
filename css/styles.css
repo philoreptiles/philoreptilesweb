@@ -1,0 +1,760 @@
+/* ==========================================================================
+   styles.css — Componentes reutilizables de Philoreptiles
+   Depende de las variables y estilos base definidos en design.css,
+   que debe cargarse ANTES que este archivo.
+   ========================================================================== */
+
+/* === NAVBAR === */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* Hueso — antes era chocolate translúcido (rgba(43,26,18,...)),
+     que corresponde a --bg. Ahora usamos --text (#FFF2D9) en rgb
+     literal porque rgba() no puede tomar un var() como componente. */
+  background: rgba(255, 242, 217, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.main-header.scrolled {
+  background: rgba(255, 242, 217, 0.97);
+  box-shadow: var(--shadow-soft);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 1rem;
+}
+
+.logo-text {
+  font-family: var(--font-logo);
+  color: var(--bg);
+  font-size: 1.8rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  transition: color var(--transition-fast);
+}
+
+.logo-text:hover {
+  color: var(--accent);
+}
+
+.main-nav > ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.main-nav a {
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.95rem;
+  text-decoration: none;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color var(--transition-fast);
+}
+
+.main-nav a:hover {
+  color: var(--text);
+}
+
+.main-nav a.active {
+  color: var(--accent);
+}
+
+.main-nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* En desktop el nav vive directo sobre el banner (ahora hueso), sin
+   panel propio de por medio, así que necesita texto oscuro. En móvil
+   el <nav> se convierte en un panel flotante con fondo oscuro propio
+   (más abajo, en NAVBAR — RESPONSIVE) y el texto claro original sigue
+   funcionando ahí sin tocarlo. */
+@media (min-width: 768px) {
+  .main-nav a {
+    color: var(--bg);
+  }
+
+  .main-nav a:hover {
+    color: var(--accent-dim);
+  }
+
+  .main-nav a.active {
+    color: var(--accent);
+  }
+
+  .dropdown-toggle {
+    color: var(--bg);
+  }
+
+  .dropdown-toggle:hover,
+  .dropdown-toggle[aria-expanded="true"] {
+    color: var(--accent-dim);
+  }
+}
+
+.dropdown {
+  position: relative;
+}
+
+/* El <a> de texto ("Boas") y el <button> de la flecha son hermanos.
+   Ambos inline-flex: se acomodan naturalmente uno junto al otro, como
+   si fueran texto. El <ul class="dropdown-menu"> es un elemento de
+   bloque normal (comportamiento por defecto de <ul>), así que cae
+   SIEMPRE en su propia línea, debajo de ellos — sin necesidad de
+   flex/flex-wrap en el <li> padre, que es lo que causaba el bug
+   anterior (el submenú apareciendo al lado del texto). */
+.dropdown > a.nav-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font: inherit;
+  padding: 0.5rem 0.3rem;
+  margin-left: 0.2rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.dropdown-toggle:hover,
+.dropdown-toggle[aria-expanded="true"] {
+  color: var(--accent);
+}
+
+.dropdown-toggle .arrow {
+  font-size: 0.7em;
+  display: inline-block;
+  transition: transform var(--transition-fast);
+}
+
+.dropdown:hover .dropdown-toggle .arrow,
+.dropdown.open .dropdown-toggle .arrow {
+  transform: rotate(180deg);
+}
+
+/* === DROPDOWN MENU — base (una sola columna, siempre) === */
+.dropdown-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.dropdown-menu li {
+  display: block;
+  width: 100%;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.7rem 1.4rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.dropdown-menu a:hover {
+  background: rgba(196, 146, 62, 0.10);
+  color: var(--text);
+}
+
+.dropdown-menu a.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* === DROPDOWN MENU — DESKTOP ===
+   Panel flotante, una sola columna, alineado a la IZQUIERDA de
+   ".dropdown" — es decir, arranca justo debajo de la palabra "Boas"
+   (que es el primer hijo), no debajo de todo el bloque a+botón.
+   Se abre con :hover sobre el <li> Y con la clase .open (click en
+   el botón-flecha). El <a> de texto nunca controla la apertura. */
+@media (min-width: 768px) {
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 240px;
+    width: max-content;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-strong);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity var(--transition-base), visibility var(--transition-base), transform var(--transition-base);
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+/* === DROPDOWN MENU — MÓVIL ===
+   Sin hover disponible: se abre/cierra ÚNICAMENTE con click en la
+   flecha (clase .open añadida por JS). El <li class="dropdown">
+   pasa a width:100% (en vez de encogerse al ancho de "Boas ▾" como
+   los demás items) para que el submenú tenga todo el ancho del nav
+   y no se comprima. Indentado y sin chrome pesado. */
+@media (max-width: 767px) {
+  .dropdown {
+    width: 100%;
+  }
+
+  .dropdown-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    display: none;
+    margin-top: 0.25rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .dropdown.open .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu a {
+    white-space: normal;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--bg);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* === NAVBAR — RESPONSIVE === */
+@media (max-width: 767px) {
+  /* El <nav> es hijo de .main-header (position: fixed), así que su
+     contenedor de referencia es el propio header y NO el viewport.
+     Por eso top: 100% arranca EXACTAMENTE en el borde inferior real del
+     header, sin importar cuánto mida (no hay que estimar 64px, 68px, etc.
+     y no hay que ajustar nada si el header cambia de altura).
+     Con top: 0 el panel taparía el logo y el botón ☰ (que son texto
+     oscuro sobre el fondo oscuro del panel), por eso no se usa.
+     El alto es "100% del viewport menos la altura del header":
+     el 100% dentro de calc() se resuelve contra el alto del header. */
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 999; /* menor que .main-header (1000) */
+    width: 80%;
+    max-width: 320px;
+    height: calc(100vh - 100%);  /* fallback */
+    height: calc(100dvh - 100%); /* móviles con barra de navegador dinámica */
+    background: var(--bg-elevated);
+    border-left: 1px solid var(--border-subtle);
+    padding: 2rem 1.5rem;
+    padding-bottom: var(--space-lg);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    overflow-y: auto;
+  }
+
+  .main-nav.open {
+    transform: translateX(0);
+  }
+
+  .main-nav > ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* === FOOTER === */
+.main-footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border-subtle);
+  padding-block: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .main-footer {
+    margin-top: var(--space-xl);
+  }
+
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.main-footer p {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  transition: color var(--transition-fast);
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
+
+.social-icon {
+  stroke: currentColor;
+  transition: stroke var(--transition-fast);
+}
+
+/* === BOTONES === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--transition-base), border-color var(--transition-base), color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+  color: var(--text);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-outline:hover {
+  background: rgba(196, 146, 62, 0.12);
+  color: var(--text);
+}
+
+/* === HERO CORTO (blog, boas, taxonomía, etc.) === */
+.page-title {
+  padding-top: calc(64px + var(--space-xl));
+  padding-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.page-title h1 {
+  font-size: var(--fs-h1);
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+}
+
+.page-title h1 em {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.page-title p {
+  color: var(--text-muted);
+  max-width: 70ch;
+  margin-inline: auto;
+}
+
+/* === TARJETAS DE SUBSECCIÓN (para boas.html) === */
+.cards-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  text-decoration: none;
+  color: inherit;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.card:hover .card-image img {
+  transform: scale(1.05);
+}
+
+.card-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+}
+
+.card-soon {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+.card-body {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.card-body h3 {
+  font-size: var(--fs-h3);
+  margin: 0;
+}
+
+.card-body p {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  margin: 0;
+  flex: 1;
+}
+
+.card-cta {
+  margin-top: var(--space-sm);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .card-cta {
+  color: var(--text);
+}
+
+.card.is-soon {
+  opacity: 0.85;
+}
+
+.card.is-soon img {
+  opacity: 0.7;
+}
+
+.card.is-soon .card-cta {
+  color: var(--text-muted);
+}
+
+/* === SISTEMA DE TABS (para taxonomía, cuidados, genética) === */
+.taxonomy-layout {
+  display: grid;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .taxonomy-layout {
+    grid-template-columns: 260px 1fr;
+  }
+}
+
+.species-nav {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  height: fit-content;
+  position: sticky;
+  top: 90px;
+}
+
+.species-nav h3 {
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.species-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-base), color var(--transition-base);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.species-btn:hover {
+  background: rgba(196, 146, 62, 0.12);
+  color: var(--text);
+}
+
+.species-btn.active-tab {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-panel.active-panel {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.species-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.species-content h2 {
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.species-content h2 em {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text);
+  text-transform: none;
+}
+
+.species-content .subtitle {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: var(--space-md);
+}
+
+.content-with-image {
+  display: grid;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .content-with-image {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.content-with-image .text-content p {
+  margin: 0;
+}
+
+.content-with-image .image-content img {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  width: 100%;
+  height: auto;
+}
+
+.species-content h3 {
+  color: var(--text);
+  font-size: var(--fs-h3);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.back-link {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+/* === UTILIDADES DE ANIMACIÓN === */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stagger.visible > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(2) { transition-delay: 150ms; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(3) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(4) { transition-delay: 450ms; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(5) { transition-delay: 600ms; opacity: 1; transform: translateY(0); }
+
+/* === PREFERS-REDUCED-MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

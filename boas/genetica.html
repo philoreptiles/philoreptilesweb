@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philoreptiles | Introducción a la genética en boas</title>
+<meta name="description" content="Guía de genética en boas: herencia recesiva, dominantes incompletos, combinaciones de morfos y selección poligénica explicada paso a paso.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de boas/genetica.html
+   ========================================================================== */
+
+:root {
+  --ok: #a3e635;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --albinismo: #ed8936;
+  --jungle: #ab47bc;
+}
+
+/* === CONTENEDOR Y PANELES DE CONTENIDO === */
+.genetics-content {
+  padding: var(--space-sm);
+  min-width: 0;
+}
+
+.genetics-content h2 {
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin-bottom: var(--space-xs);
+}
+
+.genetics-content h3 {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.genetics-content p {
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+  line-height: 1.6;
+}
+
+.genetics-content p:last-child {
+  margin-bottom: 0;
+}
+
+.tab-subtitle {
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-md);
+}
+
+/* === CAJAS DE INFORMACIÓN (TARJETAS EXPLICATIVAS) === */
+.info-card {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-block: var(--space-md);
+  max-width: 100%;
+}
+
+.info-card h4 {
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.info-card p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* === GRID DE CONCEPTOS === */
+.concept-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  margin-block: var(--space-md);
+}
+
+.concept-box {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.concept-box h4 {
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.concept-box p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* === BADGES === */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-het {
+  background: rgba(196, 146, 62, 0.15);
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+}
+
+.badge-homo {
+  background: rgba(163, 230, 53, 0.15);
+  color: var(--ok);
+  border: 1px solid var(--ok);
+}
+
+/* === DIAGRAMA DE ESFERAS === */
+.genetics-diagram-box {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-block: var(--space-md);
+}
+
+.diagram-title {
+  color: var(--text);
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.diagram-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-md);
+}
+
+.diagram-spheres {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.sphere-item {
+  flex: 1;
+  min-width: 150px;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sphere-svg {
+  width: 120px;
+  height: 120px;
+  overflow: visible;
+  display: block;
+  margin: 0 auto;
+}
+
+.sphere-title {
+  color: var(--text);
+  margin-top: 0.75rem;
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.sphere-title.is-albino {
+  color: var(--albinismo);
+}
+
+.sphere-title.is-jungle {
+  color: #e1bee7;
+}
+
+.sphere-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* === CUADROS DE PUNNETT === */
+.punnett-container {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-block: var(--space-md);
+}
+
+.punnett-title {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+.punnett-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-md);
+}
+
+.punnett-table {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr;
+  gap: 8px;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.punnett-cell {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell-corner {
+  background: transparent;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.cell-header {
+  background: rgba(196, 146, 62, 0.15);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.05rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.cell-header small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.cell-result {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  transition: transform var(--transition-base), border-color var(--transition-base);
+}
+
+.cell-result:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.cell-result.is-albino {
+  border-color: var(--albinismo);
+  background: rgba(237, 137, 54, 0.1);
+}
+
+.cell-result.is-jungle {
+  border-color: var(--jungle);
+  background: rgba(171, 71, 188, 0.1);
+}
+
+.geno-tag {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: monospace;
+  margin-bottom: 0.2rem;
+}
+
+.geno-tag.is-albino {
+  color: var(--albinismo);
+}
+
+.geno-tag.is-jungle {
+  color: #e1bee7;
+}
+
+.pheno-tag {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.percent-tag {
+  font-size: 0.75rem;
+  background: rgba(196, 146, 62, 0.2);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.percent-tag.is-albino {
+  background: rgba(237, 137, 54, 0.25);
+  color: #feebc8;
+}
+
+.percent-tag.is-jungle {
+  background: rgba(171, 71, 188, 0.25);
+  color: #e1bee7;
+}
+
+.punnett-legend {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.punnett-legend ul {
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+}
+
+.punnett-legend li {
+  margin-bottom: 0.35rem;
+  line-height: 1.5;
+}
+
+.punnett-legend li:last-child {
+  margin-bottom: 0;
+}
+
+/* === NOTA Y ATENCIÓN === */
+.note-box {
+  background: rgba(196, 146, 62, 0.08);
+  border: 1px dashed var(--accent-dim);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-md);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* === CLASES UTILITARIAS SEMÁNTICAS === */
+.is-accent { color: var(--accent); }
+.is-albino { color: var(--albinismo); }
+.is-jungle { color: var(--jungle); }
+.is-muted { color: var(--text-muted); }
+.is-ok { color: var(--ok); font-weight: 600; }
+.is-warn { color: var(--warn); font-weight: 600; }
+.is-danger { color: var(--danger); font-weight: 600; }
+
+/* === COMPENSACIÓN DE NAVBAR FIJA EN SCROLL === */
+.genetics-nav,
+.tab-panel,
+.genetics-content {
+  scroll-margin-top: 90px;
+}
+
+/* === BOTÓN FLOTANTE "VOLVER ARRIBA" === */
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+
+  /* Estado oculto */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.back-to-top svg {
+  flex-shrink: 0;
+}
+
+/* Espacio extra al final para que el botón no tape los enlaces del footer. */
+.main-footer {
+  padding-bottom: calc(var(--space-lg) + 1.5rem);
+}
+
+/* === MEDIA QUERIES PARA ESCRITORIO / TABLET === */
+@media (min-width: 768px) {
+  .genetics-content {
+    padding: var(--space-lg);
+  }
+
+  .genetics-content h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .genetics-content h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .info-card,
+  .concept-box,
+  .genetics-diagram-box,
+  .punnett-container,
+  .note-box {
+    padding: var(--space-md);
+  }
+
+  .concept-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .punnett-table {
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 10px;
+  }
+
+  .back-to-top {
+    padding: 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top span {
+    display: none;
+  }
+
+  .back-to-top {
+    padding: 0.65rem;
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-content">
+    <a href="../index.html" class="logo-text">Philoreptiles</a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link active">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html" class="active">Genética</a></li>
+            <li><a href="../boas/morfos.html">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. ENCABEZADO DE LA PÁGINA -->
+  <section class="page-title">
+    <div class="container">
+      <h1>Introducción a la genética en boas</h1>
+      <p>Explora la ciencia y el arte detrás de los colores, patrones y herencia genética en boas.</p>
+    </div>
+  </section>
+
+  <!-- 2. INTERFAZ DE NAVEGACIÓN Y CONTENIDO -->
+  <section class="container taxonomy-layout">
+
+    <!-- Menú lateral -->
+    <aside class="genetics-nav species-nav" role="tablist" aria-label="Temas de genética">
+      <h3>Temario</h3>
+      <button class="genetics-btn species-btn active-tab" role="tab" id="tab-fundamentos" aria-controls="fundamentos" aria-selected="true">1. Fundamentos</button>
+      <button class="genetics-btn species-btn" role="tab" id="tab-recesivos" aria-controls="recesivos" aria-selected="false">2. Recesivos</button>
+      <button class="genetics-btn species-btn" role="tab" id="tab-incompletos" aria-controls="incompletos" aria-selected="false">3. Dominantes incompletos</button>
+      <button class="genetics-btn species-btn" role="tab" id="tab-poligenicos" aria-controls="poligenicos" aria-selected="false">4. Poligénicos</button>
+      <button class="genetics-btn species-btn" role="tab" id="tab-filosofia" aria-controls="filosofia" aria-selected="false">5. Valor y visión personal</button>
+    </aside>
+
+    <!-- Área de contenido dinámico -->
+    <section class="genetics-content species-content">
+
+      <!-- PANEL 1: FUNDAMENTOS BÁSICOS -->
+      <div id="fundamentos" class="tab-panel active-panel" role="tabpanel" aria-labelledby="tab-fundamentos" aria-hidden="false">
+        <h2>De la boa silvestre al universo de los morfos</h2>
+
+        <p>Cuando pensamos en una boa, probablemente imaginamos un animal de tonos grises o marrones, con las características “sillas de montar” recorriendo el cuerpo. Esa apariencia, cercana a la que encontramos en poblaciones silvestres, es nuestro punto de partida para entender algo mucho más amplio: la diversidad de colores y patrones que puede presentar una boa.</p>
+
+        <p>Algunas de estas diferencias forman parte de la variación natural de la especie, mientras que otras son el resultado de mutaciones genéticas que pueden heredarse de una generación a otra. En cautiverio, la selección y combinación de estas características ha dado lugar a numerosos <strong>morfos</strong>: ejemplares cuya apariencia se distingue por determinados colores, patrones o combinaciones de ambos.</p>
+
+        <p>Para comprender de dónde surgen estos morfos y cómo pueden transmitirse, primero necesitamos conocer algunas ideas básicas de genética.</p>
+
+        <div class="info-card">
+          <h4>Dos copias, una de cada progenitor</h4>
+          <p>Para muchos de los genes que estudiaremos, una boa posee <strong>dos copias o alelos</strong>: una heredada de la madre y otra del padre. La combinación de esas dos copias influye en las características que el animal expresa y en aquellas que puede transmitir a su descendencia.</p>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-box">
+            <span class="badge badge-het">Dos alelos distintos</span>
+            <h4>Heterocigoto (Het)</h4>
+            <p>Un ejemplar es <strong>heterocigoto</strong> cuando posee dos versiones diferentes de un mismo gen. En una mutación recesiva, una boa puede portar una copia de la mutación sin mostrarla visualmente. Por eso, cuando encontramos términos como <strong>“Het Albino”</strong>, significa que el animal porta esa mutación y puede transmitirla.</p>
+          </div>
+
+          <div class="concept-box">
+            <span class="badge badge-homo">Dos alelos iguales</span>
+            <h4>Homocigoto</h4>
+            <p>Un ejemplar es <strong>homocigoto</strong> cuando posee dos copias iguales de un determinado alelo. En el caso de muchas mutaciones recesivas, recibir la copia mutada de ambos progenitores es lo que permite que la característica se exprese visualmente.</p>
+          </div>
+        </div>
+
+        <h3>Lo que vemos y lo que puede llevar una boa</h3>
+        <p>Hasta ahora hemos hablado de las copias que una boa puede recibir de sus progenitores. Pero hay una diferencia importante entre <strong>lo que podemos observar en el animal</strong> y la información genética que lleva consigo.</p>
+
+        <div class="concept-grid">
+          <div class="concept-box">
+            <span class="badge badge-het">Lo que vemos</span>
+            <h4>Fenotipo</h4>
+            <p>Es el conjunto de características que podemos observar en una boa: su coloración, patrón, tamaño y otras características físicas. Cuando una mutación se manifiesta en la apariencia del animal, hablamos de un ejemplar <strong>visual</strong> para esa mutación.</p>
+          </div>
+
+          <div class="concept-box">
+            <span class="badge badge-homo">Lo que lleva</span>
+            <h4>Genotipo</h4>
+            <p>Es la información genética que posee el ejemplar. Parte de ella puede no ser evidente a simple vista. Por ejemplo, una boa puede portar una mutación recesiva sin mostrarla en su apariencia; en ese caso puede describirse como <strong>heterocigota (Het)</strong> para esa mutación.</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h4>¿Y qué significa “Poss Het”?</h4>
+          <p>En ocasiones sabemos que existe una posibilidad de que una boa porte una mutación recesiva, pero no podemos confirmarlo únicamente por su apariencia. En estos casos se utiliza <strong>Poss Het</strong> (posible heterocigoto), acompañado de una probabilidad como <strong>50% Poss Het</strong> o <strong>66% Poss Het</strong>, calculada a partir de la genética de sus progenitores.</p>
+        </div>
+
+        <p>También encontrarás términos como <strong>Nominal</strong> o <strong>Normal</strong> para referirse a ejemplares que presentan una apariencia silvestre y no expresan visualmente una mutación determinada.</p>
+
+        <p>Esta diferencia entre lo que vemos y lo que una boa lleva en su genética es fundamental para entender los morfos. Dos ejemplares pueden parecer iguales y, sin embargo, tener genotipos diferentes. Una boa que no muestra una mutación puede llevar una copia de ella y transmitirla a su descendencia.</p>
+
+        <p>Con estas ideas como base, podemos comenzar a entender por qué algunas mutaciones aparecen visualmente, otras pueden permanecer ocultas durante generaciones y ciertas combinaciones producen resultados muy distintos. El siguiente paso es conocer <strong>cómo se comportan estas mutaciones al heredarse</strong>.</p>
+      </div>
+
+      <!-- PANEL 2: GENES RECESIVOS -->
+      <div id="recesivos" class="tab-panel" role="tabpanel" aria-labelledby="tab-recesivos" aria-hidden="true">
+        <h2>Herencia recesiva</h2>
+        <p class="tab-subtitle">Mutaciones discretas que requieren dos copias para hacerse visibles.</p>
+
+        <p>Los <strong>genes recesivos</strong> necesitan obligatoriamente <strong>dos copias</strong> (homocigoto, una de cada progenitor) para manifestarse en la piel del ejemplar. Si la boa solo posee una copia, será un portador (heterocigoto / het) de aspecto silvestre o normal sin cambios aparentes.</p>
+
+        <p><em>Ejemplos clásicos de genes recesivos:</em> Albino (Kahl, Sharp, VPI), Anery y Blood.</p>
+
+        <div class="genetics-diagram-box">
+          <h3 class="diagram-title">Representación visual: Fenotipo vs. Genotipo</h3>
+          <p class="diagram-subtitle">La esfera exterior representa la apariencia visible del ejemplar. Las esferas interiores representan las dos copias del gen que posee.</p>
+
+          <div class="diagram-spheres">
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#2d3748" stroke="#718096" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title">Nominal (NN)</strong>
+              <span class="sphere-desc">Esfera exterior gris.<br>Sin genes recesivos.</span>
+            </div>
+
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#2d3748" stroke="#718096" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#ed8936" stroke="#feebc8" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title">Het Albino (Na)</strong>
+              <span class="sphere-desc">Esfera exterior gris.<br>1 copia recesiva oculta.</span>
+            </div>
+
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#7b341e" stroke="#ed8936" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#ed8936" stroke="#feebc8" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#ed8936" stroke="#feebc8" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title is-albino">Albino visual (aa)</strong>
+              <span class="sphere-desc">Esfera exterior naranja.<br>2 copias recesivas visibles.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUADROS DE PUNNETT (GENES RECESIVOS) -->
+
+        <!-- CUADRO 1: NOMINAL x HET ALBINO -->
+        <div class="punnett-container">
+          <div class="punnett-title">1. Cruce: Nominal (NN) × Het Albino (Na)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>a</strong> = Gen albino (recesivo)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong>50% Nominal (NN):</strong> Ejemplares nominales.</li>
+              <li><strong>50% Het Albino (Na):</strong> Ejemplares con aspecto nominal pero portadores de 1 copia del gen albino.</li>
+              <li><em>Nota: Visualmente toda la camada luce normal; cada cría es <strong>50% Het Albino</strong> pues no podemos determinar qué crías heredaron el gen albino.</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 2: HET ALBINO x HET ALBINO -->
+        <div class="punnett-container">
+          <div class="punnett-title">2. Cruce: Het Albino (Na) × Het Albino (Na)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>a</strong> = Gen albino (recesivo)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">25%</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong class="is-albino">25% Albino visual (aa):</strong> Ejemplares homocigotos que expresan físicamente la mutación.</li>
+              <li><strong>50% Het Albino (Na):</strong> Ejemplares con aspecto nominal pero portadores de 1 copia del gen albino.</li>
+              <li><strong>25% Nominal (NN):</strong> Ejemplares nominales.</li>
+              <li><em>Nota: De las crías de aspecto nominal (75% del total), estadísticamente 2 de cada 3 son portadoras. Por ello, en el hobby a los ejemplares no visuales de este cruce se les etiqueta como <strong>66% Poss Het Albino</strong>.</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 3: NOMINAL x ALBINO VISUAL -->
+        <div class="punnett-container">
+          <div class="punnett-title">3. Cruce: Nominal (NN) × Albino visual (aa)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>a</strong> = Gen albino (recesivo)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Normal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+
+            <div class="punnett-cell cell-header">N <small>(Normal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la Camada (Probabilidades por Cría):</strong>
+            <ul>
+              <li><strong>100% Het Albino (Na):</strong> El progenitor albino (aa) aporta obligatoriamente un gen mutado a toda su descendencia. El progenitor nominal (NN) aporta un gen normal.</li>
+              <li><em>Nota: Todas las crías lucirán como nominales, pero se garantiza genéticamente que el 100% son portadoras (<strong>Het Albino</strong>), sin necesidad de probarlas en reproducciones futuras.</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 4: HET ALBINO x ALBINO VISUAL -->
+        <div class="punnett-container">
+          <div class="punnett-title">4. Cruce: Het Albino (Na) × Albino visual (aa)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>a</strong> = Gen albino (recesivo)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Normal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Na</span>
+              <span class="pheno-tag">Het Albino</span>
+              <span class="percent-tag">25%</span>
+            </div>
+
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">25%</span>
+            </div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">25%</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong class="is-albino">50% Albino visual (aa):</strong> Ejemplares homocigotos que expresan físicamente la mutación.</li>
+              <li><strong>50% Het Albino (Na):</strong> Ejemplares con aspecto nominal pero portadores de 1 copia del gen albino.</li>
+              <li><em>Nota: Este cruce asegura que todas las crías de aspecto nominal sean <strong>Het Albino</strong>, eliminando la incertidumbre de los "poss hets".</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 5: ALBINO VISUAL x ALBINO VISUAL -->
+        <div class="punnett-container">
+          <div class="punnett-title">5. Cruce: Albino visual (aa) × Albino visual (aa)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>a</strong> = Gen albino (Recesivo)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">100% Total</span>
+            </div>
+
+            <div class="punnett-cell cell-header">a <small>(Albino)</small></div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result is-albino">
+              <span class="geno-tag is-albino">aa</span>
+              <span class="pheno-tag"><strong>ALBINO VISUAL</strong></span>
+              <span class="percent-tag is-albino">100% Total</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong class="is-albino">100% Albino visual (aa):</strong> Al no existir copias de genes nominales (N) en ninguno de los dos padres, todas las crías serán albinas.</li>
+              <li><em>Nota: Es el cruce definitivo para producir exclusivamente ejemplares visuales.</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: DOMINANCIA INCOMPLETA -->
+      <div id="incompletos" class="tab-panel" role="tabpanel" aria-labelledby="tab-incompletos" aria-hidden="true">
+        <h2>Dominantes Incompletos (o codominantes*)</h2>
+        <p class="tab-subtitle">Genes donde una copia altera el fenotipo y dos copias generan una Superforma.</p>
+
+        <p>En este tipo de genes, una sola copia es suficiente para que el morfo sea visible. Cuando el ejemplar hereda las dos copias, el efecto no se repite simplemente: se intensifica o cambia, dando lugar a lo que comúnmente se conoce como <strong>Superforma</strong>.</p>
+
+        <p><em>Ejemplos conocidos:</em> Líneas como Jungle, Motley o Hypo, donde las versiones “Super” muestran diferencias respecto a la forma simple.</p>
+
+        <div class="genetics-diagram-box">
+          <h3 class="diagram-title">Representación visual: Nominal vs. Jungle vs. Super Jungle</h3>
+          <p class="diagram-subtitle">A diferencia de los genes recesivos, una sola copia (Nj) altera el aspecto exterior del ejemplar. Dos copias (jj) producen la superforma.</p>
+
+          <div class="diagram-spheres">
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#2d3748" stroke="#718096" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title">Nominal (NN)</strong>
+              <span class="sphere-desc">Esfera exterior gris.<br>Sin genes Jungle.</span>
+            </div>
+
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#4a1b5c" stroke="#ab47bc" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#718096" stroke="#cbd5e0" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#ab47bc" stroke="#e1bee7" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title is-jungle">Jungle (Nj)</strong>
+              <span class="sphere-desc">Esfera exterior púrpura.<br>1 copia visible.</span>
+            </div>
+
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="#6b1d70" stroke="#e1bee7" stroke-width="4"/>
+                <circle cx="44" cy="60" r="14" fill="#ab47bc" stroke="#e1bee7" stroke-width="2"/>
+                <circle cx="76" cy="60" r="14" fill="#ab47bc" stroke="#e1bee7" stroke-width="2"/>
+              </svg>
+              <strong class="sphere-title is-jungle">Super Jungle (jj)</strong>
+              <span class="sphere-desc">Esfera magenta brillante.<br>2 copias (Superforma).</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <strong>*Aclaración técnica sobre la terminología:</strong><br>
+          En el mundo del hobby es común que a los genes dominantes incompletos se les llame “codominantes”. Aunque el término se ha popularizado, no es del todo preciso desde un punto de vista biológico. En la práctica, ambos se usan de forma intercambiable para describir genes cuya expresión cambia cuando están presentes en una o dos copias.<br><br>
+          Asimismo, aunque en mutaciones como <strong>Jungle</strong> la forma "Super" produce un cambio evidente y radical, esto no siempre ocurre de manera clara. En el caso de líneas como <strong>Hypo</strong>, la diferencia entre una y dos copias puede ser sutil, progresiva o difícil de distinguir, dependiendo del ejemplar y su linaje.
+        </div>
+
+        <!-- CUADROS DE PUNNETT (DOMINANCIA INCOMPLETA / JUNGLE) -->
+
+        <!-- CUADRO 1: NOMINAL x JUNGLE VISUAL -->
+        <div class="punnett-container">
+          <div class="punnett-title">1. Cruce: Nominal (NN) × Jungle(Nj)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>j</strong> = Gen Jungle (Dominante incompleto)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-header">j <small>(Jungle)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">25%</span>
+            </div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">25%</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong>50% Jungle (Nj):</strong> Ejemplares heterocigotos que heredan 1 copia del gen y expresan visiblemente la alteración de patrón.</li>
+              <li><strong>50% Nominal (NN):</strong> Ejemplares nominales.</li>
+              <li><em>Nota: En los genes dominantes incompletos no existen los portadores (hets); si la boa porta el gen, lo expresa visualmente.</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 2: JUNGLE VISUAL x JUNGLE VISUAL -->
+        <div class="punnett-container">
+          <div class="punnett-title">2. Cruce: Jungle(Nj) × Jungle(Nj)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>j</strong> = Gen Jungle (Dominante incompleto)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-header">j <small>(Jungle)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">NN</span>
+              <span class="pheno-tag">Nominal</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">25%</span>
+            </div>
+
+            <div class="punnett-cell cell-header">j <small>(Jungle)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">25%</span>
+            </div>
+            <div class="punnett-cell cell-result is-jungle">
+              <span class="geno-tag is-jungle">jj</span>
+              <span class="pheno-tag"><strong>SUPER JUNGLE</strong></span>
+              <span class="percent-tag is-jungle">25%</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong class="is-jungle">25% Super Jungle (jj):</strong> Forma homocigota que reúne 2 copias del gen (Superforma).</li>
+              <li><strong>50% Jungle (Nj):</strong> Ejemplares heterocigotos con 1 copia del gen.</li>
+              <li><strong>25% Nominal (NN):</strong> Ejemplares nominales.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUADRO 3: NOMINAL x SUPER JUNGLE -->
+        <div class="punnett-container">
+          <div class="punnett-title">3. Cruce: Nominal (NN) × Super Jungle (jj)</div>
+          <div class="punnett-subtitle">Nomenclatura: <strong>N</strong> = Gen nominal | <strong>j</strong> = Gen Jungle (Dominante incompleto)</div>
+
+          <div class="punnett-table">
+            <div class="punnett-cell cell-corner">♂ \ ♀</div>
+            <div class="punnett-cell cell-header">j <small>(Jungle)</small></div>
+            <div class="punnett-cell cell-header">j <small>(Jungle)</small></div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+
+            <div class="punnett-cell cell-header">N <small>(Nominal)</small></div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+            <div class="punnett-cell cell-result">
+              <span class="geno-tag">Nj</span>
+              <span class="pheno-tag">Jungle</span>
+              <span class="percent-tag">100% Total</span>
+            </div>
+          </div>
+
+          <div class="punnett-legend">
+            <strong>Desglose de la camada (probabilidades por cría):</strong>
+            <ul>
+              <li><strong class="is-jungle">100% Jungle (Nj):</strong> Al ser un progenitor homocigoto (jj), transmite obligatoriamente una copia del gen a toda su descendencia, garantizando un 100% de crías Jungle.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: POLIGÉNICOS -->
+      <div id="poligenicos" class="tab-panel" role="tabpanel" aria-labelledby="tab-poligenicos" aria-hidden="true">
+        <h2>Poligénicos (selección de línea)</h2>
+        <p class="tab-subtitle">Crianza selectiva acumulativa: el arte de moldear tonalidades a lo largo del tiempo.</p>
+
+        <p>Aquí no hay un solo “interruptor genético”. Estos rasgos dependen de la interacción de múltiples genes y se desarrollan gradualmente mediante selección a lo largo de generaciones.</p>
+
+        <div class="info-card">
+          <h4>Sin "Hets" ni atajos</h4>
+          <p>No existen <strong>hets</strong> en este caso. En lugar de eso, los rasgos se refinan y acentúan con el tiempo, generación tras generación, eligiendo siempre a los progenitores con mejor calidad de color o patrón.</p>
+        </div>
+
+        <div class="genetics-diagram-box">
+          <h3 class="diagram-title">Representación visual: Acción conjunta (clusters poligénicos)</h3>
+          <p class="diagram-subtitle">Las esferas dentro de cada grupo representan micro-genes individuales que actúan en red. Su efecto sumatorio es lo que define el resultado.</p>
+
+          <div class="diagram-spheres">
+
+            <!-- CLUSTER A: FACTORES DE LIMPIEZA -->
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="100" cy="100" r="85" fill="rgba(254, 240, 138, 0.05)" stroke="#fde047" stroke-width="2" stroke-dasharray="6,4" />
+                <line x1="70" y1="70" x2="130" y2="70" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="130" y1="70" x2="130" y2="130" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="130" y1="130" x2="70" y2="130" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="70" y1="130" x2="70" y2="70" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="70" y1="70" x2="130" y2="130" stroke="#fde047" stroke-width="1.5" stroke-opacity="0.4" />
+                <line x1="130" y1="70" x2="70" y2="130" stroke="#fde047" stroke-width="1.5" stroke-opacity="0.4" />
+                <circle cx="100" cy="100" r="14" fill="#fde047" opacity="0.25" />
+                <circle cx="70" cy="70" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
+                <circle cx="130" cy="70" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
+                <circle cx="130" cy="130" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
+                <circle cx="70" cy="130" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
+              </svg>
+              <strong class="sphere-title">Cluster A: Factores de limpieza</strong>
+              <span class="sphere-desc">Red de micro-genes enfocados en la eliminación progresiva de pigmentos negros y grises.</span>
+            </div>
+
+            <!-- CLUSTER B: FACTORES DE SATURACIÓN -->
+            <div class="sphere-item">
+              <svg class="sphere-svg" viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="100" cy="100" r="85" fill="rgba(244, 63, 94, 0.05)" stroke="#fb7185" stroke-width="2" stroke-dasharray="6,4" />
+                <line x1="70" y1="70" x2="130" y2="70" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="130" y1="70" x2="130" y2="130" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="130" y1="130" x2="70" y2="130" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="70" y1="130" x2="70" y2="70" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
+                <line x1="70" y1="70" x2="130" y2="130" stroke="#fb7185" stroke-width="1.5" stroke-opacity="0.4" />
+                <line x1="130" y1="70" x2="70" y2="130" stroke="#fb7185" stroke-width="1.5" stroke-opacity="0.4" />
+                <circle cx="100" cy="100" r="14" fill="#fb7185" opacity="0.25" />
+                <circle cx="70" cy="70" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
+                <circle cx="130" cy="70" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
+                <circle cx="130" cy="130" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
+                <circle cx="70" cy="130" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
+              </svg>
+              <strong class="sphere-title">Cluster B: Factores de saturación</strong>
+              <span class="sphere-desc">Red de micro-genes enfocados en intensificar pigmentos rojos, naranjas o rosados.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <p>En los rasgos poligénicos, la intensidad del color o la limpieza del patrón no dependen de un único gen mutante, sino del efecto acumulativo de múltiples factores genéticos.</p>
+
+        <p>Por esta razón, el trabajo con líneas como Pastel, Sunglow o selecciones de color requiere paciencia y una constante selección de los ejemplares con mejor expresión en cada generación.</p>
+      </div>
+
+      <!-- PANEL 5: VALOR Y VISIÓN PERSONAL -->
+      <div id="filosofia" class="tab-panel" role="tabpanel" aria-labelledby="tab-filosofia" aria-hidden="true">
+        <h2>Valor y visión personal</h2>
+        <p class="tab-subtitle">La herpetocultura como compromiso y proyecto a largo plazo.</p>
+
+        <p>Más allá de las combinaciones genéticas y las tablas de probabilidades, la crianza de boas es un trabajo de paciencia, ética y pasión por la especie.</p>
+
+        <p>El verdadero valor de un ejemplar no reside únicamente en la rareza de sus genes o en la complejidad de sus morfos, sino en la salud del animal, el cuidado responsable y la visión a largo plazo del criador.</p>
+
+        <p>Cada proyecto genético debe priorizar siempre el bienestar de los animales y el respeto por la herpetocultura responsable.</p>
+      </div>
+
+    </section>
+  </section>
+
+  <!-- 3. VOLVER AL MENÚ DE BOAS -->
+  <div class="back-link">
+    <a href="../boas.html" class="btn btn-secondary">← Volver al menú de Boas</a>
+  </div>
+
+  <!-- Botón flotante "Volver arriba" -->
+  <button type="button" class="back-to-top" id="back-to-top" aria-label="Volver al selector de apartados">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5"/>
+      <path d="M5 12l7-7 7 7"/>
+    </svg>
+    <span>Volver arriba</span>
+  </button>
+
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  // Conecta cada botón de temario con el sistema de tabs expuesto en window.switchTab
+  const geneticsButtons = document.querySelectorAll('.genetics-btn');
+  const geneticsContent = document.querySelector('.genetics-content');
+
+  geneticsButtons.forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      if (typeof window.switchTab !== 'function') return;
+      const panelId = btn.getAttribute('aria-controls');
+      window.switchTab(event, panelId);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!geneticsContent) return;
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          geneticsContent.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+        });
+      });
+    });
+  });
+
+  // Botón flotante "Volver arriba": aparece cuando el menú de temario (.genetics-nav) ya no es visible
+  document.addEventListener('DOMContentLoaded', () => {
+    const backToTop = document.getElementById('back-to-top');
+    const geneticsNav = document.querySelector('.genetics-nav');
+    if (!backToTop || !geneticsNav) return;
+
+    const NAV_OFFSET = 80;
+
+    const setVisible = (visible) => {
+      backToTop.classList.toggle('is-visible', visible);
+      backToTop.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      backToTop.tabIndex = visible ? 0 : -1;
+    };
+
+    const update = () => {
+      setVisible(geneticsNav.getBoundingClientRect().top < NAV_OFFSET);
+    };
+
+    setVisible(false);
+    update();
+
+    document.addEventListener('scroll', update, { passive: true, capture: true });
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('load', update);
+
+    backToTop.addEventListener('click', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      geneticsNav.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

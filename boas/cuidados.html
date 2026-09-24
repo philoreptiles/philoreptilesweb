@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philoreptiles | Guía de cuidados</title>
+<meta name="description" content="Guía básica de cuidados para Boa en cautiverio: recinto, gradiente térmico y humedad, con pautas prácticas para el bienestar de tu ejemplar.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de boas/cuidados.html
+   ========================================================================== */
+
+:root {
+  --ok: #a3e635;
+  --warn: #fbbf24;
+  --danger: #f87171;
+}
+
+/* === BLOQUE INTRODUCTORIO === */
+.care-intro {
+  max-width: 72ch;
+  margin-inline: auto;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.care-intro p {
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+}
+
+.care-intro p:last-child {
+  margin-bottom: 0;
+}
+
+/* === ÍCONOS DECORATIVOS === */
+.care-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* === CONTENEDOR Y PANELES DE CONTENIDO === */
+.species-content,
+.care-content {
+  padding: var(--space-sm);
+  min-width: 0;
+}
+
+.care-content h2,
+.care-content h3,
+.care-content h4,
+.care-content p,
+.care-content li,
+.care-content strong {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.care-content h2 {
+  font-size: 1.3rem;
+  margin-bottom: var(--space-xs);
+}
+
+.care-content h3 {
+  font-size: 1.1rem;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+/* === CAJAS DE APOYO (aclaraciones, experiencia, consejos) === */
+.care-callout {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-md);
+  max-width: 100%;
+}
+
+.care-callout h4 {
+  color: var(--accent);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-xs);
+}
+
+.care-callout h4:not(:first-child) {
+  margin-top: var(--space-sm);
+}
+
+.care-callout p {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-xs);
+}
+
+.care-callout p:last-child {
+  margin-bottom: 0;
+}
+
+.care-callout ul {
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.care-callout li {
+  margin-bottom: 0.5rem;
+}
+
+.care-callout li:last-child {
+  margin-bottom: 0;
+}
+
+.care-callout .care-callout {
+  margin-top: var(--space-sm);
+  margin-bottom: 0;
+  border-left-color: var(--accent-dim);
+}
+
+/* === TABLA DE ETAPAS === */
+.care-table-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-md);
+  max-width: 100%;
+}
+
+.care-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+.care-table th,
+.care-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.care-table thead tr {
+  background: var(--border-subtle);
+  color: var(--accent);
+}
+
+.care-table tbody {
+  color: var(--text);
+}
+
+.care-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.care-table .stage-label {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* === LISTA DE ELEMENTOS BÁSICOS DEL RECINTO === */
+.care-element-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.care-element-list li {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  font-size: 0.9rem;
+}
+
+.care-element-list strong {
+  color: var(--accent);
+}
+
+.substrate-list p {
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.substrate-list p:last-child {
+  margin-top: 0.3rem;
+}
+
+/* === COLORES SEMÁNTICOS INFORMATIVOS === */
+.is-ok {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.is-warn {
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.is-danger {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* === TARJETAS DE GRADIENTE TÉRMICO === */
+.temp-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.temp-card {
+  background: var(--bg);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.temp-card h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--accent);
+  margin-bottom: var(--space-xs);
+}
+
+.temp-card p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.temp-card.is-cold {
+  border-left-color: var(--accent-dim);
+}
+
+.temp-card.is-cold h4 {
+  color: var(--text-muted);
+}
+
+/* === BLOQUES DE HERRAMIENTAS DE CALEFACCIÓN === */
+.tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.tool-block {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.tool-block h4 {
+  color: var(--accent);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-xs);
+}
+
+.tool-block p {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.tool-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* === ALERTA DE TERMOSTATO === */
+.warning-block {
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.warning-block.is-danger {
+  background: var(--bg);
+  border: 2px solid var(--danger);
+}
+
+.warning-block h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--danger);
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.warning-block p {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+
+.warning-block p:last-of-type {
+  margin-bottom: var(--space-sm);
+}
+
+/* === TARJETAS DE HUMEDAD === */
+.humidity-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.humidity-card {
+  background: var(--bg);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.humidity-card h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--accent);
+  margin-bottom: var(--space-xs);
+}
+
+.humidity-card p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.humidity-card.is-shed {
+  border-left-color: var(--accent-dim);
+}
+
+.humidity-card.is-shed h4 {
+  color: var(--text-muted);
+}
+
+/* === BLOQUES DE RIESGO (HUMEDAD INCORRECTA) === */
+.risk-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.risk-block {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  max-width: 100%;
+}
+
+.risk-block h4 {
+  font-size: 0.95rem;
+  margin-bottom: var(--space-xs);
+}
+
+.risk-block ul {
+  padding-left: 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.risk-block li {
+  margin-bottom: 0.4rem;
+}
+
+.risk-block li:last-child {
+  margin-bottom: 0;
+}
+
+.risk-block.is-danger {
+  border-color: var(--danger);
+}
+
+.risk-block.is-danger h4 {
+  color: var(--danger);
+}
+
+.risk-block.is-warn {
+  border-color: var(--warn);
+}
+
+.risk-block.is-warn h4 {
+  color: var(--warn);
+}
+
+/* === GALERÍAS DE IMÁGENES === */
+.care-gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.care-gallery figure {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.care-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* === COMPENSACIÓN DE NAVBAR FIJA EN SCROLL === */
+.care-nav,
+.tab-panel,
+.care-content {
+  scroll-margin-top: 90px;
+}
+
+/* === BOTÓN FLOTANTE "VOLVER ARRIBA" === */
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+
+  /* Estado oculto */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.back-to-top svg {
+  flex-shrink: 0;
+}
+
+/* Espacio extra al final para que el botón no tape los enlaces del footer. */
+.main-footer {
+  padding-bottom: calc(var(--space-lg) + 1.5rem);
+}
+
+/* === MEDIA QUERIES PARA ESCRITORIO / TABLET (MIN-WIDTH: 768PX) === */
+@media (min-width: 768px) {
+  .care-intro {
+    margin-bottom: var(--space-lg);
+  }
+
+  .species-content,
+  .care-content {
+    padding: var(--space-lg);
+  }
+
+  .care-content h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .care-content h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .care-callout {
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .care-callout h4 {
+    font-size: 1rem;
+  }
+
+  .care-callout p,
+  .care-callout ul {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .care-callout ul {
+    padding-left: 1.2rem;
+  }
+
+  .care-table {
+    font-size: 0.95rem;
+  }
+
+  .care-table th,
+  .care-table td {
+    padding: 0.8rem 1rem;
+  }
+
+  .care-element-list {
+    margin-bottom: var(--space-lg);
+    gap: var(--space-sm);
+  }
+
+  .care-element-list li,
+  .substrate-list p {
+    font-size: 0.95rem;
+  }
+
+  .temp-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .temp-card {
+    padding: var(--space-md);
+  }
+
+  .temp-card h4 {
+    font-size: 1.1rem;
+  }
+
+  .temp-card p {
+    font-size: 0.95rem;
+  }
+
+  .tool-list {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .tool-block {
+    padding: var(--space-md);
+  }
+
+  .tool-block h4 {
+    font-size: 1rem;
+  }
+
+  .tool-block p {
+    font-size: 0.95rem;
+  }
+
+  .warning-block {
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .warning-block h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .warning-block p {
+    font-size: 0.95rem;
+  }
+
+  .humidity-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .humidity-card {
+    padding: var(--space-md);
+  }
+
+  .humidity-card h4 {
+    font-size: 1.1rem;
+  }
+
+  .humidity-card p {
+    font-size: 0.95rem;
+  }
+
+  .risk-cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .risk-block {
+    padding: var(--space-md);
+  }
+
+  .risk-block h4 {
+    font-size: 1.05rem;
+  }
+
+  .risk-block ul {
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .risk-block li {
+    margin-bottom: 0.5rem;
+  }
+
+  .care-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .back-to-top {
+    padding: 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top span {
+    display: none;
+  }
+
+  .back-to-top {
+    padding: 0.65rem;
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-content">
+    <a href="../index.html" class="logo-text">Philoreptiles</a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link active">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html" class="active">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html">Genética</a></li>
+            <li><a href="../boas/morfos.html">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. ENCABEZADO DE LA PÁGINA -->
+  <section class="page-title">
+    <div class="container">
+      <h1>Guía básica de cuidados</h1>
+      <p>Pautas esenciales para asegurar el bienestar de tu ejemplar.</p>
+    </div>
+  </section>
+
+  <!-- 2. TEXTO INTRODUCTORIO -->
+  <section class="container care-intro">
+    <p>Mantener una boa en cautiverio es una experiencia fascinante y sumamente gratificante, pero también requiere compromiso, observación y, sobre todo, información correcta. El objetivo de esta guía es ofrecerte un punto de partida sólido y claro con las pautas esenciales para que puedas asegurar el bienestar de tu ejemplar desde el primer día.</p>
+
+    <p>Es importante tener en cuenta que los parámetros que encontrarás aquí deben tomarse como una orientación general. En la herpetocultura no existen fórmulas mágicas ni reglas escritas en piedra: cada ejemplar es un individuo único con su propio ritmo, temperamento y necesidades particulares. Lo que funciona a la perfección para una boa, tal vez requiera pequeños ajustes para otra.</p>
+
+    <p>Además, tu ubicación geográfica juega un papel determinante. El clima de tu entorno influirá directamente en el esfuerzo y los recursos que necesitarás para recrear el hábitat ideal dentro del recinto:</p>
+
+    <p>No es lo mismo mantener una boa en regiones cálidas y húmedas, donde las condiciones ambientales juegan a tu favor y facilitan el mantenimiento de la humedad y la temperatura, que mantenerla en zonas de clima templado o frío, donde los descensos bruscos de temperatura o la baja humedad ambiental representan un reto mayor y, de no controlarse adecuadamente con el equipo correcto, pueden resultar fatales para el animal.</p>
+
+    <p>Aprender a "leer" a tu reptil y adaptar su entorno a las condiciones de tu ciudad es la verdadera clave del éxito. Utiliza esta guía como tu mapa inicial, observa a tu ejemplar y ajusta sus parámetros siempre en función de su salud y comportamiento.</p>
+  </section>
+
+  <!-- 3. INTERFAZ DE NAVEGACIÓN INTERACTIVA -->
+  <section class="container taxonomy-layout">
+
+    <!-- Menú lateral -->
+    <aside class="care-nav species-nav" role="tablist" aria-label="Apartados de la guía">
+      <h3>Apartados</h3>
+      <button class="care-btn species-btn active-tab" role="tab" id="tab-encierro" aria-controls="encierro" aria-selected="true">Encierro</button>
+      <button class="care-btn species-btn" role="tab" id="tab-temperatura" aria-controls="temperatura" aria-selected="false">Temperatura</button>
+      <button class="care-btn species-btn" role="tab" id="tab-humedad" aria-controls="humedad" aria-selected="false">Humedad</button>
+    </aside>
+
+    <!-- Área de contenido dinámico -->
+    <section class="care-content species-content">
+
+      <!-- Panel 1: Encierro -->
+      <div id="encierro" class="tab-panel active-panel" role="tabpanel" aria-labelledby="tab-encierro" aria-hidden="false">
+        <h2>¿Dónde y cómo alojar a tu boa?</h2>
+        <p>En la herpetocultura moderna, el recinto de una boa no es definitivo desde el primer día: se debe adaptar progresivamente al ritmo de crecimiento del ejemplar.</p>
+        <p>Para ejemplares en desarrollo (crías y juveniles), las cajas o tinas plásticas organizadoras tipo "zapatera" son la herramienta más práctica y eficiente. Nos permiten mantener los parámetros de temperatura y humedad en niveles óptimos, facilitan enormemente la higiene y reducen el estrés del animal.</p>
+
+        <h3>Etapas de alojamiento recomendadas</h3>
+
+        <div class="care-table-wrap">
+          <table class="care-table">
+            <thead>
+              <tr>
+                <th>Etapa</th>
+                <th>Edad estimada</th>
+                <th>Tipo de recinto</th>
+                <th>Dimensiones approx.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="stage-label">Etapa 1</td>
+                <td>0 a 12 meses</td>
+                <td>Caja plástica zapatera chica</td>
+                <td>~35 x 20 x 12 cm</td>
+              </tr>
+              <tr>
+                <td class="stage-label">Etapa 2</td>
+                <td>12 a 24 meses</td>
+                <td>Caja plástica mediana</td>
+                <td>~58 x 42 x 15 cm</td>
+              </tr>
+              <tr>
+                <td class="stage-label">Etapa 3</td>
+                <td>A partir de 2 años</td>
+                <td>Caja plástica grande</td>
+                <td>~74 x 45 x 15 cm</td>
+              </tr>
+              <tr>
+                <td class="stage-label">Etapa 4 (Machos)</td>
+                <td>Adultos</td>
+                <td>Caja plástica grande / Terrario (Definitivo)</td>
+                <td>~74 x 45 x 15 cm</td>
+              </tr>
+              <tr>
+                <td class="stage-label">Etapa 4 (Hembras)</td>
+                <td>Adultas</td>
+                <td>Terrario de PVC / Madera / Vidrio (Mínimo)</td>
+                <td>120 x 60 x 25 cm</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="care-callout">
+          <h4>Aclaración clave sobre las etapas:</h4>
+          <p>La edad de los ejemplares en la tabla es únicamente un estimado de referencia. La decisión de cambiar de recinto depende completamente de la talla y longitud física de tu boa, no de sus meses de vida. Recuerda que el ritmo de crecimiento está estrechamente ligado al régimen de alimentación del animal (frecuencia y tamaño de la presa). Monitorea el cuerpo de tu serpiente y avanza de etapa cuando el recinto actual comience a quedarle justo.</p>
+
+          <h4>Nota importante sobre el dimorfismo sexual:</h4>
+          <p>Los machos pueden vivir cómodamente toda su vida en una caja grande de la Etapa 3. Sin embargo, para las hembras adultas es muy complicado encontrar contenedores plásticos comerciales con las dimensiones adecuadas, por lo que será obligatorio adquirir o construir un terrario definitivo. En total, se calcula que un macho utilizará 3 encierros a lo largo de su vida, mientras que una hembra requerirá 4.</p>
+        </div>
+
+        <h3>¿Por qué mantener a los ejemplares en espacios reducidos?</h3>
+        <p>A menudo caemos en el error de pensar que un recinto más grande siempre es mejor. Sin embargo, en serpientes jóvenes, los espacios amplios suelen generar inseguridad y estrés elevado.</p>
+
+        <div class="care-callout">
+          <h4>Nuestra experiencia:</h4>
+          <p>En una ocasión alojamos a dos crías en contenedores de 41 x 28 x 13 cm (un poco más grandes de lo sugerido para su edad). Una de ellas se adaptó perfecto: comía, mudaba y mantenía la calma. La otra, en cambio, se mostraba constantemente en alerta, siseaba, rechazaba alimento y presentó problemas de muda debido al estrés.</p>
+          <p><strong>La solución:</strong> Cubrimos las paredes del contenedor para restarle visibilidad y hacer que el espacio se sintiera más cerrado. Rápidamente volvió a la normalidad. Para las crías, un espacio reducido equivale a protección.</p>
+        </div>
+
+        <h3>Elementos básicos dentro del recinto</h3>
+        <p>Un contenedor vacío no es suficiente. Para garantizar la salud de tu boa, necesitas acondicionar el interior con tres elementos clave:</p>
+
+        <ul class="care-element-list">
+          <li>
+            <strong>1. Bebedero (Fundamental):</strong> Debe contener agua potable limpia en todo momento. Se recomienda cambiar el agua mínimo una vez por semana, o de inmediato si el ejemplar defeca dentro (un comportamiento muy común) o la contamina con sustrato.
+          </li>
+          <li class="substrate-list">
+            <strong>2. Sustrato (Fundamental):</strong> Debe ajustarse a tus rutinas de limpieza y a las necesidades de humedad del reptil.
+            <p><span class="is-ok">✔ Aptos y seguros:</span> Servitoallas, papel estraza, aspen chip (viruta de álamo) o coco chip (fibra de coco en cubo), entre otros.</p>
+            <p><span class="is-danger">⚠ Sustratos prohibidos:</span> Nunca utilices viruta de pino, cedro ni aserrín sin procesar. Estas maderas liberan aceites y gases aromáticos (fenoles) que resultan highly tóxicos y causan daños irreversibles en las vías respiratorias de las serpientes.</p>
+          </li>
+          <li>
+            <strong>3. Escondite o refugio (Opcional según el ejemplar):</strong> Si mantienes a tu boa en un terrario de paredes transparentes o notas que es un individuo tímido y movedizo, un refugio es estrictamente necesario para que pueda resguardarse y sentirse segura.
+          </li>
+        </ul>
+
+        <div class="care-gallery">
+          <figure>
+            <img src="/img/Sustrato.png" alt="Sustrato del recinto" loading="lazy">
+          </figure>
+          <figure>
+            <img src="/img/Bebedero.png" alt="Bebedero del recinto" loading="lazy">
+          </figure>
+          <figure>
+            <img src="/img/Escondite.png" alt="Escondite del recinto" loading="lazy">
+          </figure>
+        </div>
+      </div>
+
+      <!-- Panel 2: Temperatura -->
+      <div id="temperatura" class="tab-panel" role="tabpanel" aria-labelledby="tab-temperatura" aria-hidden="true">
+        <h2>El motor metabólico de tu boa</h2>
+        <p>Como la gran mayoría sabe, las serpientes son ectotermas (de "sangre fría"). Esto significa que carecen de la capacidad metabólica para generar su propio calor corporal, por lo que dependen al 100% de fuentes externas para digerir sus alimentos, mantener fuerte su sistema inmune y realizar sus funciones vitales.</p>
+        <p>Aquí es donde nuestro papel como cuidadores se vuelve fundamental: debemos recrear un entorno térmico adecuado mediante un <strong>gradiente de temperatura</strong>.</p>
+
+        <h3>El Gradiente térmico: Zona caliente vs. Zona fresca</h3>
+        <p>No debemos calentar todo el terrario por igual. Tu boa necesita elegir en qué parte del recinto estar según sus necesidades de cada momento. Para ello, crearemos dos zonas bien definidas:</p>
+
+        <div class="temp-cards">
+          <div class="temp-card is-hot">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="care-icon" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+              Punto caliente: 29°C - 32°C
+            </h4>
+            <p>Ocupa máximo 1/3 de la superficie total del recinto. Es la zona donde la boa se posará para digerir sus presas.</p>
+          </div>
+
+          <div class="temp-card is-cold">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="care-icon" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              Zona fresca: 24°C - 26°C
+            </h4>
+            <p>El resto del recinto. Permite a la boa descender su temperatura cuando ha recibido suficiente calor.</p>
+          </div>
+        </div>
+
+        <h3>Herramientas de calefacción: ¿Qué opciones existen?</h3>
+
+        <div class="tool-list">
+          <div class="tool-block">
+            <h4>1. Placas térmicas</h4>
+            <p>Son la opción más práctica y utilizada en sistemas de cajas o racks.</p>
+            <p><strong>Ubicación:</strong> Se colocan siempre por la parte exterior e inferior del contenedor, cubriendo únicamente un tercio de la base.</p>
+            <p><span class="is-ok">✔ Ventaja:</span> No consumen espacio interno ni resecan el ambiente drásticamente.</p>
+          </div>
+
+          <div class="tool-block">
+            <h4>2. Focos y cerámicas</h4>
+            <p>Ideales para terrarios definitivos o de paredes altas.</p>
+            <p><strong>Tipos:</strong> Existen bombillas cerámicas (solo emiten calor) y focos de luz infrarroja o UVA. La ventaja de estos últimos es que proveen luz visible para el ejemplar, ayudando a marcar sus ciclos de día y noche (ritmos circadianos).</p>
+            <p><span class="is-danger">⚠ Seguridad:</span> Deben mantenerse completamente fuera del alcance de la serpiente o protegidos con rejillas de seguridad antiquemaduras. Una boa puede enroscarse en un foco encendido y sufrir quemaduras de gravedad.</p>
+          </div>
+        </div>
+
+        <div class="warning-block is-danger">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            El termostato no es opcional
+          </h3>
+          <p>Una placa térmica conectada directamente a la corriente puede alcanzar temperaturas superiores a los 60°C, provocando quemaduras fatales en el vientre de tu ejemplar.</p>
+          <p>Es strictly obligatorio conectar cualquier fuente de calor a un termostato. Este aparato apagará o regulará la energía automáticamente al alcanzar la temperatura programada.</p>
+
+          <div class="care-callout">
+            <h4>Medición complementaria:</h4>
+            <p>Apóyate siempre de una pistola de temperatura infrarroja (termómetro láser). Es la herramienta más precisa para tomar lecturas al instante en la superficie del punto caliente y verificar que la calibración de tu termostato sea la correcta.</p>
+          </div>
+        </div>
+
+        <div class="care-gallery">
+          <figure>
+            <img src="/img/Placa.png" alt="Placa térmica" loading="lazy">
+          </figure>
+          <figure>
+            <img src="/img/Termostato.png" alt="Termostato" loading="lazy">
+          </figure>
+          <figure>
+            <img src="/img/Pistola.png" alt="Pistola de temperatura infrarroja" loading="lazy">
+          </figure>
+        </div>
+      </div>
+
+      <!-- Panel 3: Humedad -->
+      <div id="humedad" class="tab-panel" role="tabpanel" aria-labelledby="tab-humedad" aria-hidden="true">
+        <h2>Humedad: Un parámetro dinámico</h2>
+        <p>A diferencia de la temperatura, la humedad en el recinto de tu boa no debe ser rígida ni constante. Debe fluctuar de acuerdo con el estado biológico de la serpiente para favorecer su salud.</p>
+
+        <h3>Rangos ideales y cuándo ajustarlos</h3>
+
+        <div class="humidity-cards">
+          <div class="humidity-card is-base">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="care-icon" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+              Humedad base (diaria): 50% - 60%
+            </h4>
+            <p>Es el rango óptimo de rutina. Permite que el ejemplar se mantenga hidratado sin saturar el ambiente.</p>
+          </div>
+
+          <div class="humidity-card is-shed">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="care-icon" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              Durante la muda (Ecdisis): 70% - 80%
+            </h4>
+            <p>Eleva la humedad cuando sus ojos se tornen azulados/grisáceos o la piel se vea opaca. Esto garantizará una muda en una sola pieza.</p>
+          </div>
+        </div>
+
+        <h3>¿Qué ocurre si la humedad es incorrecta?</h3>
+        <p>La humedad puede ser un parámetro traicionero. Tanto la falta como el exceso generan complicaciones severas en la salud de la serpiente:</p>
+
+        <div class="risk-cards">
+          <div class="risk-block is-danger">
+            <h4>❌ Por exceso (sustrato encharcado):</h4>
+            <ul>
+              <li><strong>Proliferación de hongos y moho:</strong> Deteriora el ambiente y crea un foco de infección en el recinto.</li>
+              <li><strong>Pudrición de escamas (Scale Rot):</strong> Ampollas e infecciones bacterianas graves en el vientre por contacto directo constante con el agua.</li>
+            </ul>
+          </div>
+
+          <div class="risk-block is-warn">
+            <h4>⚠️ Por falta (ambiente muy seco):</h4>
+            <ul>
+              <li><strong>Infecciones Respiratorias Agudas (IRA):</strong> El aire seco irrita las mucosas respiratorias, volviendo al animal vulnerable a bacterias y virus.</li>
+              <li><strong>Mudas retenidas (Disecdisis):</strong> La piel se rompe en parches pegados al cuerpo, pudiendo estrangular la circulación en el extremo de la cola.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Consejos prácticos para controlar la humedad</h3>
+        <div class="care-callout">
+          <ul>
+            <li><strong>Juega con el bebedero:</strong> Si colocas el plato de agua cerca del punto caliente, la evaporación elevará la humedad del aire. Si lo colocas en la zona fresca, la humedad bajará.</li>
+            <li><strong>Atomización puntual:</strong> Utiliza un aspersor con agua limpia para rociar suavemente las paredes del recinto o el sustrato únicamente cuando se aproxime el periodo de muda.</li>
+            <li><strong>Monitoreo:</strong> Utiliza siempre un higrómetro digital con sonda para medir la humedad real al nivel donde habita la serpiente.</li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+  <!-- 4. VOLVER AL MENÚ DE BOAS -->
+  <div class="back-link">
+    <a href="../boas.html" class="btn btn-secondary">← Volver al menú de Boas</a>
+  </div>
+
+  <!-- Botón flotante "Volver arriba" -->
+  <button type="button" class="back-to-top" id="back-to-top" aria-label="Volver al selector de apartados">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5"/>
+      <path d="M5 12l7-7 7 7"/>
+    </svg>
+    <span>Volver arriba</span>
+  </button>
+
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  // Conecta cada botón de apartado con el sistema de tabs expuesto en window.switchTab
+  const careButtons = document.querySelectorAll('.care-btn');
+  const careContent = document.querySelector('.care-content');
+
+  careButtons.forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      if (typeof window.switchTab !== 'function') return;
+      const panelId = btn.getAttribute('aria-controls');
+      window.switchTab(event, panelId);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!careContent) return;
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          careContent.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+        });
+      });
+    });
+  });
+
+  // Botón flotante "Volver arriba": aparece cuando el filtro de apartados (.care-nav) ya no es visible
+  document.addEventListener('DOMContentLoaded', () => {
+    const backToTop = document.getElementById('back-to-top');
+    const careNav = document.querySelector('.care-nav');
+    if (!backToTop || !careNav) return;
+
+    const NAV_OFFSET = 80;
+
+    const setVisible = (visible) => {
+      backToTop.classList.toggle('is-visible', visible);
+      backToTop.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      backToTop.tabIndex = visible ? 0 : -1;
+    };
+
+    const update = () => {
+      setVisible(careNav.getBoundingClientRect().top < NAV_OFFSET);
+    };
+
+    setVisible(false);
+    update();
+
+    document.addEventListener('scroll', update, { passive: true, capture: true });
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('load', update);
+
+    backToTop.addEventListener('click', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      careNav.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

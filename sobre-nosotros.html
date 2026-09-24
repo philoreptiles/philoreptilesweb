@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre nosotros — Philoreptiles</title>
+<meta name="description" content="Quiénes somos y qué defendemos en Philoreptiles: divulgación cercana, aprendizaje continuo y herpetocultura responsable sobre el género Boa.">
+
+<link rel="stylesheet" href="./css/design.css">
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de sobre-nosotros.html
+   Mobile-first: base = móvil; escala con min-width 768px y 1024px
+   ========================================================================== */
+
+/* === HERO EDITORIAL === */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  max-width: 100%;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  max-width: 100%;
+}
+
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(20, 12, 8, 0.96) 0%, rgba(20, 12, 8, 0.55) 45%, rgba(20, 12, 8, 0.15) 72%),
+    linear-gradient(to right, rgba(20, 12, 8, 0.4), transparent 55%);
+}
+
+.hero-content {
+  position: relative;
+  padding-top: calc(64px + var(--space-md));
+  padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--space-md);
+  margin-inline: auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.hero-content > * {
+  max-width: 760px;
+}
+
+.hero-title {
+  font-size: var(--fs-h1);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-sm);
+}
+
+.hero-subtitle {
+  max-width: 48ch;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* === BLOQUES EDITORIALES === */
+.manifesto-section {
+  padding-block: var(--space-xl);
+}
+
+.manifesto-container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+.manifesto-block {
+  max-width: 72ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-xl);
+}
+
+.manifesto-block:last-child {
+  margin-bottom: 0;
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.block-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.block-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.block-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.block-content p {
+  font-size: var(--fs-body);
+  font-weight: 300;
+  line-height: 1.75;
+  max-width: 100%;
+  margin-bottom: var(--space-sm);
+}
+
+.block-content p:last-child {
+  margin-bottom: 0;
+}
+
+.block-content p.secondary {
+  color: var(--text-muted);
+}
+
+/* Pull quote */
+.block-content .highlight {
+  display: block;
+  margin-block: var(--space-lg);
+  padding-left: var(--space-md);
+  border-left: 3px solid var(--accent);
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--accent);
+}
+
+/* Separador tipográfico */
+.block-separator {
+  margin-block: var(--space-xl);
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  opacity: 0.5;
+}
+
+.block-separator::before,
+.block-separator::after {
+  content: "·";
+  margin-inline: 0.75em;
+}
+
+/* === CIERRE CON CTA === */
+.cta-close {
+  padding-block: var(--space-xl);
+  text-align: center;
+}
+
+.cta-close .block-separator {
+  margin-block: 0 var(--space-md);
+}
+
+.cta-close p {
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 52ch;
+  margin: 0 auto var(--space-lg);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+/* === TABLET / ESCRITORIO (≥ 768px) === */
+@media (min-width: 768px) {
+  .hero-content {
+    padding-top: calc(80px + var(--space-md));
+    padding-bottom: var(--space-xl);
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+  }
+
+  .manifesto-section {
+    padding-block: var(--space-2xl);
+  }
+
+  .manifesto-block {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .manifesto-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .cta-close {
+    padding-block: var(--space-2xl);
+  }
+
+  .cta-close p {
+    font-size: 1.05rem;
+  }
+
+  .cta-buttons {
+    flex-direction: row;
+    gap: var(--space-md);
+  }
+}
+
+/* === ESCRITORIO (≥ 1024px) === */
+@media (min-width: 1024px) {
+  .hero-subtitle {
+    max-width: 52ch;
+    font-size: 1.1rem;
+  }
+
+  .block-header {
+    margin-bottom: var(--space-lg);
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-content">
+    <a href="index.html" class="logo-text">Philoreptiles</a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="sobre-nosotros.html" class="active">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="boas.html" class="nav-link">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="boas/genetica.html">Genética</a></li>
+            <li><a href="boas/morfos.html">Morfos</a></li>
+            <li><a href="boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. HERO EDITORIAL -->
+  <section class="hero">
+    <div class="hero-media">
+      <img src="img/fondo2.jpg" alt="Boa en su hábitat natural">
+    </div>
+    <div class="container hero-content stagger">
+      <span class="text-accent">Philoreptiles</span>
+      <h1 class="hero-title">Sobre nosotros</h1>
+      <p class="hero-subtitle">Un proyecto que documenta, observa y comparte el mundo de las boas con rigor, cercanía y aprendizaje constante.</p>
+    </div>
+  </section>
+
+  <section class="manifesto-section">
+    <div class="manifesto-container">
+
+      <article class="manifesto-block reveal">
+        <header class="block-header">
+          <span class="block-icon" aria-hidden="true">
+            <!-- Ícono: Brújula / Punto de partida -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </span>
+          <span class="block-eyebrow">Nuestro origen</span>
+        </header>
+        <div class="block-content">
+          <p>Philoreptiles nace del interés genuino por el mundo de los reptiles, una curiosidad que con el tiempo encontró un enfoque claro en las boas tras una primera interacción en una convención de fauna en Ciudad de México en 2014. Desde entonces, lo que comenzó como una fascinación difícil de explicar se ha convertido en un proceso constante de aprendizaje, observación y experiencia directa.</p>
+          <span class="highlight">HERPETOCULTURA RESPONSABLE, ACCESIBLE Y EN CONSTANTE EVOLUCIÓN</span>
+          <p>Este espacio surge con la intención de compartir ese proceso de forma abierta y honesta: no solo recopilando información, sino también documentando lo que funciona, lo que no, y todo lo que se aprende en el camino. Philoreptiles busca ser un punto de referencia cercano para quienes sienten interés por estas especies.</p>
+        </div>
+      </article>
+
+      <div class="block-separator" aria-hidden="true">◆</div>
+
+      <article class="manifesto-block reveal">
+        <header class="block-header">
+          <span class="block-icon" aria-hidden="true">
+            <!-- Ícono: Ojo / Observación directa y aprendizaje -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+          <span class="block-eyebrow">Filosofía del proyecto</span>
+        </header>
+        <div class="block-content">
+          <p>En Philoreptiles se comparte contenido enfocado en el cuidado, comportamiento y diversidad de las boas. La información no busca presentarse como absoluta, sino como una guía clara y útil que pueda adaptarse a distintos contextos y necesidades.</p>
+          <p>El proyecto se construye a partir de la observación constante, la investigación y la experiencia directa con cada ejemplar. Se entiende que cada animal es distinto, y que lo que funciona en un caso puede variar en otro. Por ello, el enfoque se basa en aprender continuamente, ajustar prácticas cuando es necesario y mantener siempre como prioridad el bienestar de los ejemplares.</p>
+          <p class="secondary">Detrás de Philoreptiles hay un interés genuino por comprender a profundidad el género <em>Boa</em> y todo lo que lo hace tan particular: su diversidad, comportamiento, genética y relación con el ser humano. Más que un punto de llegada, este proyecto representa un camino en constante evolución, donde no pretendemos posicionarnos como una voz absoluta, sino como un espacio abierto donde también hay lugar para reconocer errores y mejorar con el tiempo.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 3. CIERRE CON LLAMADA A LA ACCIÓN -->
+  <section class="cta-close reveal">
+    <div class="container">
+      <div class="block-separator" aria-hidden="true">◆</div>
+      <p>Si quieres conocer más, puedes visitar el blog para consultar experiencias y contenido más detallado, o explorar las secciones dedicadas al género <em>Boa</em>.</p>
+      <div class="cta-buttons">
+        <a href="blog.html" class="btn btn-primary">Ver Blog</a>
+        <a href="boas.html" class="btn btn-primary">Género Boa</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="./js/main.js"></script>
+</body>
+</html>

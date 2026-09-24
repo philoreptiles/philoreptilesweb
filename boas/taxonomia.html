@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philoreptiles | Taxonomía del género Boa</title>
+<meta name="description" content="Taxonomía completa del género Boa: Boa imperator, Boa constrictor (con sus subespecies occidentalis y atlantica), Boa sigma, Boa nebulosa y Boa orophias.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de boas/taxonomia.html — lo mínimo que no cubre
+   styles.css (el layout, colores y tipografía de .taxonomy-layout,
+   .species-nav, .species-content, .content-with-image, etc. ya viven ahí).
+   ========================================================================== */
+
+/* Para que el scroll automático al cambiar de tab no deje el título
+   del panel escondido debajo de la navbar fija. */
+.tab-panel {
+  scroll-margin-top: 90px;
+}
+
+/* Al volver al filtro, no queda escondido bajo la navbar fija. */
+.species-nav,
+.taxonomy-layout {
+  scroll-margin-top: 90px;
+}
+
+/* === BOTÓN FLOTANTE "VOLVER ARRIBA" === */
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+
+  /* Estado oculto */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.back-to-top svg {
+  flex-shrink: 0;
+}
+
+/* Espacio extra al final para que el botón no tape los enlaces del footer. */
+.main-footer {
+  padding-bottom: calc(var(--space-lg) + 1.5rem);
+}
+
+@media (min-width: 768px) {
+  .back-to-top {
+    padding: 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top span {
+    display: none;
+  }
+
+  .back-to-top {
+    padding: 0.65rem;
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-content">
+    <a href="../index.html" class="logo-text">Philoreptiles</a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link active">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html" class="active">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html">Genética</a></li>
+            <li><a href="../boas/morfos.html">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. ENCABEZADO DE LA PÁGINA -->
+  <section class="page-title">
+    <div class="container">
+      <h1>Taxonomía del género Boa</h1>
+      <p>Selecciona cualquier especie del menú para ver su información.</p>
+    </div>
+  </section>
+
+  <!-- 2. INTERFAZ DE NAVEGACIÓN INTERACTIVA -->
+  <section class="container taxonomy-layout">
+
+    <!-- Menú lateral / selector de especies -->
+    <aside class="species-nav" role="tablist" aria-label="Especies del género Boa">
+      <h3>Especies</h3>
+      <button class="species-btn active-tab" role="tab" id="tab-imperator" aria-controls="imperator" aria-selected="true">Boa imperator</button>
+      <button class="species-btn" role="tab" id="tab-constrictor" aria-controls="constrictor" aria-selected="false">Boa constrictor</button>
+      <button class="species-btn" role="tab" id="tab-sigma" aria-controls="sigma" aria-selected="false">Boa sigma</button>
+      <button class="species-btn" role="tab" id="tab-nebulosa" aria-controls="nebulosa" aria-selected="false">Boa nebulosa</button>
+      <button class="species-btn" role="tab" id="tab-orophias" aria-controls="orophias" aria-selected="false">Boa orophias</button>
+    </aside>
+
+    <!-- Área de contenido dinámico -->
+    <section class="species-content">
+
+      <!-- Panel 1: Boa imperator -->
+      <div id="imperator" class="tab-panel active-panel" role="tabpanel" aria-labelledby="tab-imperator" aria-hidden="false">
+        <h2>Boa imperator</h2>
+        <p class="subtitle">Boa de América Central / Boa común</p>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Durante mucho tiempo fue considerada una subespecie, pero hoy en día los estudios de ADN la reconocen como una especie independiente por derecho propio. A diferencia de la boa de cola roja (Boa constrictor), suele ser de un tamaño más moderado y compacto, con diferencias visibles en el diseño de las manchas de su lomo. Su hábitat abarca desde el este y sur de México (incluyendo la costa del Golfo y la península de Yucatán), cruzando toda América Central hasta llegar a Colombia y Ecuador. Por su carácter dócil y la increíble variedad de colores y patrones (morfos) que presenta, es la boa más famosa y criada del mundo.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_imperator.png" alt="Boa imperator" loading="lazy">
+          </div>
+        </div>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <h2>Localidad insular destacada: Boa de Cayos Cochinos / Islas Hog (Hog Island)</h2>
+            <p>Las célebres boas de las islas Hog (o Cayos Cochinos, en Honduras) no constituyen una especie ni una subespecie independiente, sino una fascinante población insular perteneciente a Boa imperator. Aunque los estudios de ADN confirman que comparten origen con las boas de América Central, la vida en el archipiélago las transformó por completo: al disponer de presas limitadas en las islas, desarrollaron un proceso de enanismo insular que redujo su tamaño a tan solo 1.2 o 1.5 metros y aclaró su piel con tonos pálidos y salmón de increíble belleza. Por su fragilidad ecológica y su valor biológico único, hoy cuentan con una estricta protección legal.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_imperator_HI.png" alt="Boa imperator" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Boa constrictor -->
+      <div id="constrictor" class="tab-panel" role="tabpanel" aria-labelledby="tab-constrictor" aria-hidden="true">
+        <h2>Boa constrictor</h2>
+        <p class="subtitle">Boa de cola roja</p>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Es la especie representativa y el gran referente del género, habitando la mayor parte de América del Sur al este de la cordillera de los Andes (en países como las Guayanas, Venezuela, Colombia, Brasil, Ecuador, Perú y Bolivia). Se diferencia claramente de las boas de México y Centroamérica (Boa imperator y Boa sigma) por alcanzar un tamaño considerablemente mayor —con hembras adultas que pueden superar los 3 metros— y por el deslumbrante color rojo intenso, caoba o magenta en las manchas de su cola. Conocida en todo el mundo como la verdadera boa de cola roja (red-tailed boa), es una de las serpientes más admiradas por los apasionados de los reptiles gracias al enorme valor y belleza de sus variedades silvestres puras, como las afamadas localidades de Surinam, Guyana o Perú.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_constrictor.png" alt="Boa constrictor" loading="lazy">
+          </div>
+        </div>
+
+        <div class="text-content">
+          <h2>Un par de subespecies de Boa constrictor</h2>
+          <p>Debido a su amplia distribución geográfica en Sudamérica, Boa constrictor presenta distintas subespecies y linajes regionales bien documentados. Conoce algunas de ellas:</p>
+        </div>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Boa constrictor occidentalis (Boa de las vizcacheras): Es la boa de distribución más meridional del continente, adaptada para habitar en los climas más fríos y secos de Argentina y Paraguay. Destaca de inmediato por su elegante patrón reticulado en tonos oscuros y grisáceos, así como por su increíble resistencia. Aunque recientemente se propuso considerarla como una especie independiente, los estudios más recientes confirman que se trata de una subespecie oficial dentro del complejo Boa constrictor. Debido a la fragilidad de sus poblaciones silvestres, cuenta con el máximo nivel de protección internacional (Apéndice I de CITES).</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_constrictor_occidentalis.png" alt="Boa constrictor occidentalis" loading="lazy">
+          </div>
+        </div>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Boa constrictor atlantica (Boa de la Mata Atlántica): Esta singular variedad de boa habita únicamente en la franja costera del oriente de Brasil, adaptada a la frondosa selva de la Mata Atlántica. Aunque en 2024 se propuso considerarla como una especie independiente, revisiones genéticas y científicas más recientes redefinieron su clasificación, manteniéndola oficialmente como una subespecie dentro del gran grupo de Boa constrictor.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_atlantica.png" alt="Boa constrictor atlantica" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 3: Boa sigma -->
+      <div id="sigma" class="tab-panel" role="tabpanel" aria-labelledby="tab-sigma" aria-hidden="true">
+        <h2>Boa sigma</h2>
+        <p class="subtitle">Boa del Pacífico mexicano</p>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Aunque a simple vista es prácticamente idéntica a <em>Boa imperator</em>, los análisis de ADN confirmaron que la boa del Pacífico mexicano es una especie plenamente independiente. Su principal sello distintivo es su origen: habita de forma exclusiva a lo largo de la costa del Pacífico de México, extendiéndose desde Sonora hasta Oaxaca. En la herpetocultura mexicana, su cría en cautiverio ha tomado un fuerte impulso dentro de criaderos legales (PIMVS y UMA), donde los aficionados y biólogos locales la valoran enormemente por lo que representa reproducir y conservar una especie endémica.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_sigma.png" alt="Boa sigma" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 4: Boa nebulosa -->
+      <div id="nebulosa" class="tab-panel" role="tabpanel" aria-labelledby="tab-nebulosa" aria-hidden="true">
+        <h2>Boa nebulosa</h2>
+        <p class="subtitle">Boa de Dominica</p>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Si hay una serpiente que parece moldeada por las propias brumas de su entorno, es la boa de Dominica. Bautizada precisamente por su diseño "nublado", sus tonos grises y café se difuminan en degradados suaves que rompen por completo con los patrones geométricos tradicionales del género. Habita de forma exclusiva en el interior boscoso y montañoso de esta isla caribeña, habiendo consolidado su estatus de especie independiente mediante análisis genéticos. Al ser su ecosistema tan susceptible al azote de huracanes y a la presión humana, se encuentra bajo un resguardo legal severo, manteniéndose como una de las boas más enigmáticas y raras de ver.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_nebulosa.png" alt="Boa nebulosa" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 5: Boa orophias -->
+      <div id="orophias" class="tab-panel" role="tabpanel" aria-labelledby="tab-orophias" aria-hidden="true">
+        <h2>Boa orophias</h2>
+        <p class="subtitle">Boa de Santa Lucía</p>
+
+        <div class="content-with-image">
+          <div class="text-content">
+            <p>Es una joya del Caribe que habita exclusivamente en las selvas de la isla de Santa Lucía. Llama la atención por sus tonos café y grisáceos adornados con marcados bloques oscuros de alto contraste, un camuflaje perfecto para pasar desapercibida entre la hojarasca del bosque. Aunque durante años se le consideró una simple subespecie, la genética moderna confirmó su estatus como una especie independiente por derecho pleno. Hoy en día, la destrucción de su hábitat y la llegada de depredadores invasores (como la mangosta) la mantienen en un estado crítico de conservación, por lo que cuenta con una estricta protección internacional y está totalmente fuera del circuito de la herpetocultura comercial.</p>
+          </div>
+          <div class="image-content">
+            <img src="/img/Boa_orophias.png" alt="Boa orophias" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+  <!-- 3. VOLVER AL MENÚ DE BOAS (fuera de .species-content, no se mueve al cambiar de tab) -->
+  <div class="back-link">
+    <a href="../boas.html" class="btn btn-secondary">← Volver al menú de Boas</a>
+  </div>
+
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  // Conecta cada botón de especie con el sistema de tabs que ya expone
+  // main.js en window.switchTab. No se define una función local: se
+  // reutiliza la existente, verificando primero que esté disponible.
+  const speciesButtons = document.querySelectorAll('.species-btn');
+
+  speciesButtons.forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      if (typeof window.switchTab !== 'function') return;
+      const panelId = btn.getAttribute('aria-controls');
+      window.switchTab(event, panelId);
+    });
+  });
+
+  // Botón flotante "Volver arriba": aparece cuando el filtro de especies
+  // ya quedó por encima del viewport y devuelve al usuario hasta él.
+  // Se mide la posición natural del filtro: el inicio de .taxonomy-layout.
+  document.addEventListener('DOMContentLoaded', () => {
+    // El botón está en el HTML después de este <script>: se espera al DOM.
+    const backToTop = document.getElementById('back-to-top');
+    const layout = document.querySelector('.taxonomy-layout');
+    if (!backToTop || !layout) return;
+
+    const NAV_OFFSET = 80; // altura aprox. de la navbar fija
+
+    const setVisible = (visible) => {
+      backToTop.classList.toggle('is-visible', visible);
+      backToTop.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      backToTop.tabIndex = visible ? 0 : -1;
+    };
+
+    const update = () => {
+      setVisible(layout.getBoundingClientRect().top < NAV_OFFSET);
+    };
+
+    setVisible(false);
+    update();
+
+    document.addEventListener('scroll', update, { passive: true, capture: true });
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('load', update);
+
+    backToTop.addEventListener('click', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      layout.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+<button type="button" class="back-to-top" id="back-to-top" aria-label="Volver al filtro de especies">
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5"/>
+    <path d="M5 12l7-7 7 7"/>
+  </svg>
+  <span>Volver arriba</span>
+</button>
+</body>
+</html>
