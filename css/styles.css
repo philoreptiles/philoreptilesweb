@@ -4,39 +4,128 @@
    que debe cargarse ANTES que este archivo.
    ========================================================================== */
 
-/* === NAVBAR === */
+/* === SCROLL SUAVE Y PREFERS-REDUCED-MOTION === */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* === NAVBAR — ESTILO APPLE ===
+   HEADER APPLE: delgado (48px móvil / 56px desktop), símbolo de marca a la
+   izquierda y menú a la derecha, con espacio vacío al centro.
+   El estado BASE es sólido (hueso translúcido + blur), que es el que usan
+   las páginas sin .hero. En el index el <header> lleva además la clase
+   .transparent desde el HTML (evita el parpadeo antes de que cargue el JS)
+   y main.js la quita al hacer scroll. */
 .main-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  height: 48px;
   z-index: 1000;
-  /* Hueso — antes era chocolate translúcido (rgba(43,26,18,...)),
-     que corresponde a --bg. Ahora usamos --text (#FFF2D9) en rgb
-     literal porque rgba() no puede tomar un var() como componente. */
-  background: rgba(255, 242, 217, 0.85);
+  background: rgba(255, 242, 217, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-subtle);
-  transition: background-color var(--transition-base), box-shadow var(--transition-base);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
 }
 
+@media (min-width: 768px) {
+  .main-header {
+    height: 56px;
+  }
+}
+
+/* HEADER APPLE: estado con scroll (y estado permanente en páginas sin .hero):
+   fondo hueso sólido con blur y borde inferior sutil. */
 .main-header.scrolled {
-  background: rgba(255, 242, 217, 0.97);
-  box-shadow: var(--shadow-soft);
+  background: rgba(255, 242, 217, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.header-content {
+/* HEADER APPLE: estado transparente sobre el hero oscuro del index.
+   Textos y logo en hueso claro (var(--bg)); el logo se invierte a blanco
+   con filter. Se excluye .menu-open: con el panel móvil abierto el header
+   vuelve a ser sólido para que el logo y el botón se lean sobre el panel. */
+.main-header.transparent:not(.menu-open) {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.main-header.transparent:not(.menu-open) .logo-img {
+  filter: brightness(0) invert(1);
+}
+
+.main-header.transparent:not(.menu-open) .logo-text,
+.main-header.transparent:not(.menu-open) .main-nav > ul > li > a,
+.main-header.transparent:not(.menu-open) .dropdown-toggle,
+.main-header.transparent:not(.menu-open) .menu-toggle {
+  color: var(--bg);
+}
+
+.main-header.transparent:not(.menu-open) .logo-text:hover,
+.main-header.transparent:not(.menu-open) .main-nav > ul > li > a:hover,
+.main-header.transparent:not(.menu-open) .main-nav > ul > li > a.active,
+.main-header.transparent:not(.menu-open) .dropdown-toggle:hover,
+.main-header.transparent:not(.menu-open) .dropdown-toggle[aria-expanded="true"] {
+  color: var(--accent);
+}
+
+/* HEADER APPLE: contenedor a casi todo el ancho (padding lateral de 22px),
+   sin el límite de 1200px de .container. Extremos izquierda/derecha. */
+.main-header .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-block: 1rem;
+  height: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-block: 0;
+  padding-inline: 22px;
 }
 
+/* HEADER APPLE: logo = solo el símbolo cuadrado (24px móvil / 28px desktop). */
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  height: 24px;
+  width: auto;
+  max-width: none;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transition: filter var(--transition-fast), opacity var(--transition-fast);
+}
+
+.logo-link:hover .logo-img {
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .logo-img {
+    height: 28px;
+  }
+}
+
+/* Compatibilidad: páginas que aún no migraron al logo de imagen. */
 .logo-text {
   font-family: var(--font-logo);
-  color: var(--bg);
-  font-size: 1.8rem;
+  color: var(--text);
+  font-size: 1.6rem;
   letter-spacing: 0.02em;
   text-transform: none;
   transition: color var(--transition-fast);
@@ -46,18 +135,21 @@
   color: var(--accent);
 }
 
+/* HEADER APPLE: items del menú — Montserrat 400, sentence case,
+   sin bordes ni fondo; hover dorado; subrayado dorado solo en .active. */
 .main-nav > ul {
   display: flex;
-  gap: 2rem;
+  gap: 28px;
   list-style: none;
   align-items: center;
 }
 
 .main-nav a {
-  color: var(--text-muted);
+  color: var(--text);
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 0.95rem;
+  text-transform: none;
   text-decoration: none;
   position: relative;
   padding: 0.5rem 0;
@@ -65,7 +157,7 @@
 }
 
 .main-nav a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
 .main-nav a.active {
@@ -82,31 +174,26 @@
   background: var(--accent);
 }
 
-/* En desktop el nav vive directo sobre el banner (ahora hueso), sin
-   panel propio de por medio, así que necesita texto oscuro. En móvil
-   el <nav> se convierte en un panel flotante con fondo oscuro propio
-   (más abajo, en NAVBAR — RESPONSIVE) y el texto claro original sigue
-   funcionando ahí sin tocarlo. */
+/* HEADER APPLE (desktop): el nav ocupa toda la altura del header para que
+   el submenú de "Boas" arranque justo en el borde inferior del header. */
 @media (min-width: 768px) {
+  .main-nav {
+    height: 100%;
+  }
+
+  .main-nav > ul {
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .main-nav > ul > li {
+    display: flex;
+    align-items: center;
+  }
+
   .main-nav a {
-    color: var(--bg);
-  }
-
-  .main-nav a:hover {
-    color: var(--accent-dim);
-  }
-
-  .main-nav a.active {
-    color: var(--accent);
-  }
-
-  .dropdown-toggle {
-    color: var(--bg);
-  }
-
-  .dropdown-toggle:hover,
-  .dropdown-toggle[aria-expanded="true"] {
-    color: var(--accent-dim);
+    font-size: 0.85rem;
+    padding: 0.25rem 0;
   }
 }
 
@@ -115,12 +202,11 @@
 }
 
 /* El <a> de texto ("Boas") y el <button> de la flecha son hermanos.
-   Ambos inline-flex: se acomodan naturalmente uno junto al otro, como
+   Ambos inline-flex: se acomodan naturally uno junto al otro, como
    si fueran texto. El <ul class="dropdown-menu"> es un elemento de
    bloque normal (comportamiento por defecto de <ul>), así que cae
-   SIEMPRE en su propia línea, debajo de ellos — sin necesidad de
-   flex/flex-wrap en el <li> padre, que es lo que causaba el bug
-   anterior (el submenú apareciendo al lado del texto). */
+   SIEMPRE en su propia línea, debajo de ellos (en móvil). En desktop
+   el <li> es flex y el submenú es absoluto, así que no interfiere. */
 .dropdown > a.nav-link {
   display: inline-flex;
   align-items: center;
@@ -130,12 +216,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  vertical-align: middle;
   background: transparent;
   border: none;
   font: inherit;
   padding: 0.5rem 0.3rem;
   margin-left: 0.2rem;
-  color: var(--text-muted);
+  color: var(--text);
   cursor: pointer;
   transition: color var(--transition-fast);
 }
@@ -168,18 +255,20 @@
   width: 100%;
 }
 
+/* HEADER APPLE: texto chocolate sobre el panel beige (también con el header transparente). */
 .dropdown-menu a {
   display: block;
   padding: 0.7rem 1.4rem;
-  color: var(--text-muted);
+  color: var(--text);
   font-size: 0.9rem;
   white-space: nowrap;
+  overflow-wrap: normal;
   transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .dropdown-menu a:hover {
   background: rgba(196, 146, 62, 0.10);
-  color: var(--text);
+  color: var(--accent);
 }
 
 .dropdown-menu a.active {
@@ -188,17 +277,21 @@
 }
 
 /* === DROPDOWN MENU — DESKTOP ===
-   Panel flotante, una sola columna, alineado a la IZQUIERDA de
-   ".dropdown" — es decir, arranca justo debajo de la palabra "Boas"
-   (que es el primer hijo), no debajo de todo el bloque a+botón.
+   Panel flotante alineado a la derecha de ".dropdown" (right: 0),
+   lo que garantiza que se despliegue hacia la izquierda del elemento
+   y mantenga al menos 22px de margen con el borde derecho de la ventana.
    Se abre con :hover sobre el <li> Y con la clase .open (click en
-   el botón-flecha). El <a> de texto nunca controla la apertura. */
+   el botón-flecha). El <a> de texto nunca controla la apertura.
+   MODO CLARO: fondo beige elevado (var(--bg-elevated)) con borde y
+   sombra chocolate sutiles. */
 @media (min-width: 768px) {
   .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    min-width: 240px;
+    right: 0;
+    left: auto;
+    min-width: 260px;
+    max-width: calc(100vw - 44px);
     width: max-content;
     background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
@@ -222,9 +315,8 @@
 /* === DROPDOWN MENU — MÓVIL ===
    Sin hover disponible: se abre/cierra ÚNICAMENTE con click en la
    flecha (clase .open añadida por JS). El <li class="dropdown">
-   pasa a width:100% (en vez de encogerse al ancho de "Boas ▾" como
-   los demás items) para que el submenú tenga todo el ancho del nav
-   y no se comprima. Indentado y sin chrome pesado. */
+   pasa a width:100% para que el submenú tenga todo el ancho del panel.
+   HEADER APPLE: submenú indentado dentro del panel. */
 @media (max-width: 767px) {
   .dropdown {
     width: 100%;
@@ -241,8 +333,9 @@
     visibility: visible;
     transform: none;
     display: none;
-    margin-top: 0.25rem;
-    padding-left: 1rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    padding: 0 0 0 1rem;
     border-left: 1px solid var(--border-subtle);
   }
 
@@ -252,59 +345,128 @@
 
   .dropdown-menu a {
     white-space: normal;
+    padding: 0.65rem 0.75rem;
   }
 }
 
+/* HEADER APPLE: botón hamburguesa a la derecha (solo móvil), alto completo
+   del header para un área táctil cómoda. .transparent lo vuelve claro
+   (ver bloque .main-header.transparent más arriba). */
 .menu-toggle {
   display: none;
   background: transparent;
   border: none;
-  color: var(--bg);
+  color: var(--text);
   font-size: 1.5rem;
+  line-height: 1;
+  height: 100%;
+  padding: 0 0 0 var(--space-sm);
   cursor: pointer;
+  transition: color var(--transition-fast);
 }
 
-/* === NAVBAR — RESPONSIVE === */
+.menu-toggle:hover {
+  color: var(--accent);
+}
+
+/* HEADER APPLE: fondo oscurecido detrás del panel móvil. Lo crea main.js
+   (div.nav-backdrop) y solo existe visualmente en móvil. */
+.nav-backdrop {
+  display: none;
+}
+
+/* === NAVBAR — RESPONSIVE (móvil) ===
+   HEADER APPLE: el panel se despliega desde arriba, a todo el ancho, con
+   fondo hueso sólido. Animación de ~300ms: revelado desde arriba (clip-path)
+   + fade + ligero deslizamiento. Va por debajo del header (z-index 999 < 1000).
+   Al estar dentro del header (position: fixed), top: 100% arranca en su
+   borde inferior real y la altura máxima se calcula contra su alto. */
 @media (max-width: 767px) {
-  /* El <nav> es hijo de .main-header (position: fixed), así que su
-     contenedor de referencia es el propio header y NO el viewport.
-     Por eso top: 100% arranca EXACTAMENTE en el borde inferior real del
-     header, sin importar cuánto mida (no hay que estimar 64px, 68px, etc.
-     y no hay que ajustar nada si el header cambia de altura).
-     Con top: 0 el panel taparía el logo y el botón ☰ (que son texto
-     oscuro sobre el fondo oscuro del panel), por eso no se usa.
-     El alto es "100% del viewport menos la altura del header":
-     el 100% dentro de calc() se resuelve contra el alto del header. */
   .main-nav {
     position: absolute;
     top: 100%;
-    right: 0;
-    z-index: 999; /* menor que .main-header (1000) */
-    width: 80%;
-    max-width: 320px;
-    height: calc(100vh - 100%);  /* fallback */
-    height: calc(100dvh - 100%); /* móviles con barra de navegador dinámica */
-    background: var(--bg-elevated);
-    border-left: 1px solid var(--border-subtle);
-    padding: 2rem 1.5rem;
-    padding-bottom: var(--space-lg);
-    transform: translateX(100%);
-    transition: transform var(--transition-base);
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    max-height: calc(100vh - 100%);  /* fallback */
+    max-height: calc(100dvh - 100%); /* móviles con barra de navegador dinámica */
     overflow-y: auto;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--space-xs) var(--space-md) var(--space-md);
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      clip-path var(--transition-base),
+      opacity var(--transition-base),
+      transform var(--transition-base),
+      visibility 0s linear 0.3s;
   }
 
   .main-nav.open {
-    transform: translateX(0);
+    clip-path: inset(0);
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
   }
 
+  /* Items en una sola columna, alineados a la izquierda, con aire. */
   .main-nav > ul {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .main-nav > ul > li {
+    width: 100%;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .main-nav > ul > li:last-child {
+    border-bottom: none;
+  }
+
+  .main-nav > ul > li > a {
+    display: inline-block;
+    padding: 0.85rem 0;
+  }
+
+  .dropdown-toggle {
+    padding: 0.85rem 0.75rem;
   }
 
   .menu-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Con el panel abierto el header es sólido (aunque esté en .transparent). */
+  .main-header.menu-open {
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: var(--border-subtle);
+  }
+
+  /* Fondo de pantalla oscurecido detrás del panel (por debajo del header). */
+  .nav-backdrop {
     display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: var(--overlay);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility 0s linear 0.3s;
+  }
+
+  .nav-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
   }
 }
 
@@ -385,16 +547,18 @@
   text-decoration: none;
 }
 
+/* MODO CLARO: dorado con texto chocolate (contraste sobre el acento);
+   el hover pasa a un dorado más oscuro con texto claro. */
 .btn-primary {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
   border-color: var(--accent);
 }
 
 .btn-primary:hover {
-  background: var(--accent-dim);
-  border-color: var(--accent-dim);
-  color: var(--text);
+  background: #A87B2E;
+  border-color: #A87B2E;
+  color: var(--bg);
   transform: translateY(-2px);
   box-shadow: var(--shadow-soft);
 }
@@ -469,6 +633,7 @@
   }
 }
 
+/* MODO CLARO: superficie elevada beige (var(--bg-elevated)) con borde chocolate sutil. */
 .card {
   position: relative;
   display: flex;
@@ -506,12 +671,13 @@
   transform: scale(1.05);
 }
 
+/* MODO CLARO: texto chocolate sobre el badge dorado (mismo criterio que .btn-primary). */
 .card-badge {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.7rem;
@@ -634,9 +800,10 @@
   color: var(--text);
 }
 
+/* MODO CLARO: texto chocolate sobre el estado activo dorado (mismo criterio que .card-badge). */
 .species-btn.active-tab {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -724,6 +891,308 @@
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
   border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+/* ==========================================================================
+   === CARRUSEL ESTILO APPLE (COMPONENTES REUTILIZABLES) ===
+   ========================================================================== */
+
+.carousel-section {
+  padding-block: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Contenedor del encabezado alineado al container estándar */
+.carousel-header {
+  margin-bottom: var(--space-lg);
+}
+
+.carousel-header h2 {
+  font-size: var(--fs-h2);
+  margin-top: 0.25rem;
+}
+
+/* El carrusel va A SANGRE (100% del ancho del viewport, sin max-width) */
+.carousel {
+  position: relative;
+  width: 100%;
+}
+
+/* === CORRECCIÓN PROBLEMA 2: Ajuste de gap y padding del track para eliminar espacios gigantes === */
+.carousel-track {
+  display: flex;
+  gap: 14px; /* Gap pequeño entre fichas en móvil (12-16px máximo) */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--space-md, 1rem);
+  padding-inline: var(--space-md, 1rem);
+  padding-block: 8px 16px; /* Espacio superior e inferior para evitar recortes en sombras/hover */
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fichas individuales del carrusel */
+.carousel-item {
+  flex: 0 0 85%; /* Móvil: 85% del ancho de la pantalla, deja ver el 15% de la siguiente */
+  scroll-snap-align: start;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), opacity var(--transition-base);
+  box-shadow: 0 4px 12px rgba(43, 26, 18, 0.04);
+}
+
+.carousel-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* === AJUSTE CARRUSELES (tablet/desktop): centrado, gap a la mitad y
+   ancho de fichas recalculado. El móvil (base, arriba) no se toca. === */
+@media (min-width: 768px) {
+  .carousel-track {
+    --carousel-gap: 8px; /* Gap a la mitad del valor anterior (16px) */
+    --carousel-visible: 2.15; /* 2 fichas completas + fragmento (~15%) de la 3ra */
+    gap: var(--carousel-gap);
+    justify-content: center; /* Centra el contenido cuando cabe en el ancho disponible; no afecta el scroll cuando desborda */
+    scroll-padding-inline: 6vw;
+    padding-inline: 6vw;
+  }
+  .carousel-item {
+    flex: 0 0 calc((100% - (var(--carousel-visible) - 1) * var(--carousel-gap)) / var(--carousel-visible));
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel-track {
+    --carousel-gap: 10px; /* Gap a la mitad del valor anterior (20px) */
+    --carousel-visible: 3.15; /* 3 fichas completas + fragmento (~15%) de la 4ta */
+    gap: var(--carousel-gap);
+    scroll-padding-inline: 5vw;
+    padding-inline: 5vw;
+  }
+  .carousel-item {
+    flex: 0 0 calc((100% - (var(--carousel-visible) - 1) * var(--carousel-gap)) / var(--carousel-visible));
+  }
+}
+
+/* Área visual: Círculo con SVG (Conoce a las boas) */
+.carousel-item-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+  flex-shrink: 0;
+}
+
+/* Área visual: Imagen (Últimos artículos) */
+.carousel-item-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg);
+  margin-bottom: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.carousel-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.carousel-item:hover .carousel-item-image img {
+  transform: scale(1.05);
+}
+
+/* Tipografía interna estilo Apple */
+.carousel-item-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.carousel-item-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 2vw, 1.5rem);
+  color: var(--text);
+  margin-bottom: var(--space-xs);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.carousel-item-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+  flex: 1; /* Permite que todas las fichas mantengan la misma altura */
+}
+
+.carousel-item-link {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color var(--transition-fast);
+}
+
+.carousel-item:hover .carousel-item-link {
+  color: var(--text);
+}
+
+/* Variantes para ítems is-soon */
+.carousel-item.is-soon {
+  opacity: 0.7;
+}
+
+.carousel-item-soon-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+/* Flechas de navegación */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: opacity var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  @media (min-width: 768px) {
+  .carousel-arrow,
+  .carousel-dots {
+    display: none;
+  }
+}
+}
+
+.carousel-arrow:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.carousel-arrow-prev {
+  left: 8px;
+}
+
+.carousel-arrow-next {
+  right: 8px;
+}
+
+@media (min-width: 768px) {
+  .carousel-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+  .carousel-arrow-prev {
+    left: 20px;
+  }
+  .carousel-arrow-next {
+    right: 20px;
+  }
+}
+
+.carousel-arrow[disabled],
+.carousel-arrow.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Indicadores de posición (Dots) */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--space-md);
+  
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), width var(--transition-fast), border-radius var(--transition-fast);
+}
+
+.carousel-dot:hover {
+  background: var(--accent-dim);
+}
+
+.carousel-dot.active {
+  background: var(--accent);
+  width: 20px;
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .carousel-arrow,
+  .carousel-dots {
+    display: none;
+  }
+}
+
+/* Pie del carrusel con botón de llamada a la acción */
+.carousel-footer {
+  margin-top: var(--space-lg);
   text-align: center;
 }
 

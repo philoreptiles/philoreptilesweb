@@ -13,22 +13,24 @@
 
 /* ==========================================================================
    === VARIABLES ===
+   MODO CLARO: --bg y --text intercambian sus valores originales (fondo
+   hueso, texto chocolate); --accent y --accent-dim se mantienen igual.
    ========================================================================== */
 :root {
   /* Colores */
-  --bg: #2B1A12;
-  --bg-elevated: #3D2820;
-  --text: #FFF2D9;
-  --text-muted: #B8A88C;
+  --bg: #FFF2D9;
+  --bg-elevated: #F7E8CA;
+  --text: #2B1A12;
+  --text-muted: #2B1A12;
   --accent: #C4923E;
   --accent-dim: #8A6A3A;
 
-  /* Derivados útiles */
-  --border-subtle: rgba(196, 146, 62, 0.20);
-  --border-strong: rgba(196, 146, 62, 0.45);
-  --overlay: rgba(43, 26, 18, 0.75);
-  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-strong: 0 16px 40px rgba(0, 0, 0, 0.55);
+  /* Derivados útiles — bordes y sombras recalculados en tono chocolate para modo claro */
+  --border-subtle: rgba(43, 26, 18, 0.12);
+  --border-strong: rgba(43, 26, 18, 0.28);
+  --overlay: rgba(43, 26, 18, 0.55);
+  --shadow-soft: 0 8px 24px rgba(43, 26, 18, 0.08);
+  --shadow-strong: 0 16px 40px rgba(43, 26, 18, 0.12);
 
   /* Tipografía */
   --font-logo: 'Peach Club', 'Bebas Neue', sans-serif;
@@ -100,14 +102,12 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-
-  /* Textura de escamas, fija sobre todo el fondo */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='none' stroke='%23C4923E' stroke-opacity='0.15' stroke-width='1.2'/%3E%3Cpath d='M40 15 L65 40 L40 65 L15 40 Z' fill='none' stroke='%23FFF2D9' stroke-opacity='0.06' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='2' fill='%23C4923E' fill-opacity='0.2'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-attachment: fixed;
+  /* MODO CLARO: se elimina la textura de escamas; el fondo es ahora un
+     color plano hueso (var(--bg)), sin background-image de patrón. */
 }
 
-/* Luz radial suave entre hojas, detrás de todo el contenido */
+/* MODO CLARO: reemplaza el patrón de escamas por dos luces radiales
+   doradas muy sutiles en las esquinas, detrás de todo el contenido. */
 body::before {
   content: "";
   position: fixed;
@@ -115,8 +115,8 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(ellipse 55% 45% at 8% 6%, rgba(196, 146, 62, 0.07), transparent 60%),
-    radial-gradient(ellipse 55% 45% at 94% 92%, rgba(138, 106, 58, 0.06), transparent 60%);
+    radial-gradient(ellipse 55% 45% at 8% 6%, rgba(196, 146, 62, 0.06), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 94% 92%, rgba(196, 146, 62, 0.04), transparent 60%);
 }
 
 /* ==========================================================================
@@ -196,9 +196,10 @@ code, pre {
   font-size: 0.9em;
 }
 
+/* MODO CLARO: texto chocolate sobre dorado para mantener contraste en la selección */
 ::selection {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
 }
 
 /* ==========================================================================

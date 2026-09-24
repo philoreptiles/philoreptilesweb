@@ -16,11 +16,22 @@
    Mobile-first: base = móvil; escala con min-width 768px y 1024px/1280px
    ========================================================================== */
 
-/* === ANCLAS: compensan la navbar fija === */
+/* === CORRECCIÓN PROBLEMA 1: Variables de altura de la navbar fija === */
+:root {
+  --header-height: 48px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-height: 56px;
+  }
+}
+
+/* === ANCLAS: compensan la navbar fija ajustadas exactamente a su altura real === */
 #sobre-el-proyecto,
 #blog,
 #contacto {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 40px;
 }
 
 /* === HERO A SANGRE === */
@@ -32,8 +43,8 @@
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  /* Compensa navbar fija (64px) y barra del navegador / safe area */
-  padding-top: calc(64px + var(--space-md));
+  /* HEADER APPLE: compensa la navbar fija (48px móvil) y barra del navegador / safe area */
+  padding-top: calc(48px + var(--space-md));
   padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
 }
 
@@ -63,6 +74,8 @@
   margin-inline: auto;
   max-width: 1200px;
   width: 100%;
+  /* HERO CLARO: red de seguridad — nada dentro del hero hereda el chocolate de --text */
+  color: var(--bg);
 }
 
 .hero-content > * { max-width: 760px; }
@@ -70,16 +83,29 @@
 /* Los <p> del hero no heredan el max-width: 70ch de design.css en móvil */
 .hero-content p { max-width: 100%; }
 
-.hero-title { font-size: var(--fs-h1); letter-spacing: 0.02em; margin-bottom: var(--space-sm); }
+/* HERO CLARO: título en Peach Club, hueso claro y más pequeño que antes.
+   Móvil: clamp(2rem, 8vw, 3rem). Desktop: ver media query ≥ 768px. */
+.hero-title {
+  font-family: var(--font-logo);
+  font-size: clamp(2rem, 8vw, 3rem);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--bg);
+  margin-bottom: var(--space-sm);
+}
 
+/* HERO CLARO: subtítulo hueso al 85% de opacidad (rgba del mismo #FFF2D9).
+   Se usa rgba y no `opacity` para no chocar con la animación .stagger. */
 .hero-subtitle {
   max-width: 100%;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.7;
   font-weight: 300;
-  color: var(--text-muted);
+  color: rgba(255, 242, 217, 0.85);
 }
 
+/* HERO CLARO: enlace en hueso; subrayado dorado apagado; hover dorado. */
 .hero-cta {
   margin-top: var(--space-md);
   margin-bottom: var(--space-sm);
@@ -88,7 +114,7 @@
   gap: 0.6rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--bg);
   border-bottom: 1px solid var(--accent-dim);
   padding-bottom: 4px;
   transition: color var(--transition-base), border-color var(--transition-base);
@@ -124,103 +150,11 @@
 .about-text p { color: var(--text-muted); font-weight: 300; max-width: 60ch; margin-bottom: var(--space-sm); }
 .about-text .card-cta { display: inline-block; }
 
-/* === CTA GÉNERO BOA === */
-.boas-cta {
-  padding-block: var(--space-xl);
-  background-color: var(--bg-elevated);
-  text-align: center;
-}
-
-.boas-cta h2 {
-  margin-top: 0.25rem;
-  margin-bottom: var(--space-sm);
-}
-
-.boas-cta p {
-  max-width: 52ch;
-  margin-inline: auto;
-  margin-bottom: var(--space-lg);
-  font-weight: 300;
-  color: var(--text-muted);
-  font-size: 1.05rem;
-}
-
-.boas-cta .btn {
-  display: inline-flex;
-  margin-top: var(--space-md);
-}
-
-/* === ÚLTIMOS ARTÍCULOS === */
-.articles { padding-block: var(--space-lg); }
-.section-intro { margin-bottom: var(--space-lg); max-width: 50ch; }
-
-.card-body h3 { font-size: 1.35rem; }
-
-/* === REDES SOCIALES === */
-.social-strip {
-  padding: var(--space-xl) 0;
-  background-color: var(--bg-elevated);
-  text-align: center;
-}
-
-.social-strip h2 {
-  font-size: var(--fs-h2);
-  margin-top: 0.25rem;
-}
-
-.social-strip p {
-  margin: var(--space-xs) auto var(--space-lg);
-  max-width: 48ch;
-  font-weight: 300;
-  color: var(--text-muted);
-  font-size: 1.05rem;
-}
-
-.social-strip .social-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-md);
-}
-
-.social-strip .social-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.7rem 1.4rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text);
-  font-weight: 500;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: all var(--transition-base, 0.3s ease);
-}
-
-.social-strip .social-btn svg {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-  stroke: none;
-  transition: transform var(--transition-base, 0.3s ease);
-}
-
-.social-strip .social-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-3px);
-}
-
-.social-strip .social-btn:hover svg {
-  transform: scale(1.1);
-}
-
 /* === TABLET / ESCRITORIO (≥ 768px) === */
 @media (min-width: 768px) {
   .hero {
-    padding-top: calc(80px + var(--space-md));
+    /* HEADER APPLE: navbar fija de 56px en desktop */
+    padding-top: calc(56px + var(--space-md));
     padding-bottom: 0;
   }
 
@@ -230,6 +164,11 @@
   }
 
   .hero-content p { max-width: 70ch; }
+
+  /* HERO CLARO: título desktop clamp(2.5rem, 5vw, 3.5rem) */
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  }
 
   .hero-subtitle {
     max-width: 46ch;
@@ -250,19 +189,6 @@
   }
 
   .about-photo { margin-top: 0; }
-
-  .card-body h3 { font-size: var(--fs-h3); }
-
-  .articles { padding-bottom: var(--space-2xl); }
-
-  .boas-cta { padding-block: var(--space-2xl); }
-
-  .social-strip { padding: var(--space-2xl) 0; }
-
-  .social-strip .social-btn {
-    padding: 0.85rem 1.75rem;
-    font-size: 0.95rem;
-  }
 }
 
 /* === ESCRITORIO (≥ 1024px) === */
@@ -285,14 +211,10 @@
 /* === MOVIMIENTO REDUCIDO === */
 @media (prefers-reduced-motion: reduce) {
   .hero-cta,
-  .hero-cta .arrow,
-  .social-strip .social-btn,
-  .social-strip .social-btn svg {
+  .hero-cta .arrow {
     transition: none;
   }
-  .hero-cta:hover .arrow,
-  .social-strip .social-btn:hover,
-  .social-strip .social-btn:hover svg {
+  .hero-cta:hover .arrow {
     transform: none;
   }
 }
@@ -300,9 +222,13 @@
 </head>
 <body>
 
-<header class="main-header">
-  <div class="container header-content">
-    <a href="#inicio" class="logo-text">Philoreptiles</a>
+<!-- HEADER APPLE: el index arranca en estado .transparent (sobre el hero);
+     main.js lo quita al hacer scroll y añade .scrolled. -->
+<header class="main-header transparent">
+  <div class="header-content">
+    <a href="index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="./img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
     <nav class="main-nav" id="main-nav">
       <ul>
         <li><a href="#inicio" class="active">Inicio</a></li>
@@ -332,7 +258,7 @@
   <!-- 1. HERO -->
   <section id="inicio" class="hero">
     <div class="hero-media">
-      <img src="img/textura.jpg" alt="Boa constrictor entre la vegetación">
+      <img src="img/textura1.jpg" alt="Boa constrictor entre la vegetación">
     </div>
     <div class="container hero-content stagger">
       <h1 class="hero-title">Philoreptiles</h1>
@@ -348,7 +274,7 @@
   <section id="sobre-el-proyecto" class="about reveal">
     <div class="container">
       <div class="about-photo">
-        <img src="img/Profile1.jpg" alt="Sobre Philoreptiles">
+        <img src="img/1.jpg" alt="Sobre Philoreptiles">
       </div>
       <div class="about-text">
         <span class="text-accent">Sobre el proyecto</span>
@@ -361,57 +287,133 @@
     </div>
   </section>
 
-  <!-- 2b. CTA GÉNERO BOA -->
-  <section class="boas-cta reveal">
-    <div class="container">
-      <span class="text-accent">El género Boa</span>
-      <h2>Conoce a las boas</h2>
-      <p>Un recorrido por la taxonomía, los cuidados, la genética, los morfos y la legalidad de uno de los géneros de serpientes más fascinantes.</p>
-      <a href="./boas.html" class="btn btn-primary">Explorar el género Boa →</a>
+  <!-- 3. CARRUSEL: CONOCE A LAS BOAS (Conserva flechas y dots) -->
+  <section id="boas" class="carousel-section reveal" role="region" aria-label="Conoce a las boas">
+    <div class="carousel-container container">
+      <div class="carousel-header">
+        <span class="text-accent">El género Boa</span>
+        <h2>Conoce a las boas</h2>
+      </div>
+    </div>
+    <div class="carousel" role="region" aria-label="Carrusel de conocimiento sobre el género Boa">
+      <div class="carousel-track" aria-label="Explorar subsecciones de Boas">
+        
+        <!-- Ficha 1: Taxonomía -->
+        <a href="boas/taxonomia.html" class="carousel-item">
+          <div class="carousel-item-icon">
+            <svg viewBox="0 0 64 64" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+              <path d="M12 18 C 24 18, 40 46, 52 46"/>
+              <path d="M12 46 C 24 46, 40 18, 52 18"/>
+              <line x1="20" y1="23.5" x2="20" y2="40.5"/>
+              <line x1="32" y1="32" x2="32" y2="32"/>
+              <line x1="44" y1="23.5" x2="44" y2="40.5"/>
+              <circle cx="20" cy="23.5" r="2" fill="currentColor"/>
+              <circle cx="20" cy="40.5" r="2" fill="currentColor"/>
+              <circle cx="44" cy="23.5" r="2" fill="currentColor"/>
+              <circle cx="44" cy="40.5" r="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="carousel-item-eyebrow">Biología</span>
+          <h3 class="carousel-item-title">Taxonomía</h3>
+          <p class="carousel-item-text">Clasificación científica, especies y subespecies reconocidas del género Boa.</p>
+          <span class="carousel-item-link">Explorar →</span>
+        </a>
+
+        <!-- Ficha 2: Cuidados en cautiverio -->
+        <a href="boas/cuidados.html" class="carousel-item">
+          <div class="carousel-item-icon">
+            <svg viewBox="0 0 64 64" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+              <rect x="10" y="14" width="44" height="36" rx="4"/>
+              <path d="M18 24 h28"/>
+              <path d="M22 36 h20"/>
+              <path d="M28 44 h8"/>
+              <circle cx="32" cy="14" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="carousel-item-eyebrow">Manutención</span>
+          <h3 class="carousel-item-title">Cuidados en cautiverio</h3>
+          <p class="carousel-item-text">Parámetros de temperatura, humedad, terrarios y alimentación responsable.</p>
+          <span class="carousel-item-link">Explorar →</span>
+        </a>
+
+        <!-- Ficha 3: Genética -->
+        <a href="boas/genetica.html" class="carousel-item">
+          <div class="carousel-item-icon">
+            <svg viewBox="0 0 64 64" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
+              <path d="M16 12 C 32 24, 32 40, 48 52"/>
+              <path d="M48 12 C 32 24, 32 40, 16 52"/>
+              <line x1="21" y1="18" x2="43" y2="18"/>
+              <line x1="25" y1="27" x2="39" y2="27"/>
+              <line x1="25" y1="37" x2="39" y2="37"/>
+              <line x1="21" y1="46" x2="43" y2="46"/>
+            </svg>
+          </div>
+          <span class="carousel-item-eyebrow">Herpetocultura</span>
+          <h3 class="carousel-item-title">Genética</h3>
+          <p class="carousel-item-text">Principios de herencia genotípica, mutaciones recesivas y dominantes.</p>
+          <span class="carousel-item-link">Explorar →</span>
+        </a>
+
+      </div>
+      <div class="carousel-dots"></div>
+    </div>
+    <div class="carousel-footer">
+      <a href="./boas.html" class="btn btn-secondary">Ver más →</a>
     </div>
   </section>
 
-  <!-- 3. ÚLTIMOS ARTÍCULOS -->
-  <section id="blog" class="articles reveal">
-    <div class="container">
-      <div class="section-intro">
+  <!-- 4. CARRUSEL: ÚLTIMOS ARTÍCULOS (Se añade la clase .carousel--no-arrows para ocultar flechas siempre y dots en desktop) -->
+  <section id="blog" class="carousel-section reveal" role="region" aria-label="Últimos artículos">
+    <div class="carousel-container container">
+      <div class="carousel-header">
         <span class="text-accent">El blog</span>
         <h2>Últimos artículos</h2>
       </div>
-      <div class="cards-grid">
-        <a href="./posts/post-1.html" class="card">
-          <div class="card-image">
+    </div>
+    <div class="carousel carousel--no-arrows" role="region" aria-label="Carrusel de artículos del blog">
+      <div class="carousel-track" aria-label="Artículos recientes">
+        
+        <!-- Artículo 1 -->
+        <a href="./posts/post-1.html" class="carousel-item">
+          <div class="carousel-item-image">
             <img src="https://picsum.photos/seed/philoreptiles1/600/450" alt="[IMAGEN DEL POST 1]">
           </div>
-          <div class="card-body">
-            <h3>[Título del post 1]</h3>
-            <p>[Extracto corto del artículo, dos o three líneas que inviten a seguir leyendo.]</p>
-            <span class="card-cta">Leer más →</span>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 1]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
-        <a href="./posts/post-2.html" class="card">
-          <div class="card-image">
+
+        <!-- Artículo 2 -->
+        <a href="./posts/post-2.html" class="carousel-item">
+          <div class="carousel-item-image">
             <img src="https://picsum.photos/seed/philoreptiles2/600/450" alt="[IMAGEN DEL POST 2]">
           </div>
-          <div class="card-body">
-            <h3>[Título del post 2]</h3>
-            <p>[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
-            <span class="card-cta">Leer más →</span>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 2]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
-        <a href="./posts/post-3.html" class="card">
-          <div class="card-image">
+
+        <!-- Artículo 3 -->
+        <a href="./posts/post-3.html" class="carousel-item">
+          <div class="carousel-item-image">
             <img src="https://picsum.photos/seed/philoreptiles3/600/450" alt="[IMAGEN DEL POST 3]">
           </div>
-          <div class="card-body">
-            <h3>[Título del post 3]</h3>
-            <p>[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
-            <span class="card-cta">Leer más →</span>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 3]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
+
       </div>
+      <div class="carousel-dots"></div>
+    </div>
+    <div class="carousel-footer">
+      <a href="blog.html" class="btn btn-secondary">Ver todos los artículos →</a>
     </div>
   </section>
+
 </main>
 
 <footer class="main-footer">
