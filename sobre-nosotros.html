@@ -8,7 +8,7 @@
 
 <link rel="stylesheet" href="./css/design.css">
 <link rel="stylesheet" href="./css/styles.css">
-<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="icon" type="image/png" href="./img/favicon.png">
 
 <style>
 /* ==========================================================================
@@ -63,23 +63,37 @@
   max-width: 760px;
 }
 
+/* HERO CLARO: título en Peach Club (script), hueso claro, tamaño moderado
+   para no verse desproporcionado; se respeta su caja tal cual (sin forzar
+   mayúsculas, a diferencia del h1 uppercase por defecto de design.css). */
 .hero-title {
-  font-size: var(--fs-h1);
+  font-family: var(--font-logo);
+  font-size: clamp(2rem, 8vw, 3.5rem);
   letter-spacing: 0.02em;
+  text-transform: none;
+  color: #FFF2D9;
   margin-bottom: var(--space-sm);
 }
 
+/* HERO CLARO: subtítulo hueso al 85% de opacidad (rgba del mismo #FFF2D9) */
 .hero-subtitle {
   max-width: 48ch;
   font-size: 0.95rem;
   font-weight: 300;
-  color: var(--text-muted);
+  color: rgba(255, 242, 217, 0.85);
   line-height: 1.6;
 }
 
+.hero-content h1,
+.hero-content p {
+  color: #FFF2D9;
+}
+
 /* === BLOQUES EDITORIALES === */
+/* Espaciado reducido: antes --space-xl en móvil (se sentía excesivo entre
+   el hero y el primer bloque, y hacia el cierre); se baja un escalón. */
 .manifesto-section {
-  padding-block: var(--space-xl);
+  padding-block: var(--space-lg);
 }
 
 .manifesto-container {
@@ -88,10 +102,12 @@
   padding-inline: var(--space-md);
 }
 
+/* Antes --space-xl: era el mayor contribuyente al hueco entre bloques
+   (origen → foto → filosofía → cierre). Se reduce más agresivo en móvil. */
 .manifesto-block {
   max-width: 72ch;
   margin-inline: auto;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
 }
 
 .manifesto-block:last-child {
@@ -161,8 +177,9 @@
 }
 
 /* Separador tipográfico */
+/* Antes --space-xl: el separador aislado no necesita tanto aire propio. */
 .block-separator {
-  margin-block: var(--space-xl);
+  margin-block: var(--space-md);
   text-align: center;
   font-size: 1rem;
   line-height: 1;
@@ -177,9 +194,40 @@
   margin-inline: 0.75em;
 }
 
+/* === FOTOGRAFÍA EDITORIAL: pausa visual entre "Nuestro origen" y
+   "Filosofía del proyecto". Bordes limpios, sin sombras. === */
+/* Antes --space-xl de margen inferior: se baja para no duplicar el aire
+   que ya aportan los --space-md de los bloques de texto contiguos. */
+.editorial-photo {
+  max-width: 900px;
+  margin: 0 auto var(--space-lg);
+  padding-inline: var(--space-md);
+}
+
+.editorial-photo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.editorial-photo figcaption {
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+  color: var(--text-muted);
+}
+
 /* === CIERRE CON CTA === */
+/* Antes --space-xl arriba y abajo: sumado al margin-top del footer dejaba
+   un hueco desproporcionado antes de llegar al pie de página. */
 .cta-close {
-  padding-block: var(--space-xl);
+  padding-block: var(--space-lg);
   text-align: center;
 }
 
@@ -211,16 +259,22 @@
     padding-bottom: var(--space-xl);
   }
 
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+
   .hero-subtitle {
     font-size: 1.05rem;
   }
 
+  /* Desktop: reducción más moderada que en móvil (2xl → xl / lg) para
+     conservar el ritmo editorial sin el hueco excesivo original. */
   .manifesto-section {
-    padding-block: var(--space-2xl);
+    padding-block: var(--space-xl);
   }
 
   .manifesto-block {
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-lg);
   }
 
   .manifesto-block:last-child {
@@ -228,7 +282,7 @@
   }
 
   .cta-close {
-    padding-block: var(--space-2xl);
+    padding-block: var(--space-xl);
   }
 
   .cta-close p {
@@ -256,9 +310,13 @@
 </head>
 <body>
 
-<header class="main-header">
-  <div class="container header-content">
-    <a href="index.html" class="logo-text">Philoreptiles</a>
+<!-- HEADER APPLE: arranca en estado .transparent sobre el hero;
+     main.js lo quita al hacer scroll y añade .scrolled. -->
+<header class="main-header transparent">
+  <div class="header-content">
+    <a href="index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="./img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
     <nav class="main-nav" id="main-nav">
       <ul>
         <li><a href="index.html">Inicio</a></li>
@@ -291,8 +349,7 @@
       <img src="img/textura.jpg" alt="Boa en su hábitat natural">
     </div>
     <div class="container hero-content stagger">
-      <span class="text-accent">Philoreptiles</span>
-      <h1 class="hero-title">Sobre nosotros</h1>
+      <h1>Sobre nosotros</h1>
       <p class="hero-subtitle">Un proyecto que documenta, observa y comparte el mundo de las boas con rigor, cercanía y aprendizaje constante.</p>
     </div>
   </section>
@@ -312,13 +369,16 @@
           <span class="block-eyebrow">Nuestro origen</span>
         </header>
         <div class="block-content">
-          <p>Philoreptiles nace del interés genuino por el mundo de los reptiles, una curiosidad que con el tiempo encontró un enfoque claro en las boas tras una primera interacción en una convención de fauna en Ciudad de México en 2014. Desde entonces, lo que comenzó como una fascinación difícil de explicar se ha convertido en un proceso constante de aprendizaje, observación y experiencia directa.</p>
-          <span class="highlight">HERPETOCULTURA RESPONSABLE, ACCESIBLE Y EN CONSTANTE EVOLUCIÓN</span>
-          <p>Este espacio surge con la intención de compartir ese proceso de forma abierta y honesta: no solo recopilando información, sino también documentando lo que funciona, lo que no, y todo lo que se aprende en el camino. Philoreptiles busca ser un punto de referencia cercano para quienes sienten interés por estas especies.</p>
+          <p>Philoreptiles nace del interés genuino por el mundo de los reptiles, una curiosidad que con el tiempo encontró un enfoque claro en las boas tras una primera interacción en una convención de 
+            fauna en Ciudad de México en 2014. Desde entonces, lo que comenzó como una fascinación difícil de explicar se ha convertido en un proceso constante de aprendizaje, observación y experiencia directa.</p>
+          <p>Este espacio surge con la intención de compartir ese proceso de forma abierta y honesta: no solo recopilando información, sino también documentando lo que funciona, lo que no, y todo lo que se aprende 
+            en el camino. Philoreptiles busca ser un punto de referencia cercano para quienes sienten interés por estas especies.</p>
         </div>
       </article>
 
-      <div class="block-separator" aria-hidden="true">◆</div>
+      <figure class="editorial-photo reveal">
+        <img src="/img/2.jpg" alt="Boa en su hábitat / detalle de escamas" loading="lazy">
+      </figure>
 
       <article class="manifesto-block reveal">
         <header class="block-header">
@@ -347,8 +407,8 @@
       <div class="block-separator" aria-hidden="true">◆</div>
       <p>Si quieres conocer más, puedes visitar el blog para consultar experiencias y contenido más detallado, o explorar las secciones dedicadas al género <em>Boa</em>.</p>
       <div class="cta-buttons">
-        <a href="blog.html" class="btn btn-primary">Ver Blog</a>
-        <a href="boas.html" class="btn btn-primary">Género Boa</a>
+        <a href="blog.html" class="btn btn-secondary">Ver Blog</a>
+        <a href="boas.html" class="btn btn-secondary">Género Boa</a>
       </div>
     </div>
   </section>

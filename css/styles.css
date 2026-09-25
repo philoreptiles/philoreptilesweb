@@ -475,7 +475,9 @@ html {
   background: var(--bg);
   border-top: 1px solid var(--border-subtle);
   padding-block: var(--space-lg);
-  margin-top: var(--space-lg);
+  /* Antes --space-lg: sumado al padding del cierre CTA se sentía como un
+     doble espacio antes del footer. Se baja un escalón en móvil. */
+  margin-top: var(--space-md);
 }
 
 .footer-content {
@@ -487,8 +489,9 @@ html {
 }
 
 @media (min-width: 768px) {
+  /* Antes --space-xl: reducción moderada en desktop (xl → lg). */
   .main-footer {
-    margin-top: var(--space-xl);
+    margin-top: var(--space-lg);
   }
 
   .footer-content {
@@ -943,7 +946,7 @@ html {
   scroll-snap-align: start;
   background: var(--bg-elevated);
   border-radius: var(--radius-md);
-  padding: var(--space-md);
+  padding: var(--space-sm); /* Antes var(--space-md): el padding interno era excesivo */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -997,7 +1000,7 @@ html {
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs); /* Antes var(--space-sm): separación interna excesiva */
   flex-shrink: 0;
 }
 
@@ -1009,7 +1012,7 @@ html {
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--bg);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs); /* Antes var(--space-sm): separación interna excesiva */
   flex-shrink: 0;
 }
 
@@ -1049,7 +1052,7 @@ html {
   font-size: 0.9rem;
   color: var(--text-muted);
   line-height: 1.5;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs); /* Antes var(--space-sm): separación interna excesiva */
   flex: 1; /* Permite que todas las fichas mantengan la misma altura */
 }
 
