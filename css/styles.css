@@ -881,9 +881,11 @@ html {
    bloque secundario opcional. Vive dentro de .tab-panel / .species-content.
    ========================================================================== */
 
-/* --- 1. Hero de especie: imagen a sangre dentro del panel, con nombre
-   científico y común superpuestos sobre un degradado inferior. --- */
-.species-hero {
+/* --- 1. Hero de especie / apartado: imagen a sangre dentro del panel, con
+   nombre y subtítulo superpuestos sobre un degradado inferior. Compartido
+   entre taxonomía (.species-hero) y cuidados (.care-hero). --- */
+.species-hero,
+.care-hero {
   position: relative;
   overflow: hidden;
   aspect-ratio: 4 / 3;
@@ -893,25 +895,29 @@ html {
 }
 
 @media (min-width: 768px) {
-  .species-hero {
+  .species-hero,
+  .care-hero {
     aspect-ratio: 16 / 9;
   }
 }
 
 @media (min-width: 1024px) {
-  .species-hero {
+  .species-hero,
+  .care-hero {
     max-height: 480px;
   }
 }
 
-.species-hero img {
+.species-hero img,
+.care-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
-.species-hero-overlay {
+.species-hero-overlay,
+.care-hero-overlay {
   position: absolute;
   inset: auto 0 0 0;
   padding: var(--space-md);
@@ -921,13 +927,15 @@ html {
   gap: 0.2rem;
 }
 
-.species-name {
+.species-name,
+.care-hero-title {
   margin: 0;
   color: #FFF2D9;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
 
-.species-common {
+.species-common,
+.care-hero-subtitle {
   margin: 0;
   color: rgba(255, 242, 217, 0.85);
   font-family: var(--font-body);
@@ -937,8 +945,36 @@ html {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
-/* --- 2. Ficha de datos clave: línea editorial sin tarjetas ni fondos. --- */
-.species-facts {
+/* Variante sin imagen (p. ej. Humedad, que no tiene fotografía propia):
+   composición tipográfica sobre var(--bg-elevated), con acento dorado
+   y un borde inferior en vez del degradado, ya que aquí no hay imagen
+   que perder legibilidad. */
+.care-hero.care-hero--typographic {
+  aspect-ratio: auto;
+  max-height: none;
+  background: var(--bg-elevated);
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.care-hero--typographic .care-hero-title {
+  color: var(--accent);
+  text-shadow: none;
+}
+
+.care-hero--typographic .care-hero-subtitle {
+  color: var(--text-muted);
+  text-shadow: none;
+}
+
+/* --- 2. Ficha de datos clave: línea editorial sin tarjetas ni fondos.
+   Compartida entre taxonomía (.species-facts) y cuidados (.care-facts). --- */
+.species-facts,
+.care-facts {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
@@ -949,7 +985,8 @@ html {
 }
 
 @media (min-width: 768px) {
-  .species-facts {
+  .species-facts,
+  .care-facts {
     flex-direction: row;
     flex-wrap: wrap;
     column-gap: var(--space-xl);
@@ -957,13 +994,15 @@ html {
   }
 }
 
-.species-facts > div {
+.species-facts > div,
+.care-facts > div {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
 }
 
-.species-facts dt {
+.species-facts dt,
+.care-facts dt {
   font-family: var(--font-heading);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -971,7 +1010,8 @@ html {
   color: var(--accent);
 }
 
-.species-facts dd {
+.species-facts dd,
+.care-facts dd {
   margin: 0;
   color: var(--text);
 }
@@ -996,17 +1036,21 @@ html {
   text-transform: uppercase;
 }
 
-/* --- 3. Texto descriptivo a ancho de lectura cómodo. --- */
-.species-body {
+/* --- 3. Texto descriptivo a ancho de lectura cómodo. Compartido entre
+   taxonomía (.species-body) y cuidados (.care-body). --- */
+.species-body,
+.care-body {
   max-width: 70ch;
   margin-bottom: var(--space-lg);
 }
 
-.species-body p {
+.species-body p,
+.care-body p {
   margin-bottom: var(--space-sm);
 }
 
-.species-body p:last-child {
+.species-body p:last-child,
+.care-body p:last-child {
   margin-bottom: 0;
 }
 
