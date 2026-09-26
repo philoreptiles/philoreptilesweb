@@ -252,13 +252,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ============================================
+     5.b NAVEGACIÓN POR TECLADO EN .species-nav
+     Patrón estándar de tablist: flechas (↑/↓ y ←/→), Home y End
+     mueven el foco entre pestañas y activan el panel correspondiente
+     reutilizando window.switchTab. No hace nada si no hay tablist.
+     ============================================ */
+  const speciesTablist = document.querySelector('.species-nav[role="tablist"]');
+
+  if (speciesTablist) {
+    const speciesTabs = Array.from(speciesTablist.querySelectorAll('.species-btn'));
+
+    speciesTablist.addEventListener('keydown', (event) => {
+      const currentIndex = speciesTabs.indexOf(document.activeElement);
+      if (currentIndex === -1) return;
+
+      let newIndex = null;
+
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        newIndex = (currentIndex + 1) % speciesTabs.length;
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        newIndex = (currentIndex - 1 + speciesTabs.length) % speciesTabs.length;
+      } else if (event.key === 'Home') {
+        newIndex = 0;
+      } else if (event.key === 'End') {
+        newIndex = speciesTabs.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      const nextTab = speciesTabs[newIndex];
+      nextTab.focus();
+
+      if (typeof window.switchTab === 'function') {
+        window.switchTab({ currentTarget: nextTab }, nextTab.getAttribute('aria-controls'));
+      }
+    });
+  }
+
+  /* ============================================
      6. CARRUSELES HORIZONTALES ESTILO APPLE
-     Manejo interactivo de carruseles con scroll-snap:
+     Manejo interactivo de carruseles con scroll-snap NORMAL (sin loop):
      - Generación dinámica de dots por cada item si existe el contenedor.
      - Navegación mediante flechas (si existen) y dots con scroll suave.
      - Detección segura del item activo alineado al viewport del track.
      - Verificación defensiva antes de agregar listeners de flechas.
      - Respeto de prefers-reduced-motion.
+     - MODO CENTER (opt-in vía data-carousel-align="center"): solo cambia
+       la referencia usada para detectar el item activo y el punto de
+       alineación del scroll, de "inicio del track" a "centro del track"
+       — para carruseles tipo "peek" con la ficha activa centrada (p. ej.
+       el de subsecciones de boas.html). No implica ningún loop ni
+       clonado de ítems: al llegar al último item, el scroll se detiene
+       ahí con normalidad, igual que en el resto de carruseles del sitio.
      ============================================ */
   const carousels = document.querySelectorAll('.carousel');
 
@@ -268,6 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const items = track.querySelectorAll('.carousel-item');
     if (!items.length) return;
+
+    // Modo de alineación: 'start' (por defecto, como en el carrusel de
+    // index.html) o 'center', vía data-carousel-align="center", para
+    // carruseles tipo "peek" con la ficha activa centrada (el de
+    // subsecciones de boas.html). Es solo un dato de alineación visual:
+    // no crea ni clona ítems, ni modifica cómo termina el scroll.
+    const isCenterMode = carousel.dataset.carouselAlign === 'center';
 
     // CORRECCIÓN PROBLEMA 3: Verificación condicional de existencia de elementos
     const prevBtn = carousel.querySelector('.carousel-arrow-prev');
@@ -297,20 +350,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (index < 0 || index >= items.length) return;
       items[index].scrollIntoView({
         behavior: prefersReducedMotion ? 'instant' : 'smooth',
-        inline: 'start',
+        inline: isCenterMode ? 'center' : 'start',
         block: 'nearest'
       });
     }
 
-    // 3. Obtener el índice del item visible alineado al inicio del contenedor
+    // 3. Obtener el índice del item visible alineado al inicio del
+    //    contenedor (modo normal) o al centro (modo "center")
     function getCurrentIndex() {
-      const trackLeft = track.getBoundingClientRect().left;
+      const trackRect = track.getBoundingClientRect();
+      const referenceX = isCenterMode ? trackRect.left + trackRect.width / 2 : trackRect.left;
       let closestIndex = 0;
       let minDistance = Infinity;
 
       items.forEach((item, index) => {
-        const itemLeft = item.getBoundingClientRect().left;
-        const distance = Math.abs(itemLeft - trackLeft);
+        const itemRect = item.getBoundingClientRect();
+        const itemX = isCenterMode ? itemRect.left + itemRect.width / 2 : itemRect.left;
+        const distance = Math.abs(itemX - referenceX);
         if (distance < minDistance) {
           minDistance = distance;
           closestIndex = index;
@@ -333,7 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Detectar extremos del scroll para deshabilitar flechas si existen en el DOM
+      // Detectar extremos del scroll para deshabilitar flechas si existen en
+      // el DOM. Sin loop: al llegar al final, el scroll se detiene y la
+      // flecha/dot correspondiente queda deshabilitada, con normalidad.
       const isAtStart = track.scrollLeft <= 10;
       const isAtEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
 
@@ -402,17 +460,48 @@ window.switchTab = function switchTab(event, tabId) {
   const targetPanel = document.getElementById(tabId);
   if (!targetPanel) return;
 
-  tabPanels.forEach((panel) => {
-    const isTarget = panel === targetPanel;
-    panel.classList.toggle('active-panel', isTarget);
-    panel.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
-  });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const currentPanel = document.querySelector('.tab-panel.active-panel');
 
-  tabButtons.forEach((btn) => {
-    const isClicked = btn === clickedButton;
-    btn.classList.toggle('active-tab', isClicked);
-    btn.setAttribute('aria-selected', isClicked ? 'true' : 'false');
-  });
+  // Activa botones y el panel destino; se comparte entre el camino
+  // instantáneo (reduced motion) y el camino animado (tras el fundido
+  // de salida del panel anterior).
+  const activateTarget = () => {
+    tabPanels.forEach((panel) => {
+      const isTarget = panel === targetPanel;
+      panel.classList.toggle('active-panel', isTarget);
+      panel.classList.remove('tab-panel--leaving');
+      panel.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+    });
 
-  targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    tabButtons.forEach((btn) => {
+      const isActive = btn === clickedButton || btn.getAttribute('aria-controls') === tabId;
+      btn.classList.toggle('active-tab', isActive);
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    targetPanel.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+  };
+
+  // Ya estamos en ese panel: solo desplaza, sin re-animar.
+  if (currentPanel === targetPanel) {
+    targetPanel.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
+    return;
+  }
+
+  if (reduceMotion || !currentPanel) {
+    activateTarget();
+    return;
+  }
+
+  // Transición coordinada: el panel saliente se desvanece brevemente
+  // (180ms) y, al terminar, el panel entrante aparece con su propia
+  // animación de entrada (350ms, definida en .tab-panel.active-panel).
+  currentPanel.classList.remove('active-panel');
+  currentPanel.classList.add('tab-panel--leaving');
+
+  window.setTimeout(() => {
+    currentPanel.classList.remove('tab-panel--leaving');
+    activateTarget();
+  }, 180);
 };

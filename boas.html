@@ -6,9 +6,10 @@
 <title>Boas — Philoreptiles</title>
 <meta name="description" content="Taxonomía, cuidados, genética, morfos y legalidad del género Boa, explicados con rigor y cercanía.">
 
+<link rel="icon" type="image/png" href="./img/favicon.png">
+
 <link rel="stylesheet" href="./css/design.css">
 <link rel="stylesheet" href="./css/styles.css">
-<link rel="icon" type="image/png" href="../img/favicon.png">
 
 <style>
 /* ==========================================================================
@@ -16,52 +17,262 @@
    Mobile-first: base = móvil; escala con min-width 768px
    ========================================================================== */
 
-/* Área de portada: sin imagen, fondo liso, ícono centrado (4/3 uniforme) */
-.card-image {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border-subtle);
-  overflow: hidden;
+/* === REQ. 1: reducir el hueco entre el párrafo del hero corto y las
+   fichas — solo en esta página (.page-title es compartido con otras). */
+/* === CORRECCIÓN 1: espacio header → título a la mitad ===
+   styles.css define padding-top: calc(64px + var(--space-xl)) para TODAS
+   las páginas con .page-title; aquí, solo en boas.html, se reduce ese
+   padding-top a la mitad para que el título quede más cerca del header. */
+.page-title {
+  padding-top: calc((64px + var(--space-xl)) / 2);
+  padding-bottom: var(--space-sm);
 }
 
-/* Círculo sutil detrás del ícono */
-.card-icon-bg {
-  display: flex;
+/* === REQ. 2 y 3: FICHAS EN CARRUSEL, ESTILO HUAWEI ===
+   Se reutiliza el sistema de carrusel de styles.css/main.js
+   (.carousel-section, .carousel, .carousel-track, .carousel-item,
+   .carousel-dots) en vez del .cards-grid estático. main.js ya genera
+   los dots y gestiona el scroll-snap para cualquier .carousel del DOM,
+   así que no hace falta tocar main.js. Aquí solo se adapta el layout
+   interno de .carousel-item al estilo horizontal (texto izquierda +
+   ícono derecha) que ya tenía boas.html, sin badges. */
+
+.subsections-carousel {
+  /* Antes var(--space-lg) heredado: se reduce el padding superior para
+     que las fichas queden cerca del párrafo del hero; el inferior se
+     mantiene para no pegar el carrusel al CTA de cierre. */
+  padding-top: var(--space-sm);
+}
+
+/* CORRECCIÓN: styles.css oculta .carousel-dots (y las flechas) desde
+   768px en todo el sitio — así funciona el carrusel de index.html, sin
+   dots en desktop. Aquí SÍ queremos dots visibles en todos los tamaños,
+   así que se sobrescribe con un selector más específico (no se toca
+   styles.css para no afectar los carruseles de index.html). */
+@media (min-width: 768px) {
+  .subsections-carousel .carousel-dots {
+    display: flex;
+  }
+}
+
+/* === LAYOUT DE FICHAS COMPLETAS, SIN CENTRADO, DESDE TABLET ===
+   Reemplaza el modo "peek/center" anterior (1 ficha centrada con
+   fragmentos a ambos lados) por scroll-snap-align: start de toda la
+   vida: la ficha activa siempre arranca en el borde izquierdo visible
+   del track, nunca centrada. El ancho de cada ficha se calcula con
+   --carousel-visible fichas completas repartiendo el espacio disponible
+   menos los gaps, igual que en los demás carruseles del sitio.
+   El móvil (base, sin media query) NO se toca: sigue con 1 ficha
+   completa + fragmento de la siguiente (85% + scroll-snap-align: start
+   heredado de styles.css). La clase .subsections-carousel .carousel-item
+   tiene más especificidad que el .carousel-item genérico de styles.css,
+   así que gana sin necesidad de tocar ese archivo. */
+
+/* --carousel-edge alinea la primera ficha con el borde del .container
+   (max-width 1200px + padding-inline var(--space-md)) aunque el track
+   vaya a sangre a todo el ancho del viewport: en pantallas angostas usa
+   var(--space-md); en pantallas más anchas que el container, calcula el
+   margen extra para que la ficha 1 arranque exactamente donde arranca
+   el resto del contenido de la página. Se define una sola vez a partir
+   de 768px porque no depende de cuántas fichas se muestren. */
+@media (min-width: 768px) {
+  .subsections-carousel .carousel-track {
+    --carousel-edge: max(var(--space-md), calc((100vw - 1200px) / 2 + var(--space-md)));
+    justify-content: flex-start; /* anula el justify-content:center de styles.css */
+    padding-inline: var(--carousel-edge);
+    scroll-padding-inline: var(--carousel-edge);
+  }
+}
+
+/* TABLET (768px–1023px): 2 fichas completas + un pequeño fragmento de
+   la 3ra, como referencia visual de que hay más contenido a la derecha. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .subsections-carousel .carousel-track {
+    --carousel-gap: 16px;
+    gap: var(--carousel-gap);
+  }
+
+  .subsections-carousel .carousel-item {
+    --carousel-visible: 2.15;
+    flex: 0 0 calc((100% - (var(--carousel-visible) - 1) * var(--carousel-gap)) / var(--carousel-visible));
+    scroll-snap-align: start;
+  }
+}
+
+/* DESKTOP (1024px+): exactamente 2 fichas completas, sin fragmentos
+   laterales. width = (100% - gap) / carousel-visible, con
+   --carousel-visible: 2. */
+@media (min-width: 1024px) {
+  .subsections-carousel .carousel-track {
+    --carousel-gap: 20px;
+    gap: var(--carousel-gap);
+  }
+
+  .subsections-carousel .carousel-item {
+    --carousel-visible: 2;
+    flex: 0 0 calc((100% - var(--carousel-gap)) / var(--carousel-visible));
+    scroll-snap-align: start;
+  }
+}
+
+/* === Altura de las fichas ×1.5 en desktop (min-width: 1024px) ===
+   El alto de la ficha lo determina su contenido (texto o ícono, lo que
+   sea más alto) más el padding vertical; no hay una altura fija. En este
+   breakpoint el bloque de texto (h3 + párrafo + CTA) mide ~150px y el
+   padding actual es 24px (var(--space-md)) por lado → alto total actual
+   ≈198px. Para llegar a ≈297px (198 × 1.5) sin tocar el contenido ni el
+   ancho de la ficha, se sube solo el padding vertical a ~74px por lado;
+   el horizontal se mantiene igual (var(--space-md)) para no reducir el
+   ancho disponible para el texto. Solo aplica en desktop: tablet y
+   móvil no se tocan. */
+@media (min-width: 1024px) {
+  .subsections-carousel .carousel-item {
+    padding-block: 4.625rem; /* ≈74px por lado */
+  }
+
+  /* El ícono se agranda un poco para no verse pequeño dentro de una
+     ficha mucho más alta (90px → 116px). Se usa un selector más
+     específico (.subsections-carousel .card-visual) para ganarle,
+     con certeza, a la regla general de 90px definida más abajo. */
+  .subsections-carousel .card-visual {
+    width: 116px;
+    height: 116px;
+  }
+}
+
+.carousel-item {
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--border-subtle);
+  box-shadow: none;
+  min-width: 0; /* evita que el contenido empuje la ficha fuera de su ancho calculado */
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.carousel-item:hover {
+  border-color: var(--border-strong);
+}
+
+@media (min-width: 768px) {
+  .carousel-item {
+    /* Antes var(--space-lg): con 3.2 fichas visibles en desktop, un
+       padding tan grande dejaba muy poco ancho para el texto. */
+    padding: var(--space-md);
+  }
+}
+
+/* Texto a la izquierda */
+.card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-text h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: var(--space-xs);
+  overflow-wrap: break-word;
+}
+
+.card-text p {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* .card-cta reutiliza el estilo ya definido en styles.css (Montserrat 600,
+   0.85rem, color accent, hover a var(--text)); no se sobreescribe aquí. */
+
+/* Visual a la derecha: contenedor fijo, sin círculo de fondo */
+.card-visual {
+  flex-shrink: 0;
   align-self: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: rgba(196, 146, 62, 0.08);
-  transition: background-color var(--transition-base);
-  line-height: 0;
+  width: 80px;
+  height: 80px;
 }
 
-/* Ícono lineal */
-.card-icon {
+.card-visual svg {
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
   color: var(--accent);
-  transition: transform var(--transition-base);
 }
 
-.card:hover .card-icon-bg { background: rgba(196, 146, 62, 0.14); }
-.card:hover .card-icon { transform: scale(1.05); }
+@media (min-width: 768px) {
+  .card-visual {
+    /* Antes 110px: con 3.2 fichas visibles en desktop, el texto necesita
+       más aire; el ícono se reduce un poco en vez de agrandarse. */
+    width: 90px;
+    height: 90px;
+  }
+}
 
-/* Estado "Próximamente": ícono y círculo más discretos */
-.card.is-soon .card-icon { opacity: 0.55; }
-.card.is-soon .card-icon-bg { background: rgba(196, 146, 62, 0.04); }
-.card.is-soon:hover .card-icon-bg { background: rgba(196, 146, 62, 0.07); }
+/* Estado "Próximamente" (Morfos, Legalidad): sin badge flotante; se
+   atenúa el ícono y el texto, y se añade una etiqueta bajo el CTA. */
+.carousel-item.is-soon .card-visual,
+.carousel-item.is-soon .card-text h3,
+.carousel-item.is-soon .card-text p {
+  opacity: 0.7;
+}
+
+.card-soon-text {
+  display: block;
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
 
 /*Botones del final*/
+/* .cta-close y .block-separator no estaban definidos ni aquí ni en
+   styles.css: se añaden con el mismo ritmo visual que sobre-nosotros.html. */
 .cta-close {
+  padding-block: var(--space-lg);
   text-align: center;
+}
+
+/* === CORRECCIÓN 2: centrado real del separador y los botones ===
+   En vez de confiar en text-align/justify-content sobre elementos con
+   ancho automático (que puede desalinearse si el ancho de alguno de los
+   hijos no es simétrico), se convierte .container en un contenedor flex
+   en columna con align-items:center: así el separador y el grupo de
+   botones quedan centrados como bloques completos, sin depender de
+   anchos implícitos, e igual en móvil, tablet y desktop. */
+.cta-close .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.block-separator {
+  margin-block: var(--space-md);
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  opacity: 0.5;
+}
+
+.block-separator::before,
+.block-separator::after {
+  content: "·";
+  margin-inline: 0.75em;
 }
 
 .cta-buttons {
@@ -70,41 +281,32 @@
   align-items: center;
   gap: var(--space-sm, 1rem);
   flex-wrap: wrap;
-}
-
-/* La descripción del blog ya usaba <em>; aquí solo aseguramos el ancho cómodo */
-.card-body p {
-  max-width: 100%;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
-  .card-icon-bg {
-    width: 140px;
-    height: 140px;
-  }
-
-  .card-icon {
-    width: 76px;
-    height: 76px;
+  /* Antes sin definir: mismo escalón que sobre-nosotros.html en desktop. */
+  .cta-close {
+    padding-block: var(--space-xl);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-icon-bg,
-  .card-icon {
+  .carousel-item {
     transition: none;
-  }
-  .card:hover .card-icon {
-    transform: none;
   }
 }
 </style>
 </head>
 <body>
 
+<!-- Header sólido: esta página no tiene hero con imagen, así que el
+     header NO lleva .transparent (a diferencia de index.html). -->
 <header class="main-header">
-  <div class="container header-content">
-    <a href="index.html" class="logo-text">Philoreptiles</a>
+  <div class="header-content">
+    <a href="index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="./img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
     <nav class="main-nav" id="main-nav">
       <ul>
         <li><a href="index.html">Inicio</a></li>
@@ -141,143 +343,131 @@
     </div>
   </section>
 
-  <!-- 2. GRID DE TARJETAS A SUBSECCIONES -->
-  <section>
-    <div class="container">
-      <div class="cards-grid stagger">
+  <!-- 2. CARRUSEL DE FICHAS A SUBSECCIONES (estilo Huawei: texto izquierda +
+       ícono derecha, sin badges; reutiliza el sistema de carrusel de
+       styles.css/main.js — mismo componente que "Conoce a las boas" en
+       index.html. Sin data-carousel-align: se usa el modo "start" por
+       defecto de main.js (sin centrado), que es justo lo que se necesita
+       para mostrar 2 fichas completas alineadas a la izquierda desde
+       tablet. No implica loop ni clonado de ítems: scroll-snap normal,
+       el usuario llega a la última ficha y ahí se detiene. -->
+  <section class="carousel-section subsections-carousel reveal" role="region" aria-label="Subsecciones del género Boa">
+    <div class="carousel" role="region" aria-label="Explorar subsecciones del género Boa">
+      <div class="carousel-track" aria-label="Fichas de subsecciones" tabindex="0">
 
         <!-- TAXONOMÍA -->
-        <a href="./boas/taxonomia.html" class="card">
-          <div class="card-image">
-            <span class="card-badge">Biología</span>
-            <div class="card-icon-bg">
-              <svg class="card-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" role="img" aria-labelledby="icon-taxonomia">
-                <title id="icon-taxonomia">Taxonomía</title>
-                <path d="M32 58V22"/>
-                <path d="M32 48L18 34"/>
-                <path d="M32 42L46 28"/>
-                <path d="M32 30L22 20"/>
-                <path d="M32 30L42 20"/>
-                <path d="M32 22V8"/>
-                <circle cx="18" cy="34" r="2.5"/>
-                <circle cx="46" cy="28" r="2.5"/>
-                <circle cx="22" cy="20" r="2.5"/>
-                <circle cx="42" cy="20" r="2.5"/>
-                <circle cx="32" cy="8" r="2.5"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
+        <a href="./boas/taxonomia.html" class="carousel-item">
+          <div class="card-text">
             <h3>Taxonomía</h3>
             <p>Diferencias entre especies, subespecies y variaciones morfológicas por región geográfica.</p>
             <span class="card-cta">Explorar Taxonomía →</span>
           </div>
+          <div class="card-visual">
+            <!-- Cambio de ícono de Taxonomía a un diagrama jerárquico de bloques (grosor 2.5) -->
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+              <rect x="8" y="9" width="14" height="14" rx="2.5" fill="currentColor" stroke="none" />
+              <rect x="22" y="29" width="10" height="10" rx="2" fill="currentColor" stroke="none" />
+              <rect x="22" y="47" width="10" height="10" rx="2" fill="currentColor" stroke="none" />
+              <path d="M26 16h30 M15 23v29 M15 34h7 M36 34h20 M15 52h7 M36 52h20" />
+            </svg>
+          </div>
         </a>
 
         <!-- CUIDADOS -->
-        <a href="./boas/cuidados.html" class="card">
-          <div class="card-image">
-            <span class="card-badge">Manutención</span>
-            <div class="card-icon-bg">
-              <svg class="card-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" role="img" aria-labelledby="icon-cuidados">
-                <title id="icon-cuidados">Cuidados en cautiverio</title>
-                <path d="M20 14a4 4 0 0 1 8 0V37a8 8 0 1 1-8 0Z"/>
-                <path d="M24 41V24"/>
-                <circle cx="24" cy="44" r="3"/>
-                <path d="M46 20C46 20 38 30 38 36a8 8 0 0 0 16 0C54 30 46 20 46 20Z"/>
-                <path d="M43 37a3 3 0 0 0 3 3"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
+        <a href="./boas/cuidados.html" class="carousel-item">
+          <div class="card-text">
             <h3>Cuidados en cautiverio</h3>
             <p>Guías sobre temperatura, humedad, recintos y mantenimiento responsable.</p>
             <span class="card-cta">Explorar Cuidados en cautiverio →</span>
           </div>
+          <div class="card-visual">
+            <!-- Cambio de ícono de Cuidados a una casa con signo médico y check (house-medical-check), escalado desde viewBox 24 a 64 -->
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+              <path d="M56 32L41.511 15.904C38.216 12.243 36.569 10.413 34.628 9.737C32.924 9.144 31.069 9.144 29.365 9.738C27.425 10.414 25.778 12.244 22.483 15.906L8 32"/>
+              <path d="M13.333 26.073V43.2C13.333 47.681 13.333 49.921 14.205 51.632C14.972 53.137 16.196 54.361 17.701 55.128C19.413 56 21.653 56 26.133 56H29.333"/>
+              <path d="M32 32V42.667"/>
+              <path d="M37.333 37.334H26.667"/>
+              <path d="M40 51.734L44.571 56L56 45.334"/>
+            </svg>
+          </div>
         </a>
 
         <!-- GENÉTICA -->
-        <a href="./boas/genetica.html" class="card">
-          <div class="card-image">
-            <span class="card-badge">Herpetocultura</span>
-            <div class="card-icon-bg">
-              <svg class="card-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" role="img" aria-labelledby="icon-genetica">
-                <title id="icon-genetica">Genética</title>
-                <path d="M20 6C20 18 44 18 44 32C44 46 20 46 20 58"/>
-                <path d="M44 6C44 18 20 18 20 32C20 46 44 46 44 58"/>
-                <path d="M24 13H40"/>
-                <path d="M24 24H40"/>
-                <path d="M20 32H44"/>
-                <path d="M24 40H40"/>
-                <path d="M24 51H40"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
+        <a href="./boas/genetica.html" class="carousel-item">
+          <div class="card-text">
             <h3>Genética</h3>
             <p>Principios genéticos, genes dominantes, recesivos y combinaciones populares en cautiverio.</p>
             <span class="card-cta">Explorar Genética →</span>
           </div>
+<div class="card-visual">
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+    <path d="M50.667 56C50.667 55.101 50.618 54.211 50.523 53.333"/>
+    <path d="M13.333 8C13.333 8.899 13.382 9.789 13.477 10.667"/>
+    <path d="M13.333 56C13.333 44.951 20.658 35.241 31.282 32.205L32.718 31.795C43.342 28.759 50.667 19.049 50.667 8"/>
+    <path d="M40 10.667H13.477"/>
+    <path d="M33.333 21.333H17.232"/>
+    <path d="M24 53.333H50.523"/>
+    <path d="M30.667 42.667H46.768"/>
+    <path d="M50.523 53.333C50.106 49.469 48.793 45.832 46.768 42.667"/>
+    <path d="M46.768 42.667C43.595 37.708 38.675 33.907 32.718 32.205L31.282 31.795C25.325 30.093 20.405 26.292 17.232 21.333"/>
+    <path d="M13.477 10.667C13.893 14.531 15.207 18.168 17.232 21.333"/>
+  </svg>
+</div>
         </a>
 
         <!-- MORFOS (próximamente) -->
-        <a href="./boas/morfos.html" class="card is-soon">
-          <div class="card-image">
-            <span class="card-badge">Genética visual</span>
-            <span class="card-soon">Próximamente</span>
-            <div class="card-icon-bg">
-              <svg class="card-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" role="img" aria-labelledby="icon-morfos">
-                <title id="icon-morfos">Morfos</title>
-                <path d="M32 6L54.5 19V45L32 58L9.5 45V19Z"/>
-                <path d="M32 14L39.8 18.5V27.5L32 32L24.2 27.5V18.5Z"/>
-                <path d="M24.2 27.5L32 32V41L24.2 45.5L16.4 41V32Z"/>
-                <path d="M39.8 27.5L47.6 32V41L39.8 45.5L32 41V32Z"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
+        <a href="./boas/morfos.html" class="carousel-item is-soon">
+          <div class="card-text">
             <h3>Morfos</h3>
             <p>[DESCRIPCIÓN BREVE DE MORFOS]</p>
             <span class="card-cta">Explorar Morfos →</span>
+            <span class="card-soon-text">Próximamente</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+              <path d="M13.333 42.667V53.333"/>
+              <path d="M16 10.667V21.333"/>
+              <path d="M18.667 48H8"/>
+              <path d="M21.333 16H10.667"/>
+              <path d="M34.667 10.667L39.341 22.518C39.842 23.789 40.093 24.424 40.476 24.96C40.816 25.435 41.232 25.85 41.707 26.19C42.242 26.574 42.878 26.825 44.148 27.326L56 32L44.148 36.674C42.878 37.175 42.242 37.426 41.707 37.81C41.232 38.15 40.816 38.565 40.476 39.04C40.093 39.576 39.842 40.211 39.341 41.482L34.667 53.333L29.993 41.482C29.491 40.211 29.241 39.576 28.857 39.04C28.517 38.565 28.101 38.15 27.626 37.81C27.091 37.426 26.456 37.175 25.185 36.674L13.333 32L25.185 27.326C26.456 26.825 27.091 26.574 27.626 26.19C28.101 25.85 28.517 25.435 28.857 24.96C29.241 24.424 29.491 23.789 29.993 22.518L34.667 10.667Z"/>
+            </svg>
           </div>
         </a>
 
         <!-- LEGALIDAD (próximamente) -->
-        <a href="./boas/legalidad.html" class="card is-soon">
-          <div class="card-image">
-            <span class="card-badge">Normativa</span>
-            <span class="card-soon">Próximamente</span>
-            <div class="card-icon-bg">
-              <svg class="card-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" role="img" aria-labelledby="icon-legalidad">
-                <title id="icon-legalidad">Legalidad</title>
-                <path d="M16 6H38L50 18V58H16Z"/>
-                <path d="M38 6V18H50"/>
-                <path d="M22 26H40"/>
-                <path d="M22 33H44"/>
-                <path d="M22 40H33"/>
-                <circle cx="41" cy="47" r="6"/>
-                <path d="M38.2 47L40.2 49L43.8 45"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
+        <a href="./boas/legalidad.html" class="carousel-item is-soon">
+          <div class="card-text">
             <h3>Legalidad</h3>
             <p>[DESCRIPCIÓN BREVE DE LEGALIDAD]</p>
             <span class="card-cta">Explorar Legalidad →</span>
+            <span class="card-soon-text">Próximamente</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+              <path d="M34.667 8H21.867C18.88 8 17.386 8 16.245 8.581C15.242 9.093 14.426 9.909 13.915 10.912C13.333 12.053 13.333 13.546 13.333 16.533V47.467C13.333 50.454 13.333 51.947 13.915 53.088C14.426 54.091 15.242 54.907 16.245 55.419C17.386 56 18.88 56 21.867 56H42.133C45.12 56 46.614 56 47.755 55.419C48.758 54.907 49.574 54.091 50.085 53.088C50.667 51.947 50.667 50.454 50.667 47.467V24"/>
+              <path d="M34.667 8L50.667 24"/>
+              <path d="M34.667 8V19.733C34.667 21.227 34.667 21.974 34.957 22.544C35.213 23.046 35.621 23.454 36.123 23.709C36.693 24 37.44 24 38.933 24H50.667"/>
+              <path d="M40 32.56C39.818 32.571 39.295 32.56 39.111 32.56C36.379 32.56 33.887 31.34 32 29.333C30.113 31.34 27.621 32.56 24.889 32.56C24.705 32.56 24.182 32.571 24 32.56C24 32.56 24 34.628 24 35.728C24 41.632 27.399 46.593 32 48C36.601 46.593 40 41.632 40 35.728C40 34.628 40 32.56 40 32.56Z"/>
+            </svg>
           </div>
         </a>
 
       </div>
+      <div class="carousel-dots"></div>
     </div>
+    <!-- Sin loop: scroll-snap normal. Al llegar a la última ficha
+         (Legalidad) el scroll se detiene ahí; no hay clones ni
+         reposicionamiento de scrollLeft. Los dots reflejan siempre la
+         ficha activa, de 1 a 5. -->
   </section>
 
   <!-- 3. CIERRE CON LLAMADA A LA ACCIÓN -->
   <section class="cta-close reveal">
     <div class="container">
-      <div class="block-separator" aria-hidden="true">◆</div>
+      <div class="block-separator" aria-hidden="true">◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆</div>
       <div class="cta-buttons">
-        <a href="sobre-nosotros.html" class="btn btn-primary">Sobre nosotros</a>
-        <a href="blog.html" class="btn btn-primary">Ver blog</a>
+        <a href="sobre-nosotros.html" class="btn btn-secondary">Sobre nosotros</a>
+        <a href="blog.html" class="btn btn-secondary">Ver blog</a>
       </div>
     </div>
   </section>

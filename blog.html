@@ -4,32 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog — Philoreptiles</title>
-<meta name="description" content="Artículos de divulgación sobre el género Boa: taxonomía, comportamiento y fotografía de campo.">
+<meta name="description" content="Notas de campo, experiencias y contenido de divulgación sobre el género Boa.">
+
+<link rel="icon" type="image/png" href="./img/favicon.png">
 
 <link rel="stylesheet" href="./css/design.css">
 <link rel="stylesheet" href="./css/styles.css">
-<link rel="icon" type="image/png" href="../img/favicon.png">
 
 <style>
 /* ==========================================================================
-   Estilos específicos de blog.html — lo que no cubren design.css/styles.css
+   Estilos específicos de blog.html — portada de artículos en carrusel
+   Mobile-first: base = móvil; escala con min-width 768px
+   Sigue el mismo patrón que boas.html: reutiliza el sistema de carrusel
+   de styles.css/main.js, solo ajustando el layout de las fichas y el
+   comportamiento en tablet/desktop en este <style> de página.
    ========================================================================== */
 
-/* Línea de metadatos (fecha + tiempo de lectura) dentro de cada .card */
-.card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: var(--fs-small);
-  color: var(--accent-dim);
-  border-top: 1px solid var(--border-subtle);
-  padding-top: var(--space-xs);
-  margin-top: var(--space-xs);
+/* === Espacio header → título a la mitad, igual que en boas.html === */
+.page-title {
+  padding-top: calc((64px + var(--space-xl)) / 2);
+  padding-bottom: var(--space-sm);
 }
 
-/*Botones del final*/
+/* === CARRUSEL DE ARTÍCULOS ===
+   Reutiliza .carousel-section/.carousel/.carousel-track/.carousel-item/
+   .carousel-dots (el mismo componente que "Últimos artículos" en
+   index.html), con las fichas ya en formato imagen-arriba + texto-abajo
+   que trae styles.css (.carousel-item-image, .carousel-item-eyebrow,
+   .carousel-item-title, .carousel-item-text, .carousel-item-link):
+   no hace falta reescribir ese layout interno, solo afinar bordes,
+   padding y el comportamiento de fichas visibles por breakpoint. */
+.articles-carousel {
+  padding-top: var(--space-sm);
+}
+
+/* Dots visibles en todos los tamaños: styles.css los oculta desde 768px
+   en todo el sitio (para el carrusel de index.html); aquí sí los
+   queremos siempre, con un selector más específico para no tocar
+   styles.css. */
+@media (min-width: 768px) {
+  .articles-carousel .carousel-dots {
+    display: flex;
+  }
+}
+
+/* Ficha: fondo var(--bg-elevated) ya es el valor por defecto; se afina
+   el padding, el borde y se quita la sombra por defecto (solo queda al
+   hacer hover, heredado de la regla general .carousel-item:hover). */
+.articles-carousel .carousel-item {
+  padding: var(--space-md);
+  border: 1px solid var(--border-subtle);
+  box-shadow: none;
+}
+
+.articles-carousel .carousel-item-image {
+  border-radius: var(--radius-md);
+}
+
+/* === LAYOUT DE FICHAS: alineado a la izquierda, sin centrado ===
+   Mismo criterio que boas.html: --carousel-edge alinea la primera
+   ficha con el borde del .container (max-width 1200px) aunque el
+   track vaya a sangre a todo el ancho del viewport. */
+@media (min-width: 768px) {
+  .articles-carousel .carousel-track {
+    --carousel-edge: max(var(--space-md), calc((100vw - 1200px) / 2 + var(--space-md)));
+    justify-content: flex-start;
+    padding-inline: var(--carousel-edge);
+    scroll-padding-inline: var(--carousel-edge);
+  }
+}
+
+/* TABLET (768px–1023px): 2 fichas completas + pequeño fragmento de la
+   3ra (mismo valor que usa el sistema general de carruseles del sitio,
+   restablecido aquí de forma explícita para que la página sea
+   autocontenida). */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .articles-carousel .carousel-track {
+    --carousel-gap: 16px;
+    gap: var(--carousel-gap);
+  }
+
+  .articles-carousel .carousel-item {
+    --carousel-visible: 2.15;
+    flex: 0 0 calc((100% - (var(--carousel-visible) - 1) * var(--carousel-gap)) / var(--carousel-visible));
+    scroll-snap-align: start;
+  }
+}
+
+/* DESKTOP (1024px+): exactamente 2 fichas completas, sin fragmentos
+   laterales — igual que el carrusel de boas.html. */
+@media (min-width: 1024px) {
+  .articles-carousel .carousel-track {
+    --carousel-gap: 20px;
+    gap: var(--carousel-gap);
+  }
+
+  .articles-carousel .carousel-item {
+    --carousel-visible: 2;
+    flex: 0 0 calc((100% - var(--carousel-gap)) / var(--carousel-visible));
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-item {
+    transition: none;
+  }
+}
+
+/* === CIERRE CON LLAMADA A LA ACCIÓN ===
+   Mismo estilo y centrado que el CTA de boas.html. */
 .cta-close {
+  padding-block: var(--space-lg);
   text-align: center;
+}
+
+.cta-close .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.block-separator {
+  margin-block: var(--space-md);
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  opacity: 0.5;
+}
+
+.block-separator::before,
+.block-separator::after {
+  content: "·";
+  margin-inline: 0.75em;
 }
 
 .cta-buttons {
@@ -38,15 +149,25 @@
   align-items: center;
   gap: var(--space-sm, 1rem);
   flex-wrap: wrap;
+  width: 100%;
 }
 
+@media (min-width: 768px) {
+  .cta-close {
+    padding-block: var(--space-xl);
+  }
+}
 </style>
 </head>
 <body>
 
+<!-- Header sólido, idéntico al de boas.html: esta página tampoco tiene
+     hero con imagen, así que el header NO lleva .transparent. -->
 <header class="main-header">
-  <div class="container header-content">
-    <a href="index.html" class="logo-text">Philoreptiles</a>
+  <div class="header-content">
+    <a href="index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="./img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
     <nav class="main-nav" id="main-nav">
       <ul>
         <li><a href="index.html">Inicio</a></li>
@@ -77,68 +198,63 @@
   <section class="page-title reveal">
     <div class="container">
       <h1>Blog</h1>
-      <p>Un espacio para acercarte un poco más a nosotros y al mundo de las boas.</p>
+      <p>Un espacio para notas de campo, experiencias, observaciones y contenido más detallado sobre el género Boa.</p>
     </div>
   </section>
 
-  <!-- 2. LISTA DE ARTÍCULOS -->
-  <section>
-    <div class="container">
-      <div class="cards-grid stagger">
+  <!-- 2. CARRUSEL DE ARTÍCULOS (mismo componente de carrusel que boas.html
+       y que "Últimos artículos" en index.html; aquí la imagen va arriba y
+       el texto debajo, formato tarjeta clásica. Sin data-carousel-align:
+       modo "start" por defecto, sin centrado ni loop — el usuario llega
+       al último artículo y ahí se detiene el scroll. -->
+  <section class="carousel-section articles-carousel reveal" role="region" aria-label="Artículos del blog">
+    <div class="carousel" role="region" aria-label="Explorar artículos del blog">
+      <div class="carousel-track" aria-label="Fichas de artículos" tabindex="0">
 
-        <a href="./posts/post-1.html" class="card">
-          <div class="card-image">
-            <img src="https://picsum.photos/800/600?random=1" alt="[IMAGEN DEL POST 1]">
+        <a href="./posts/post-1.html" class="carousel-item">
+          <div class="carousel-item-image">
+            <img src="https://picsum.photos/seed/philoreptiles1/600/450" alt="[IMAGEN DEL POST 1]">
           </div>
-          <div class="card-body">
-            <h2>[TÍTULO DEL POST 1]</h2>
-            <p>[EXTRACTO DEL POST 1: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
-            <div class="card-meta">
-              <span>12 Sep 2026 · 5 min</span>
-              <span class="card-cta">Leer más →</span>
-            </div>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 1]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
 
-        <a href="./posts/post-2.html" class="card">
-          <div class="card-image">
-            <img src="https://picsum.photos/800/600?random=2" alt="[IMAGEN DEL POST 2]">
+        <a href="./posts/post-2.html" class="carousel-item">
+          <div class="carousel-item-image">
+            <img src="https://picsum.photos/seed/philoreptiles2/600/450" alt="[IMAGEN DEL POST 2]">
           </div>
-          <div class="card-body">
-            <h2>[TÍTULO DEL POST 2]</h2>
-            <p>[EXTRACTO DEL POST 2: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
-            <div class="card-meta">
-              <span>28 Ago 2026 · 7 min</span>
-              <span class="card-cta">Leer más →</span>
-            </div>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 2]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
 
-        <a href="./posts/post-3.html" class="card">
-          <div class="card-image">
-            <img src="https://picsum.photos/800/600?random=3" alt="[IMAGEN DEL POST 3]">
+        <a href="./posts/post-3.html" class="carousel-item">
+          <div class="carousel-item-image">
+            <img src="https://picsum.photos/seed/philoreptiles3/600/450" alt="[IMAGEN DEL POST 3]">
           </div>
-          <div class="card-body">
-            <h2>[TÍTULO DEL POST 3]</h2>
-            <p>[EXTRACTO DEL POST 3: dos o tres líneas que resuman el artículo e inviten a seguir leyendo.]</p>
-            <div class="card-meta">
-              <span>05 Ago 2026 · 4 min</span>
-              <span class="card-cta">Leer más →</span>
-            </div>
-          </div>
+          <span class="carousel-item-eyebrow">Artículo</span>
+          <h3 class="carousel-item-title">[Título del post 3]</h3>
+          <p class="carousel-item-text">[Extracto corto del artículo, dos o tres líneas que inviten a seguir leyendo.]</p>
+          <span class="carousel-item-link">Leer más →</span>
         </a>
 
       </div>
+      <div class="carousel-dots"></div>
     </div>
+    <!-- Sin loop: scroll-snap normal, sin clones ni reposicionamiento de
+         scrollLeft. Los dots reflejan siempre el artículo activo, de 1 a 3. -->
   </section>
 
-    <!-- 3. CIERRE CON LLAMADA A LA ACCIÓN -->
+  <!-- 3. CIERRE CON LLAMADA A LA ACCIÓN -->
   <section class="cta-close reveal">
     <div class="container">
-      <div class="block-separator" aria-hidden="true">◆</div>
+      <div class="block-separator" aria-hidden="true">◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆</div>
       <div class="cta-buttons">
-        <a href="boas.html" class="btn btn-primary">Género Boa</a>
-        <a href="sobre-nosotros.html" class="btn btn-primary">Sobre nosotros</a>
+        <a href="boas.html" class="btn btn-secondary">Género Boa</a>
+        <a href="sobre-nosotros.html" class="btn btn-secondary">Sobre nosotros</a>
       </div>
     </div>
   </section>
