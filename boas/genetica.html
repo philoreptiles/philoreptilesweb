@@ -16,11 +16,11 @@
    ========================================================================== */
 
 :root {
-  --ok: #a3e635;
-  --warn: #fbbf24;
-  --danger: #f87171;
+  --ok: #6a9e16;
+  --warn: #f6b511;
+  --danger: #c02727;
   --albinismo: #ed8936;
-  --jungle: #ab47bc;
+  --jungle: #8c3a9a;
 }
 
 /* === CONTENEDOR Y PANELES DE CONTENIDO === */
@@ -52,24 +52,23 @@
   margin-bottom: 0;
 }
 
-.tab-subtitle {
-  color: var(--text-muted);
-  font-style: italic;
-  margin-bottom: var(--space-md);
-}
-
-/* === CAJAS DE INFORMACIÓN (TARJETAS EXPLICATIVAS) === */
+/* === CAJAS DE INFORMACIÓN (TARJETAS EXPLICATIVAS) ===
+   Editorial: borde-izquierdo grueso + tinte casi imperceptible, sin caja
+   cerrada ni sombra (mismo lenguaje que .care-callout de cuidados.html). */
 .info-card {
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm);
+  background: rgba(196, 146, 62, 0.04);
+  border: none;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: var(--space-md);
   margin-block: var(--space-md);
   max-width: 100%;
 }
 
 .info-card h4 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--accent);
   font-size: 1rem;
   margin-bottom: var(--space-xs);
@@ -80,7 +79,9 @@
   margin-bottom: 0;
 }
 
-/* === GRID DE CONCEPTOS === */
+/* === GRID DE CONCEPTOS ===
+   Sin fondos de tarjeta: separación por borde-izquierdo sutil y un tinte
+   casi imperceptible, en vez de cajas cerradas. */
 .concept-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -89,9 +90,10 @@
 }
 
 .concept-box {
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  background: rgba(196, 146, 62, 0.03);
+  border: none;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
   padding: var(--space-sm);
 }
 
@@ -106,35 +108,40 @@
   margin-bottom: 0;
 }
 
-/* === BADGES === */
+/* === BADGES ===
+   Fondo sutil + borde de color puntual, texto siempre del sistema
+   (var(--text)) en vez de texto coloreado. */
 .badge {
   display: inline-block;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: var(--space-xs);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
+  color: var(--text);
 }
 
 .badge-het {
-  background: rgba(196, 146, 62, 0.15);
-  color: var(--accent);
-  border: 1px solid var(--accent-dim);
+  background: rgba(196, 146, 62, 0.10);
+  border: 1px solid var(--accent);
 }
 
 .badge-homo {
-  background: rgba(163, 230, 53, 0.15);
-  color: var(--ok);
+  background: rgba(163, 230, 53, 0.10);
   border: 1px solid var(--ok);
 }
 
-/* === DIAGRAMA DE ESFERAS === */
+/* === DIAGRAMA DE ESFERAS ===
+   Sin caja cerrada: solo líneas superior e inferior, fondo casi
+   imperceptible. Los SVG internos conservan sus colores propios. */
 .genetics-diagram-box {
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  background: rgba(196, 146, 62, 0.03);
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
   padding: var(--space-sm);
   margin-block: var(--space-md);
 }
@@ -201,27 +208,37 @@
   line-height: 1.4;
 }
 
-/* === CUADROS DE PUNNETT === */
+/* === CUADROS DE PUNNETT ===
+   Sin caja cerrada: borde superior grueso a modo de separador editorial
+   y borde inferior sutil, con tipografía como protagonista. */
 .punnett-container {
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm);
-  margin-block: var(--space-md);
+  background: transparent;
+  border: none;
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  padding-block: var(--space-lg);
+  padding-inline: var(--space-sm);
+  margin-block: var(--space-xl);
 }
 
 .punnett-title {
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 1.05rem;
-  margin-bottom: 0.25rem;
+  font-family: var(--font-heading);
+  color: var(--text);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  margin-bottom: 0.35rem;
   text-align: center;
 }
 
 .punnett-subtitle {
   text-align: center;
+  font-family: var(--font-body);
+  font-weight: 300;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   margin-bottom: var(--space-md);
 }
 
@@ -251,24 +268,33 @@
 }
 
 .cell-header {
-  background: rgba(196, 146, 62, 0.15);
+  background: transparent;
   color: var(--accent);
-  font-weight: 700;
-  font-size: 1.05rem;
-  border: 1px solid var(--border-subtle);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+  border: none;
+  border-bottom: 1px solid var(--accent);
+  border-radius: 0;
+  padding-bottom: 0.6rem;
 }
 
 .cell-header small {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
 .cell-result {
-  background: var(--bg-elevated);
+  background: rgba(196, 146, 62, 0.04);
   border: 1px solid var(--border-subtle);
+  border-radius: 4px;
   transition: transform var(--transition-base), border-color var(--transition-base);
 }
 
@@ -278,13 +304,13 @@
 }
 
 .cell-result.is-albino {
-  border-color: var(--albinismo);
-  background: rgba(237, 137, 54, 0.1);
+  border-color: rgba(237, 137, 54, 0.3);
+  background: rgba(237, 137, 54, 0.08);
 }
 
 .cell-result.is-jungle {
-  border-color: var(--jungle);
-  background: rgba(171, 71, 188, 0.1);
+  border-color: rgba(171, 71, 188, 0.3);
+  background: rgba(171, 71, 188, 0.08);
 }
 
 .geno-tag {
@@ -300,18 +326,20 @@
 }
 
 .geno-tag.is-jungle {
-  color: #e1bee7;
+  color: var(--jungle);
 }
 
 .pheno-tag {
+  font-family: var(--font-body);
+  font-weight: 300;
   font-size: 0.85rem;
-  color: var(--text);
+  color: var(--text-muted);
   margin-bottom: 0.3rem;
 }
 
 .percent-tag {
   font-size: 0.75rem;
-  background: rgba(196, 146, 62, 0.2);
+  background: rgba(196, 146, 62, 0.12);
   color: var(--accent);
   padding: 2px 8px;
   border-radius: 10px;
@@ -319,13 +347,13 @@
 }
 
 .percent-tag.is-albino {
-  background: rgba(237, 137, 54, 0.25);
-  color: #feebc8;
+  background: rgba(237, 137, 54, 0.16);
+  color: var(--accent);
 }
 
 .percent-tag.is-jungle {
-  background: rgba(171, 71, 188, 0.25);
-  color: #e1bee7;
+  background: rgba(171, 71, 188, 0.16);
+  color: var(--accent);
 }
 
 .punnett-legend {
@@ -352,14 +380,70 @@
 
 /* === NOTA Y ATENCIÓN === */
 .note-box {
-  background: rgba(196, 146, 62, 0.08);
+  background: rgba(196, 146, 62, 0.04);
   border: 1px dashed var(--accent-dim);
-  padding: var(--space-sm);
-  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  border-radius: 4px;
   margin-top: var(--space-md);
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--text);
+}
+
+/* === HERO EDITORIAL DE APARTADO (sin imagen a sangre) ===
+   Sobrescribe por completo el .care-hero fotográfico compartido en
+   styles.css: aquí el encabezado de cada panel es puramente
+   tipográfico — eyebrow numerado, título grande y un párrafo de
+   entrada (lead) —, igual que en boas/cuidados.html. */
+.care-hero {
+  position: static;
+  overflow: visible;
+  aspect-ratio: auto;
+  max-height: none;
+  background: transparent;
+  margin: 0;
+  border-radius: 0;
+  padding-block: var(--space-md) var(--space-sm);
+}
+
+.care-hero-eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-size: 0.75rem;
+  margin-bottom: var(--space-xs);
+}
+
+.care-hero .care-hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--text);
+  text-shadow: none;
+  line-height: 1.05;
+  margin-bottom: var(--space-sm);
+}
+
+.care-hero-lead {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 65ch;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .care-hero {
+    padding-block: var(--space-lg) var(--space-md);
+  }
+
+  .care-hero-lead {
+    font-size: 1.15rem;
+  }
 }
 
 /* === CLASES UTILITARIAS SEMÁNTICAS === */
@@ -456,9 +540,12 @@
   .info-card,
   .concept-box,
   .genetics-diagram-box,
-  .punnett-container,
   .note-box {
     padding: var(--space-md);
+  }
+
+  .punnett-container {
+    padding-block: var(--space-xl);
   }
 
   .concept-grid {
@@ -497,8 +584,10 @@
 <body>
 
 <header class="main-header">
-  <div class="container header-content">
-    <a href="../index.html" class="logo-text">Philoreptiles</a>
+  <div class="header-content">
+    <a href="../index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="../img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
     <nav class="main-nav" id="main-nav">
       <ul>
         <li><a href="../index.html">Inicio</a></li>
@@ -551,9 +640,11 @@
 
       <!-- PANEL 1: FUNDAMENTOS BÁSICOS -->
       <div id="fundamentos" class="tab-panel active-panel" role="tabpanel" aria-labelledby="tab-fundamentos" aria-hidden="false">
-        <h2>De la boa silvestre al universo de los morfos</h2>
 
-        <p>Cuando pensamos en una boa, probablemente imaginamos un animal de tonos grises o marrones, con las características “sillas de montar” recorriendo el cuerpo. Esa apariencia, cercana a la que encontramos en poblaciones silvestres, es nuestro punto de partida para entender algo mucho más amplio: la diversidad de colores y patrones que puede presentar una boa.</p>
+        <div class="care-hero">
+          <h2 class="care-hero-title">De la boa silvestre al universo de los morfos</h2>
+          <p class="care-hero-lead">Cuando pensamos en una boa, probablemente imaginamos un animal de tonos grises o marrones, con las características “sillas de montar” recorriendo el cuerpo. Esa apariencia, cercana a la que encontramos en poblaciones silvestres, es nuestro punto de partida para entender algo mucho más amplio: la diversidad de colores y patrones que puede presentar una boa.</p>
+        </div>
 
         <p>Algunas de estas diferencias forman parte de la variación natural de la especie, mientras que otras son el resultado de mutaciones genéticas que pueden heredarse de una generación a otra. En cautiverio, la selección y combinación de estas características ha dado lugar a numerosos <strong>morfos</strong>: ejemplares cuya apariencia se distingue por determinados colores, patrones o combinaciones de ambos.</p>
 
@@ -609,8 +700,12 @@
 
       <!-- PANEL 2: GENES RECESIVOS -->
       <div id="recesivos" class="tab-panel" role="tabpanel" aria-labelledby="tab-recesivos" aria-hidden="true">
-        <h2>Herencia recesiva</h2>
-        <p class="tab-subtitle">Mutaciones discretas que requieren dos copias para hacerse visibles.</p>
+
+        <div class="care-hero">
+          <span class="care-hero-eyebrow">02 — Recesivos</span>
+          <h2 class="care-hero-title">Herencia recesiva</h2>
+          <p class="care-hero-lead">Mutaciones discretas que requieren dos copias para hacerse visibles.</p>
+        </div>
 
         <p>Los <strong>genes recesivos</strong> necesitan obligatoriamente <strong>dos copias</strong> (homocigoto, una de cada progenitor) para manifestarse en la piel del ejemplar. Si la boa solo posee una copia, será un portador (heterocigoto / het) de aspecto silvestre o normal sin cambios aparentes.</p>
 
@@ -882,8 +977,12 @@
 
       <!-- PANEL 3: DOMINANCIA INCOMPLETA -->
       <div id="incompletos" class="tab-panel" role="tabpanel" aria-labelledby="tab-incompletos" aria-hidden="true">
-        <h2>Dominantes Incompletos (o codominantes*)</h2>
-        <p class="tab-subtitle">Genes donde una copia altera el fenotipo y dos copias generan una Superforma.</p>
+
+        <div class="care-hero">
+          <span class="care-hero-eyebrow">03 — Dominantes incompletos</span>
+          <h2 class="care-hero-title">Dominantes Incompletos (o codominantes*)</h2>
+          <p class="care-hero-lead">Genes donde una copia altera el fenotipo y dos copias generan una Superforma.</p>
+        </div>
 
         <p>En este tipo de genes, una sola copia es suficiente para que el morfo sea visible. Cuando el ejemplar hereda las dos copias, el efecto no se repite simplemente: se intensifica o cambia, dando lugar a lo que comúnmente se conoce como <strong>Superforma</strong>.</p>
 
@@ -1070,8 +1169,12 @@
 
       <!-- PANEL 4: POLIGÉNICOS -->
       <div id="poligenicos" class="tab-panel" role="tabpanel" aria-labelledby="tab-poligenicos" aria-hidden="true">
-        <h2>Poligénicos (selección de línea)</h2>
-        <p class="tab-subtitle">Crianza selectiva acumulativa: el arte de moldear tonalidades a lo largo del tiempo.</p>
+
+        <div class="care-hero">
+          <span class="care-hero-eyebrow">04 — Poligénicos</span>
+          <h2 class="care-hero-title">Poligénicos (selección de línea)</h2>
+          <p class="care-hero-lead">Crianza selectiva acumulativa: el arte de moldear tonalidades a lo largo del tiempo.</p>
+        </div>
 
         <p>Aquí no hay un solo “interruptor genético”. Estos rasgos dependen de la interacción de múltiples genes y se desarrollan gradualmente mediante selección a lo largo de generaciones.</p>
 
@@ -1089,18 +1192,18 @@
             <!-- CLUSTER A: FACTORES DE LIMPIEZA -->
             <div class="sphere-item">
               <svg class="sphere-svg" viewBox="0 0 200 200" aria-hidden="true">
-                <circle cx="100" cy="100" r="85" fill="rgba(254, 240, 138, 0.05)" stroke="#fde047" stroke-width="2" stroke-dasharray="6,4" />
-                <line x1="70" y1="70" x2="130" y2="70" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="130" y1="70" x2="130" y2="130" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="130" y1="130" x2="70" y2="130" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="70" y1="130" x2="70" y2="70" stroke="#fde047" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="70" y1="70" x2="130" y2="130" stroke="#fde047" stroke-width="1.5" stroke-opacity="0.4" />
-                <line x1="130" y1="70" x2="70" y2="130" stroke="#fde047" stroke-width="1.5" stroke-opacity="0.4" />
-                <circle cx="100" cy="100" r="14" fill="#fde047" opacity="0.25" />
-                <circle cx="70" cy="70" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
-                <circle cx="130" cy="70" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
-                <circle cx="130" cy="130" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
-                <circle cx="70" cy="130" r="20" fill="#fef08a" stroke="#eab308" stroke-width="3" />
+                <circle cx="100" cy="100" r="85" fill="rgba(212, 160, 23, 0.10)" stroke="#D4A017" stroke-width="2" stroke-opacity="0.9" stroke-dasharray="6,4" />
+                <line x1="70" y1="70" x2="130" y2="70" stroke="#D4A017" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="130" y1="70" x2="130" y2="130" stroke="#D4A017" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="130" y1="130" x2="70" y2="130" stroke="#D4A017" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="70" y1="130" x2="70" y2="70" stroke="#D4A017" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="70" y1="70" x2="130" y2="130" stroke="#D4A017" stroke-width="1.5" stroke-opacity="0.6" />
+                <line x1="130" y1="70" x2="70" y2="130" stroke="#D4A017" stroke-width="1.5" stroke-opacity="0.6" />
+                <circle cx="100" cy="100" r="14" fill="#D4A017" opacity="0.35" />
+                <circle cx="70" cy="70" r="20" fill="#E6B325" stroke="#A67C00" stroke-width="3" />
+                <circle cx="130" cy="70" r="20" fill="#E6B325" stroke="#A67C00" stroke-width="3" />
+                <circle cx="130" cy="130" r="20" fill="#E6B325" stroke="#A67C00" stroke-width="3" />
+                <circle cx="70" cy="130" r="20" fill="#E6B325" stroke="#A67C00" stroke-width="3" />
               </svg>
               <strong class="sphere-title">Cluster A: Factores de limpieza</strong>
               <span class="sphere-desc">Red de micro-genes enfocados en la eliminación progresiva de pigmentos negros y grises.</span>
@@ -1109,18 +1212,18 @@
             <!-- CLUSTER B: FACTORES DE SATURACIÓN -->
             <div class="sphere-item">
               <svg class="sphere-svg" viewBox="0 0 200 200" aria-hidden="true">
-                <circle cx="100" cy="100" r="85" fill="rgba(244, 63, 94, 0.05)" stroke="#fb7185" stroke-width="2" stroke-dasharray="6,4" />
-                <line x1="70" y1="70" x2="130" y2="70" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="130" y1="70" x2="130" y2="130" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="130" y1="130" x2="70" y2="130" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="70" y1="130" x2="70" y2="70" stroke="#fb7185" stroke-width="2" stroke-opacity="0.6" />
-                <line x1="70" y1="70" x2="130" y2="130" stroke="#fb7185" stroke-width="1.5" stroke-opacity="0.4" />
-                <line x1="130" y1="70" x2="70" y2="130" stroke="#fb7185" stroke-width="1.5" stroke-opacity="0.4" />
-                <circle cx="100" cy="100" r="14" fill="#fb7185" opacity="0.25" />
-                <circle cx="70" cy="70" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
-                <circle cx="130" cy="70" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
-                <circle cx="130" cy="130" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
-                <circle cx="70" cy="130" r="20" fill="#fecdd3" stroke="#f43f5e" stroke-width="3" />
+                <circle cx="100" cy="100" r="85" fill="rgba(225, 29, 72, 0.10)" stroke="#E11D48" stroke-width="2" stroke-opacity="0.9" stroke-dasharray="6,4" />
+                <line x1="70" y1="70" x2="130" y2="70" stroke="#E11D48" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="130" y1="70" x2="130" y2="130" stroke="#E11D48" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="130" y1="130" x2="70" y2="130" stroke="#E11D48" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="70" y1="130" x2="70" y2="70" stroke="#E11D48" stroke-width="2" stroke-opacity="0.9" />
+                <line x1="70" y1="70" x2="130" y2="130" stroke="#E11D48" stroke-width="1.5" stroke-opacity="0.6" />
+                <line x1="130" y1="70" x2="70" y2="130" stroke="#E11D48" stroke-width="1.5" stroke-opacity="0.6" />
+                <circle cx="100" cy="100" r="14" fill="#E11D48" opacity="0.35" />
+                <circle cx="70" cy="70" r="20" fill="#F472B6" stroke="#9F1239" stroke-width="3" />
+                <circle cx="130" cy="70" r="20" fill="#F472B6" stroke="#9F1239" stroke-width="3" />
+                <circle cx="130" cy="130" r="20" fill="#F472B6" stroke="#9F1239" stroke-width="3" />
+                <circle cx="70" cy="130" r="20" fill="#F472B6" stroke="#9F1239" stroke-width="3" />
               </svg>
               <strong class="sphere-title">Cluster B: Factores de saturación</strong>
               <span class="sphere-desc">Red de micro-genes enfocados en intensificar pigmentos rojos.</span>
@@ -1137,8 +1240,12 @@
 
       <!-- PANEL 5: VALOR Y VISIÓN PERSONAL -->
       <div id="filosofia" class="tab-panel" role="tabpanel" aria-labelledby="tab-filosofia" aria-hidden="true">
-        <h2>Valor y visión personal</h2>
-        <p class="tab-subtitle">Cada boa es un ejemplar único en constante evolución.</p>
+
+        <div class="care-hero">
+          <span class="care-hero-eyebrow">05 — Valor y visión personal</span>
+          <h2 class="care-hero-title">Valor y visión personal</h2>
+          <p class="care-hero-lead">Cada boa es un ejemplar único en constante evolución.</p>
+        </div>
 
         <p>A opinión personal, todas las boas tienen algo que las hace únicas. Puede ser una mancha en algún punto del cuerpo, un contraste particular o un color en los 
           costados que llama la atención. Con el tiempo, uno empieza a desarrollar preferencias. En mi caso, me atraen especialmente el morfo Sterling y las líneas 

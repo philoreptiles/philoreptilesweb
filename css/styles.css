@@ -1228,21 +1228,7 @@ html {
   }
 }
 
-/* Área visual: Círculo con SVG (Conoce a las boas) */
-.carousel-item-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-  margin-bottom: var(--space-xs); /* Antes var(--space-sm): separación interna excesiva */
-  flex-shrink: 0;
-}
-
-/* Área visual: Imagen (Últimos artículos) */
+/* Área visual: Imagen (Conoce a las boas / Últimos artículos) */
 .carousel-item-image {
   position: relative;
   width: 100%;
