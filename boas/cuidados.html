@@ -518,26 +518,54 @@
   color: var(--warn);
 }
 
-/* === GALERÍAS DE IMÁGENES === */
+/* === GALERÍAS DE IMÁGENES ===
+   MÓVIL (base, <768px): carrusel horizontal con scroll-snap en lugar de
+   apilar las 3 imágenes. Las fichas son PNG de producto con fondo
+   transparente, así que cada figure es una "tarjeta" cuadrada con
+   fondo elevado + padding, y la imagen se ajusta con object-fit: contain
+   (nunca se recorta).
+   --gallery-bleed replica el padding de .care-content en cada breakpoint
+   (1rem en móvil, 2.5rem desde 768px) para que el carrusel llegue "a
+   sangre" hasta el borde interior de la tarjeta sin salirse de ella. */
 .care-gallery {
-  display: grid;
-  grid-template-columns: 1fr;
+  --gallery-bleed: var(--space-sm);
+  display: flex;
+  flex-direction: row;
   gap: var(--space-sm);
   margin-top: var(--space-md);
+  margin-inline: calc(var(--gallery-bleed) * -1);
+  padding-inline: var(--gallery-bleed);
+  overflow-x: auto;                       /* el scroll vive solo dentro de la galería */
+  overscroll-behavior-x: contain;         /* no arrastra la página al llegar al extremo */
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gallery-bleed); /* la ficha 1 y las siguientes encajan respetando el margen */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.care-gallery::-webkit-scrollbar {
+  display: none;
 }
 
 .care-gallery figure {
+  flex: 0 0 80%;                          /* 80% + fragmento de la siguiente: invita a deslizar */
+  scroll-snap-align: start;
   margin: 0;
-  aspect-ratio: 4 / 3;
-  border-radius: 4px;
-  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);               /* el producto no toca los bordes */
+  background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .care-gallery img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   display: block;
 }
 
@@ -764,14 +792,58 @@
     margin-bottom: 0.5rem;
   }
 
+  /* Galerías, TABLET (768px–1023px): desde 768px aparece el menú lateral
+     de 260px, así que la tarjeta de contenido es angosta (~340px de ancho
+     útil a 768px). En ese espacio una cuadrícula deja imágenes diminutas
+     o una huérfana en la 2ª fila; se mantiene el carrusel, ahora con
+     ~2 fichas visibles + un fragmento de la 3ª, y el sangrado sigue el
+     nuevo padding de la tarjeta. */
   .care-gallery {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-md);
+    --gallery-bleed: var(--space-lg);
+    gap: var(--space-sm);
     margin-top: var(--space-lg);
+  }
+
+  .care-gallery figure {
+    flex-basis: calc((100% - var(--space-sm)) / 2.15);
   }
 
   .back-to-top {
     padding: 0.7rem 1rem;
+  }
+}
+
+/* Galerías, DESKTOP (1024px+): vuelve la cuadrícula de 3 columnas y se
+   restaura el aspecto original de las figuras (4/3, imagen a cubrir,
+   sin tarjeta). repeat(3, 1fr) se ve igual que el auto-fit anterior en
+   pantallas anchas, pero evita la 3ª imagen huérfana entre 1024px y
+   ~1135px, donde el auto-fit solo cabía 2 columnas. */
+@media (min-width: 1024px) {
+  .care-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .care-gallery figure {
+    flex: initial;
+    aspect-ratio: 4 / 3;
+    display: block;
+    padding: 0;
+    background: none;
+    border-radius: 4px;
+  }
+
+  .care-gallery img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
   }
 }
 
@@ -789,6 +861,11 @@
 @media (prefers-reduced-motion: reduce) {
   .back-to-top {
     transition: none;
+  }
+
+  /* El carrusel de galería no se desplaza con animación suave. */
+  .care-gallery {
+    scroll-behavior: auto;
   }
 }
 </style>

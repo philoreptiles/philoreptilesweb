@@ -359,7 +359,19 @@ document.addEventListener('DOMContentLoaded', () => {
     //    contenedor (modo normal) o al centro (modo "center")
     function getCurrentIndex() {
       const trackRect = track.getBoundingClientRect();
-      const referenceX = isCenterMode ? trackRect.left + trackRect.width / 2 : trackRect.left;
+
+      // CORRECCIÓN DESFASE: el punto donde "aterriza" una ficha tras el snap
+      // NO es el borde del track, sino el borde + scroll-padding-inline-start
+      // (en boas.html desde 768px vale --carousel-edge, que en pantallas
+      // anchas llega a cientos de px). Medir contra trackRect.left a secas
+      // hacía ganar a la ficha anterior cuando el padding era grande.
+      const scrollPaddingStart = isCenterMode
+        ? 0
+        : (parseFloat(getComputedStyle(track).scrollPaddingInlineStart) || 0);
+
+      const referenceX = isCenterMode
+        ? trackRect.left + trackRect.width / 2
+        : trackRect.left + scrollPaddingStart;
       let closestIndex = 0;
       let minDistance = Infinity;
 
@@ -372,6 +384,15 @@ document.addEventListener('DOMContentLoaded', () => {
           closestIndex = index;
         }
       });
+
+      // CORRECCIÓN ÚLTIMO DOT: si caben varias fichas completas, el scroll
+      // máximo deja a la penúltima (o antepenúltima...) en el borde izquierdo
+      // y la última nunca puede alinearse ahí. Si el track está al final del
+      // scroll, la última ficha es la activa por definición.
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll > 10 && track.scrollLeft >= maxScroll - 10) {
+        return items.length - 1;
+      }
 
       return closestIndex;
     }

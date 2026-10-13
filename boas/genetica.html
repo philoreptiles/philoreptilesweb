@@ -133,6 +133,38 @@
   border: 1px solid var(--ok);
 }
 
+/* === BADGES PERSONALIZADAS PARA "LO QUE VEMOS" Y "LO QUE LLEVA" === */
+
+/* Para "Lo que vemos" (Fenotipo) - Ejemplo: Azul */
+.badge-fenotipo {
+  background: rgba(59, 130, 246, 0.10); /* Fondo azul sutil */
+  border: 1px solid #3b82f6;            /* Borde azul */
+  color: #1e3a8a;                       /* Texto azul oscuro para leer bien */
+}
+
+/* Para "Lo que lleva" (Genotipo) - Ejemplo: Verde */
+.badge-genotipo {
+  background: rgba(16, 185, 129, 0.10); /* Fondo verde sutil */
+  border: 1px solid #10b981;            /* Borde verde */
+  color: #064e3b;                       /* Texto verde oscuro para leer bien */
+}
+
+/* === BADGES PARA CONCEPTOS DE ALELOS === */
+
+/* Para "Dos alelos distintos" (Heterocigoto) - Ejemplo: Naranja/Ámbar */
+.badge-alelos-distintos {
+  background: rgba(217, 119, 6, 0.10); /* Fondo ámbar sutil */
+  border: 1px solid #d97706;            /* Borde ámbar */
+  color: #78350f;                       /* Texto marrón oscuro para leer bien */
+}
+
+/* Para "Dos alelos iguales" (Homocigoto) - Ejemplo: Púrpura */
+.badge-alelos-iguales {
+  background: rgba(139, 92, 246, 0.10); /* Fondo púrpura sutil */
+  border: 1px solid #8b5cf6;            /* Borde púrpura */
+  color: #4c1d95;                       /* Texto púrpura oscuro para leer bien */
+}
+
 /* === DIAGRAMA DE ESFERAS ===
    Sin caja cerrada: solo líneas superior e inferior, fondo casi
    imperceptible. Los SVG internos conservan sus colores propios. */
@@ -198,7 +230,7 @@
 }
 
 .sphere-title.is-jungle {
-  color: #e1bee7;
+  color: #6a1b9a;
 }
 
 .sphere-desc {
@@ -326,7 +358,7 @@
 }
 
 .geno-tag.is-jungle {
-  color: var(--jungle);
+  color: #4a148c;
 }
 
 .pheno-tag {
@@ -642,7 +674,7 @@
       <div id="fundamentos" class="tab-panel active-panel" role="tabpanel" aria-labelledby="tab-fundamentos" aria-hidden="false">
 
         <div class="care-hero">
-          <h2 class="care-hero-title">De la boa silvestre al universo de los morfos</h2>
+          <h2 class="care-hero-title">Lo visible y lo oculto</h2>
           <p class="care-hero-lead">Cuando pensamos en una boa, probablemente imaginamos un animal de tonos grises o marrones, con las características “sillas de montar” recorriendo el cuerpo. Esa apariencia, cercana a la que encontramos en poblaciones silvestres, es nuestro punto de partida para entender algo mucho más amplio: la diversidad de colores y patrones que puede presentar una boa.</p>
         </div>
 
@@ -657,13 +689,13 @@
 
         <div class="concept-grid">
           <div class="concept-box">
-            <span class="badge badge-het">Dos alelos distintos</span>
+            <span class="badge badge-alelos-distintos">Dos alelos distintos</span>
             <h4>Heterocigoto (Het)</h4>
             <p>Un ejemplar es <strong>heterocigoto</strong> cuando posee dos versiones diferentes de un mismo gen. En una mutación recesiva, una boa puede portar una copia de la mutación sin mostrarla visualmente. Por eso, cuando encontramos términos como <strong>“Het Albino”</strong>, significa que el animal porta esa mutación y puede transmitirla.</p>
           </div>
 
           <div class="concept-box">
-            <span class="badge badge-homo">Dos alelos iguales</span>
+            <span class="badge badge-alelos-iguales">Dos alelos iguales</span>
             <h4>Homocigoto</h4>
             <p>Un ejemplar es <strong>homocigoto</strong> cuando posee dos copias iguales de un determinado alelo. En el caso de muchas mutaciones recesivas, recibir la copia mutada de ambos progenitores es lo que permite que la característica se exprese visualmente.</p>
           </div>
@@ -674,13 +706,13 @@
 
         <div class="concept-grid">
           <div class="concept-box">
-            <span class="badge badge-het">Lo que vemos</span>
+            <span class="badge badge-fenotipo">Lo que vemos</span>
             <h4>Fenotipo</h4>
             <p>Es el conjunto de características que podemos observar en una boa: su coloración, patrón, tamaño y otras características físicas. Cuando una mutación se manifiesta en la apariencia del animal, hablamos de un ejemplar <strong>visual</strong> para esa mutación.</p>
           </div>
 
           <div class="concept-box">
-            <span class="badge badge-homo">Lo que lleva</span>
+            <span class="badge badge-genotipo">Lo que lleva</span>
             <h4>Genotipo</h4>
             <p>Es la información genética que posee el ejemplar. Parte de ella puede no ser evidente a simple vista. Por ejemplo, una boa puede portar una mutación recesiva sin mostrarla en su apariencia; en ese caso puede describirse como <strong>heterocigota (Het)</strong> para esa mutación.</p>
           </div>
@@ -702,18 +734,20 @@
       <div id="recesivos" class="tab-panel" role="tabpanel" aria-labelledby="tab-recesivos" aria-hidden="true">
 
         <div class="care-hero">
-          <span class="care-hero-eyebrow">02 — Recesivos</span>
           <h2 class="care-hero-title">Herencia recesiva</h2>
           <p class="care-hero-lead">Mutaciones discretas que requieren dos copias para hacerse visibles.</p>
         </div>
 
-        <p>Los <strong>genes recesivos</strong> necesitan obligatoriamente <strong>dos copias</strong> (homocigoto, una de cada progenitor) para manifestarse en la piel del ejemplar. Si la boa solo posee una copia, será un portador (heterocigoto / het) de aspecto silvestre o normal sin cambios aparentes.</p>
+        <p>Los <strong>genes recesivos</strong> necesitan obligatoriamente <strong>dos copias</strong> (una de cada progenitor) 
+          para manifestarse en la piel del ejemplar. Si la boa solo posee una copia, será un portador (heterocigoto / het) de aspecto silvestre o 
+          normal sin cambios aparentes.</p>
 
         <p><em>Ejemplos clásicos de genes recesivos:</em> Albino (Kahl, Sharp, VPI), Anery y Blood.</p>
 
         <div class="genetics-diagram-box">
-          <h3 class="diagram-title">Representación visual: Fenotipo vs. Genotipo</h3>
-          <p class="diagram-subtitle">La esfera exterior representa la apariencia visible del ejemplar. Las esferas interiores representan las dos copias del gen que posee.</p>
+          <h3 class="diagram-title">Fenotipo vs. Genotipo</h3>
+          <p class="diagram-subtitle">La esfera exterior representa la apariencia visible del ejemplar. 
+            Las esferas interiores representan las dos copias del gen que posee.</p>
 
           <div class="diagram-spheres">
             <div class="sphere-item">
@@ -975,12 +1009,11 @@
         </div>
       </div>
 
-      <!-- PANEL 3: DOMINANCIA INCOMPLETA -->
+      <!-- PANEL 3: DOMINANCIA INCOMPLETA -------------------------------------------------------------------------------------------------------------->
       <div id="incompletos" class="tab-panel" role="tabpanel" aria-labelledby="tab-incompletos" aria-hidden="true">
 
         <div class="care-hero">
-          <span class="care-hero-eyebrow">03 — Dominantes incompletos</span>
-          <h2 class="care-hero-title">Dominantes Incompletos (o codominantes*)</h2>
+          <h2 class="care-hero-title">Dominantes incompletos</h2>
           <p class="care-hero-lead">Genes donde una copia altera el fenotipo y dos copias generan una Superforma.</p>
         </div>
 
@@ -989,7 +1022,7 @@
         <p><em>Ejemplos conocidos:</em> Líneas como Jungle, Motley o Hypo, donde las versiones “Super” muestran diferencias respecto a la forma simple.</p>
 
         <div class="genetics-diagram-box">
-          <h3 class="diagram-title">Representación visual: Nominal vs. Jungle vs. Super Jungle</h3>
+          <h3 class="diagram-title">Nominal vs. Jungle vs. Super Jungle</h3>
           <p class="diagram-subtitle">A diferencia de los genes recesivos, una sola copia (Nj) altera el aspecto exterior del ejemplar. Dos copias (jj) producen la superforma.</p>
 
           <div class="diagram-spheres">
@@ -1171,7 +1204,6 @@
       <div id="poligenicos" class="tab-panel" role="tabpanel" aria-labelledby="tab-poligenicos" aria-hidden="true">
 
         <div class="care-hero">
-          <span class="care-hero-eyebrow">04 — Poligénicos</span>
           <h2 class="care-hero-title">Poligénicos (selección de línea)</h2>
           <p class="care-hero-lead">Crianza selectiva acumulativa: el arte de moldear tonalidades a lo largo del tiempo.</p>
         </div>
@@ -1242,7 +1274,6 @@
       <div id="filosofia" class="tab-panel" role="tabpanel" aria-labelledby="tab-filosofia" aria-hidden="true">
 
         <div class="care-hero">
-          <span class="care-hero-eyebrow">05 — Valor y visión personal</span>
           <h2 class="care-hero-title">Valor y visión personal</h2>
           <p class="care-hero-lead">Cada boa es un ejemplar único en constante evolución.</p>
         </div>
