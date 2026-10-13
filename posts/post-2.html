@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     PLANTILLA DE POST — Philoreptiles
+     ============================================================
+     CÓMO USARLA:
+     Copia este archivo como post-2.html, post-3.html, etc. y edita
+     SOLO los bloques marcados con <!-- EDITAR -->.
+
+     CHECKLIST RÁPIDA (busca cada "EDITAR" en orden):
+
+       [1] <title>                         → "Título — Philoreptiles"
+       [2] <meta name="description">       → resumen de 1–2 frases
+       [3] .post-number (opcional)         → 01, 02, 03...
+       [4] .post-cover img src + alt       → ../img/postN_1.png
+       [5] .post-eyebrow                   → categoría (BIOLOGÍA, CUIDADOS...)
+       [6] .post-title                     → título del post
+       [7] .post-meta                      → fecha + datetime ISO 8601,
+                                             minutos de lectura, autor
+       [8] .post-body (secciones completas)
+       [9] Imágenes intercaladas           → ../img/postN_2.png, postN_3.png...
+      [10] .post-nav: anterior / siguiente
+      [11] Comentario final del template   → borrar antes de publicar
+
+     REGLAS DE ORO:
+     - Rutas relativas con "/" (NUNCA "\"). El post vive en /posts/,
+       así que las imágenes van con ../img/...
+     - Cada <section> lleva su propio class="reveal".
+     - Cada sección temática cierra con una <figure class="post-figure">
+       (proporción 3/2, con width/height y loading="lazy").
+     - Los <div class="post-divider">◆</div> separan secciones.
+     - Jerarquía: h1 (título) → h2 (subtítulos) → h3 (sub-subtítulos).
+     - El header, footer y estilos NO se tocan entre posts.
+     ============================================================ -->
+
+<title>¿Un nuevo albinismo? — Philoreptiles</title> <!-- EDITAR [1] -->
+<meta name="description" content="Conociendo lo que ocurrió hace más de una década con un caso excepcional de albinismo en una boa."> <!-- EDITAR [2] -->
+
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de la plantilla de post (posts/post-*.html)
+   NO EDITAR entre posts: son idénticos para todos.
+   Mobile-first: base = móvil; escala con min-width 768px y 1024px.
+   ========================================================================== */
+
+.post-column {
+  max-width: 70ch;
+  margin-inline: auto;
+  font-size: clamp(1rem, 1.1vw, 1.05rem);
+}
+
+.post-hero {
+  padding-top: calc(48px + var(--space-md));
+}
+
+.post-cover {
+  --post-cover-ratio: 4 / 3;
+  margin: 0;
+  aspect-ratio: var(--post-cover-ratio);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-header {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-lg);
+}
+
+/* Número editorial opcional (01, 02, 03...). Si no lo usas, borra el
+   <p class="post-number"> del HTML; el estilo puede quedarse sin problema. */
+.post-number {
+  display: block;
+  margin: 0 0 var(--space-xs) -0.04em;
+  font-family: var(--font-heading);
+  font-size: clamp(4.5rem, 16vw, 7rem);
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  opacity: 0.22;
+  pointer-events: none;
+  user-select: none;
+}
+
+.post-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  max-width: none;
+  margin-bottom: var(--space-xs);
+}
+
+.post-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.02;
+  text-wrap: balance;
+  margin-bottom: var(--space-sm);
+}
+
+.post-meta {
+  max-width: none;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.post-meta > * + *::before {
+  content: "·";
+  margin-inline: 0.6em;
+}
+
+.post-body {
+  padding-bottom: var(--space-lg);
+}
+
+.post-body p {
+  max-width: none;
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.75;
+  margin-bottom: 1.25em;
+}
+
+.post-section > :first-child { margin-top: 0; }
+.post-section > :last-child  { margin-bottom: 0; }
+
+.post-body h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.post-body h3 {
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+
+.post-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba(196, 146, 62, 0.45);
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.post-body a:hover {
+  color: var(--text);
+  text-decoration-color: var(--accent);
+}
+
+.post-body a:focus-visible,
+.post-pager a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.post-body blockquote {
+  margin: var(--space-lg) 0;
+  padding-left: var(--space-md);
+  border-left: 3px solid var(--accent);
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.post-body blockquote p {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.post-body ul,
+.post-body ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.4em;
+}
+
+.post-body li {
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 0.5em;
+  padding-left: 0.2em;
+}
+
+.post-body li::marker {
+  color: var(--accent);
+}
+
+.post-body ol li::marker {
+  font-weight: 600;
+}
+
+.post-figure {
+  margin: var(--space-lg) 0;
+}
+
+.post-figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+}
+
+.post-figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.post-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-block: var(--space-lg);
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.55;
+}
+
+.post-divider::before,
+.post-divider::after {
+  content: "";
+  flex: 0 0 2.5rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.post-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.post-pager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  list-style: none;
+}
+
+.post-pager a {
+  display: block;
+  max-width: 16rem;
+  color: var(--text);
+}
+
+.post-pager-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.post-pager-title {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.post-pager a:hover .post-pager-title {
+  color: var(--accent);
+}
+
+.post-end {
+  padding-bottom: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .post-hero {
+    padding-top: calc(56px + var(--space-lg));
+  }
+
+  .post-cover {
+    --post-cover-ratio: 16 / 9;
+  }
+
+  .post-header {
+    padding-bottom: var(--space-xl);
+  }
+
+  .post-nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .post-pager {
+    flex-direction: row;
+    gap: var(--space-lg);
+    margin-left: auto;
+  }
+
+  .post-pager-next {
+    text-align: right;
+  }
+
+  .post-end {
+    padding-bottom: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .post-cover {
+    --post-cover-ratio: 21 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .post-header.reveal {
+    transition-delay: 0.12s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-body a,
+  .post-pager-title {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-content">
+    <a href="../index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="../img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html">Genética</a></li>
+            <li><a href="../boas/morfos.html">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html" class="active">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <article class="post">
+
+    <header class="post-hero">
+      <div class="container">
+        <figure class="post-cover reveal">
+          <!-- EDITAR [4]: portada. Proporción recortada 4/3 → 16/9 → 21/9. -->
+          <img src="../img/post2_1.png"
+               alt="El género Boa — Philoreptiles"
+               width="1600" height="900" fetchpriority="high">
+        </figure>
+
+        <div class="post-column post-header reveal">
+          <!-- EDITAR [3] (opcional): número editorial. Borra este <p> si no lo usas. -->
+          <p class="post-number" aria-hidden="true">02</p>
+
+          <!-- EDITAR [5]: categoría -->
+          <p class="post-eyebrow">BIOLOGÍA</p>
+
+          <!-- EDITAR [6]: título -->
+          <h1 class="post-title">¿Un nuevo albinismo?</h1>
+
+          <!-- EDITAR [7]: metadata. datetime en ISO 8601 (YYYY-MM-DD). -->
+          <p class="post-meta">
+            <time datetime="2026-01-15">12 de octubre, 2026</time>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="post-column post-body">
+
+        <!-- ============================================================
+             EDITAR [8]: CUERPO DEL ARTÍCULO
+             ============================================================
+             Estructura recomendada:
+               <section class="post-section reveal"> … </section>
+               <div class="post-divider" aria-hidden="true">◆</div>
+               <section class="post-section reveal"> … </section>
+               …
+             Cada sección temática cierra con una .post-figure (imagen 3/2).
+             La introducción no lleva imagen.
+             ============================================================ -->
+
+        <section class="post-section reveal">
+          <p>Durante casi dos décadas, los criadores de Boa constrictor se han enfrentado a un rompecabezas genético que no encajaba en ninguna de las reglas conocidas. 
+            Lo que comenzó en 2008 como una cría inesperada en el criadero de Joe (JPC Boas) se ha convertido oficialmente en uno de los descubrimientos más 
+            fascinantes de la herpetocultura moderna, revelado recientemente en el episodio 150 del programa Reptile Genetics Weekly de la mano del Dr. Ben Morrill 
+            (Rare Genetics Inc.), junto a los experimentados criadores Joe, Nate y Jeff (The Boaphile).</p>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>El nacimiento del misterio: Un "NFI" en la camada</h2>
+          <p>Todo empezó en 2008 cuando Joe cruzó a "Romeo" y "Juliet", dos boas de patrón normal seleccionadas simplemente por sus atractivas franjas e 
+            intensidad de color naranja. Ninguno de los padres era supuestamente portador (Het) de albinismo. Sin embargo, de una camada de 37 crías nació 
+            una sola cría albina con un aspecto inusual. Al repetir el cruce al año siguiente, nacieron 32 crías y ni un solo albino.</p>
+          <p>Al no comprender qué estaba sucediendo, el ejemplar fue bautizado de forma informal como NFI (No Freaking Idea). Durante años, muchos en la 
+            afición asumieron que el NFI era simplemente una variación más intensa del albino línea Kahl o un gen dominante incompleto. Sin embargo, sus 
+            resultados de cría no seguían las proporciones estadísticas habituales.</p>
+
+          <figure class="post-figure">
+            <!-- EDITAR [9]: ../img/postN_2.png -->
+            <img src="../img/post2_1.png"
+                 alt="Detalle de las sillas dorsales en una Boa"
+                 width="1200" height="800" loading="lazy">
+          </figure>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>La ciencia al rescate: El análisis de ADN</h2>
+          <p>El punto de inflexión llegó cuando Nate, un estudiante de biología que comenzaba a trabajar con Joe, decidió no quedarse con la duda e impulsó la 
+            recolección sistemática de mudas de piel para enviarlas al laboratorio de Rare Genetics Inc. (RGI). Gracias a las pruebas de ADN desarrolladas por el 
+            Dr. Ben Morrill y su equipo, la genética detrás de esta línea finalmente ha sido descifrada:</p>
+          <ul>
+            <li><strong>Es una mutación alelica compatible:</strong> El gen NFI no es un modificador ni un gen independiente, sino una nueva mutación que ocupa exactamente el mismo locus genético que el Albino Kahl.</li>
+            <li><strong>Funciona como un complejo alelico:</strong> Funciona de manera análoga al complejo Paradigm/Paradise en boas o al Candino en los pitones bola.</li>
+          </ul>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>La nueva terminología: ¿Cómo se clasifican ahora?</h2>
+          <p>Para reflejar la realidad genética descubierta por el laboratorio, la comunidad de criadores ha establecido una nomenclatura clara para este complejo:</p>
+          <ol>
+            <li><strong>Albino Kahl (Homocigoto Kahl):</strong> Posee dos copias del gen Kahl Albino tradicional. Es la forma albina más clara y amarilla.</li>
+            <li><strong>JPC Albino (Homocigoto para la nueva mutación):</strong> La forma homocigota pura de esta nueva mutación (anteriormente llamada "Super NFI"). Visualmente presenta un fenotipo más oscuro, con tonos marrones y un aspecto similar a las líneas T-positivas.</li>
+            <li><strong>NFI Albino (Heterocigoto compuesto):</strong> Ocurre cuando la boa hereda una copia del gen Kahl y una copia del gen JPC. Esta combinación da lugar al fenotipo visual de tonos púrpuras y grises que dio origen a todo el proyecto.</li>
+          </ol>
+
+                    <figure class="post-figure">
+            <!-- EDITAR [9]: ../img/postN_3.png -->
+            <img src="../img/post2_3.png"
+                 alt="Distribución del género Boa en el continente americano"
+                 width="1200" height="800" loading="lazy">
+          </figure>
+
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>Un hito para la crianza de reptiles</h2>
+          <p>Este hallazgo no solo demuestra el valor de la colaboración entre veterinarios, genetistas y la "nueva sangre" de estudiantes y criadores, 
+            sino que también abre un abanico enorme de combinaciones. Proyectos combinados con genes como Leopard, IMG o Motley ahora pueden trabajarse con 
+            la certeza de estar utilizando un alelo completamente independiente y compatible. Además, demuestra cómo las pruebas genéticas a través de simples 
+            mudas de piel están transformando lo que antes eran proyectos "dinker" o inciertos en líneas genéticas sólidas y validadas científicamente.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- EDITAR [10]: NAVEGACIÓN ENTRE POSTS
+         ------------------------------------------------------------------
+         post-1 → solo "siguiente" (post-2.html), sin "anterior".
+         post-2 → "anterior" (post-1.html) + "siguiente" (post-3.html).
+         post-3 → solo "anterior" (post-2.html), sin "siguiente".
+
+         Para activar "Post anterior", descomenta el <li> comentado y
+         rellena href + título. Para desactivar "Post siguiente" en el
+         último post, borra su <li> completo.
+         ------------------------------------------------------------------ -->
+    <div class="container post-end">
+      <nav class="post-column post-nav reveal" aria-label="Navegación entre artículos">
+        <a href="../blog.html" class="btn btn-secondary">← Volver al blog</a>
+
+        <ul class="post-pager">
+          <li class="post-pager-prev">
+            <a href="post-1.html" rel="prev">
+              <span class="post-pager-label">← Post anterior</span>
+              <span class="post-pager-title">El género Boa</span>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+    </div>
+
+  </article>
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

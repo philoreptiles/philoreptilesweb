@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     PLANTILLA DE POST — Philoreptiles
+     ============================================================
+     CÓMO USARLA:
+     Copia este archivo como post-2.html, post-3.html, etc. y edita
+     SOLO los bloques marcados con <!-- EDITAR -->.
+
+     CHECKLIST RÁPIDA (busca cada "EDITAR" en orden):
+
+       [1] <title>                         → "Título — Philoreptiles"
+       [2] <meta name="description">       → resumen de 1–2 frases
+       [3] .post-number (opcional)         → 01, 02, 03...
+       [4] .post-cover img src + alt       → ../img/postN_1.png
+       [5] .post-eyebrow                   → categoría (BIOLOGÍA, CUIDADOS...)
+       [6] .post-title                     → título del post
+       [7] .post-meta                      → fecha + datetime ISO 8601,
+                                             minutos de lectura, autor
+       [8] .post-body (secciones completas)
+       [9] Imágenes intercaladas           → ../img/postN_2.png, postN_3.png...
+      [10] .post-nav: anterior / siguiente
+      [11] Comentario final del template   → borrar antes de publicar
+
+     REGLAS DE ORO:
+     - Rutas relativas con "/" (NUNCA "\"). El post vive en /posts/,
+       así que las imágenes van con ../img/...
+     - Cada <section> lleva su propio class="reveal".
+     - Cada sección temática cierra con una <figure class="post-figure">
+       (proporción 3/2, con width/height y loading="lazy").
+     - Los <div class="post-divider">◆</div> separan secciones.
+     - Jerarquía: h1 (título) → h2 (subtítulos) → h3 (sub-subtítulos).
+     - El header, footer y estilos NO se tocan entre posts.
+     ============================================================ -->
+
+<title>El género Boa — Philoreptiles</title> <!-- EDITAR [1] -->
+<meta name="description" content="Un recorrido por la anatomía, taxonomía, crecimiento y reproducción del género Boa, las verdaderas joyas de nuestro continente."> <!-- EDITAR [2] -->
+
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de la plantilla de post (posts/post-*.html)
+   NO EDITAR entre posts: son idénticos para todos.
+   Mobile-first: base = móvil; escala con min-width 768px y 1024px.
+   ========================================================================== */
+
+.post-column {
+  max-width: 70ch;
+  margin-inline: auto;
+  font-size: clamp(1rem, 1.1vw, 1.05rem);
+}
+
+.post-hero {
+  padding-top: calc(48px + var(--space-md));
+}
+
+.post-cover {
+  --post-cover-ratio: 4 / 3;
+  margin: 0;
+  aspect-ratio: var(--post-cover-ratio);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-header {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-lg);
+}
+
+/* Número editorial opcional (01, 02, 03...). Si no lo usas, borra el
+   <p class="post-number"> del HTML; el estilo puede quedarse sin problema. */
+.post-number {
+  display: block;
+  margin: 0 0 var(--space-xs) -0.04em;
+  font-family: var(--font-heading);
+  font-size: clamp(4.5rem, 16vw, 7rem);
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  opacity: 0.22;
+  pointer-events: none;
+  user-select: none;
+}
+
+.post-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  max-width: none;
+  margin-bottom: var(--space-xs);
+}
+
+.post-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.02;
+  text-wrap: balance;
+  margin-bottom: var(--space-sm);
+}
+
+.post-meta {
+  max-width: none;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.post-meta > * + *::before {
+  content: "·";
+  margin-inline: 0.6em;
+}
+
+.post-body {
+  padding-bottom: var(--space-lg);
+}
+
+.post-body p {
+  max-width: none;
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.75;
+  margin-bottom: 1.25em;
+}
+
+.post-section > :first-child { margin-top: 0; }
+.post-section > :last-child  { margin-bottom: 0; }
+
+.post-body h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.post-body h3 {
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+
+.post-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba(196, 146, 62, 0.45);
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.post-body a:hover {
+  color: var(--text);
+  text-decoration-color: var(--accent);
+}
+
+.post-body a:focus-visible,
+.post-pager a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.post-body blockquote {
+  margin: var(--space-lg) 0;
+  padding-left: var(--space-md);
+  border-left: 3px solid var(--accent);
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.post-body blockquote p {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.post-body ul,
+.post-body ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.4em;
+}
+
+.post-body li {
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 0.5em;
+  padding-left: 0.2em;
+}
+
+.post-body li::marker {
+  color: var(--accent);
+}
+
+.post-body ol li::marker {
+  font-weight: 600;
+}
+
+.post-figure {
+  margin: var(--space-lg) 0;
+}
+
+.post-figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+}
+
+.post-figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.post-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-block: var(--space-lg);
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.55;
+}
+
+.post-divider::before,
+.post-divider::after {
+  content: "";
+  flex: 0 0 2.5rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.post-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.post-pager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  list-style: none;
+}
+
+.post-pager a {
+  display: block;
+  max-width: 16rem;
+  color: var(--text);
+}
+
+.post-pager-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.post-pager-title {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.post-pager a:hover .post-pager-title {
+  color: var(--accent);
+}
+
+.post-end {
+  padding-bottom: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .post-hero {
+    padding-top: calc(56px + var(--space-lg));
+  }
+
+  .post-cover {
+    --post-cover-ratio: 16 / 9;
+  }
+
+  .post-header {
+    padding-bottom: var(--space-xl);
+  }
+
+  .post-nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .post-pager {
+    flex-direction: row;
+    gap: var(--space-lg);
+    margin-left: auto;
+  }
+
+  .post-pager-next {
+    text-align: right;
+  }
+
+  .post-end {
+    padding-bottom: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .post-cover {
+    --post-cover-ratio: 21 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .post-header.reveal {
+    transition-delay: 0.12s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-body a,
+  .post-pager-title {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-content">
+    <a href="../index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="../img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html">Genética</a></li>
+            <li><a href="../boas/morfos.html">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html" class="active">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <article class="post">
+
+    <header class="post-hero">
+      <div class="container">
+        <figure class="post-cover reveal">
+          <!-- EDITAR [4]: portada. Proporción recortada 4/3 → 16/9 → 21/9. -->
+          <img src="../img/post1_1.png"
+               alt="El género Boa — Philoreptiles"
+               width="1600" height="900" fetchpriority="high">
+        </figure>
+
+        <div class="post-column post-header reveal">
+          <!-- EDITAR [3] (opcional): número editorial. Borra este <p> si no lo usas. -->
+          <p class="post-number" aria-hidden="true">01</p>
+
+          <!-- EDITAR [5]: categoría -->
+          <p class="post-eyebrow">BIOLOGÍA</p>
+
+          <!-- EDITAR [6]: título -->
+          <h1 class="post-title">El género Boa</h1>
+
+          <!-- EDITAR [7]: metadata. datetime en ISO 8601 (YYYY-MM-DD). -->
+          <p class="post-meta">
+            <time datetime="2026-01-15">26 de septiembre, 2026</time>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="post-column post-body">
+
+        <!-- ============================================================
+             EDITAR [8]: CUERPO DEL ARTÍCULO
+             ============================================================
+             Estructura recomendada:
+               <section class="post-section reveal"> … </section>
+               <div class="post-divider" aria-hidden="true">◆</div>
+               <section class="post-section reveal"> … </section>
+               …
+             Cada sección temática cierra con una .post-figure (imagen 3/2).
+             La introducción no lleva imagen.
+             ============================================================ -->
+
+        <section class="post-section reveal">
+          <p>Las boas siempre me han parecido una de las verdaderas joyas de nuestro continente. 
+            Su imponente presencia y su gran capacidad de adaptación las convierten en reptiles fascinantes. Para mí, ir descubriendo de dónde vienen, cómo crecen o cómo se reproducen no es solo acumular datos, sino una forma de entenderlas mejor y aprender a respetarlas en su totalidad.</p>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>Un vistazo a sus rasgos y anatomía</h2>
+          <p>Si nos metemos un poco en la parte biológica, esta serpiente pertenece a la familia <em>Boidae</em> y es una especie tropical no venenosa que ha perfeccionado la constricción como método de caza.</p>
+          <p>Físicamente tiene una cabeza triangular muy característica, con ojos pequeños y pupilas verticales que se adaptan súper bien a los cambios de luz. Su cuerpo es robusto, alargado y cubierto de escamas que le dan una flexibilidad increíble. Algo interesante es fijarse en la zona de la cloaca, cerca del final de la cola: ahí los machos suelen tener unos espolones bastante más desarrollados que las hembras. Además, su coloración es un espectáculo. El fondo varía entre tonos grises y cafés, pero lo mejor son las famosas "sillas", esos patrones oscuros en su lomo que funcionan casi como una huella dactilar; no hay dos boas iguales.</p>
+
+          <figure class="post-figure">
+            <!-- EDITAR [9]: ../img/postN_2.png -->
+            <img src="../img/post1_2.png"
+                 alt="Detalle de las sillas dorsales en una Boa"
+                 width="1200" height="800" loading="lazy">
+          </figure>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>De norte a sur: ¿Una o varias especies?</h2>
+          <p>Durante mucho tiempo se pensó que existía una sola gran especie (<em>Boa constrictor</em>) distribuida desde el norte de México hasta Argentina. Sin embargo, la genética moderna nos ha enseñado que en realidad estamos ante un complejo de especies distintas:</p>
+          <ol>
+            <li><strong>Boa sigma</strong> (Boa del Pacífico mexicano): Es la que habita en la vertiente del Pacífico, en estados como Sonora y Sinaloa, llegando hasta las Islas Marías.</li>
+            <li><strong>Boa imperator</strong> (Boa centroamericana): Se distribuye por el Golfo y el sureste mexicano (en estados como Tamaulipas o Quintana Roo), extendiéndose por Centroamérica y el noroeste de Sudamérica.</li>
+            <li><strong>Boa constrictor</strong> (Boa de cola roja): Queda reservada principalmente para las poblaciones de Sudamérica, al este de los Andes.</li>
+          </ol>
+          <p>Precisamente por estar tan extendidas y cercanas a la gente, en México se las conoce por distintos nombres según la región: boa, mazacuata o simplemente boa constrictora, lo que demuestra lo presentes que están en nuestro entorno y en nuestra cultura.</p>
+
+          <figure class="post-figure">
+            <!-- EDITAR [9]: ../img/postN_3.png -->
+            <img src="../img/post1_3.png"
+                 alt="Distribución del género Boa en el continente americano"
+                 width="1200" height="800" loading="lazy">
+          </figure>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>¿Cuánto crecen y cuánto viven?</h2>
+          <p>Al nacer, las crías miden entre 30 y 50 cm. A partir de ahí, su crecimiento continúa durante toda su vida, aunque el ritmo se frena al llegar a la madurez. Factores como el espacio, la temperatura y la alimentación influyen bastante en cómo se desarrolla cada individuo.</p>
+          <ul>
+            <li><strong>Diferencia de tamaños:</strong> Las hembras son significativamente más grandes y robustas que los machos (un dimorfismo sexual muy común en serpientes). En especies como <em>Boa constrictor</em> o <em>Boa imperator</em>, las hembras grandes pueden rozar o superar los 3.5 a 4 metros, mientras que <em>Boa sigma</em> suele mantenerse en tallas algo más moderadas.</li>
+            <li><strong>Longevidad:</strong> En cautiverio, no es raro que vivan 20 o 30 años (e incluso más). Esto cambia por completo la perspectiva de quien decide mantener una: no es una mascota temporal, sino un compromiso a largo plazo que requiere constancia.</li>
+          </ul>
+        </section>
+
+        <div class="post-divider" aria-hidden="true">◆</div>
+
+        <section class="post-section reveal">
+          <h2>Datos curiosos sobre su reproducción</h2>
+          <p>Aunque la edad exacta de madurez varía según la especie y la nutrición, en general los machos maduran antes que las hembras:</p>
+          <ul>
+            <li><strong>Machos:</strong> Suelen considerarse maduros alrededor de los 100 cm de longitud (aproximadamente a los 18 meses).</li>
+            <li><strong>Hembras:</strong> En cautiverio se recomienda esperar a que alcancen al menos los 180 cm y unos 3 años de edad antes de reproducirlas. Esto no es solo un dato técnico, sino una práctica fundamental para proteger su salud.</li>
+          </ul>
+          <p>Un aspecto fascinante es que son ovovivíparas: las crías se desarrollan dentro del cuerpo de la madre protegidas por membranas sin cáscara rígida, naciendo completamente formadas. En términos simples, ¡es como si la madre funcionara como una incubadora viva! Las camadas pueden ser muy numerosas, llegando en casos excepcionales a 80 crías.</p>
+          <p>Si algo de esto te llamó la atención, o si has observado algo distinto en tus propias experiencias, me interesa leerlo. Siempre salen cosas interesantes cuando se comparan puntos de vista.</p>
+          <p>Hasta la próxima.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- EDITAR [10]: NAVEGACIÓN ENTRE POSTS
+         ------------------------------------------------------------------
+         post-1 → solo "siguiente" (post-2.html), sin "anterior".
+         post-2 → "anterior" (post-1.html) + "siguiente" (post-3.html).
+         post-3 → solo "anterior" (post-2.html), sin "siguiente".
+
+         Para activar "Post anterior", descomenta el <li> comentado y
+         rellena href + título. Para desactivar "Post siguiente" en el
+         último post, borra su <li> completo.
+         ------------------------------------------------------------------ -->
+    <div class="container post-end">
+      <nav class="post-column post-nav reveal" aria-label="Navegación entre artículos">
+        <a href="../blog.html" class="btn btn-secondary">← Volver al blog</a>
+
+        <ul class="post-pager">
+          <!-- "Post anterior" (descomentar en post-2 y post-3):
+          <li class="post-pager-prev">
+            <a href="post-1.html" rel="prev">
+              <span class="post-pager-label">← Post anterior</span>
+              <span class="post-pager-title">El género Boa</span>
+            </a>
+          </li>
+          -->
+
+          <!-- "Post siguiente" (borrar en el último post): -->
+          <li class="post-pager-next">
+            <a href="post-2.html" rel="next">
+              <span class="post-pager-label">Post siguiente →</span>
+              <span class="post-pager-title">¿Un nuevo albinismo?</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+  </article>
+</main>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>© 2026 Philoreptiles.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
