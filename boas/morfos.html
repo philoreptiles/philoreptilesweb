@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philoreptiles | Morfos</title>
+<meta name="description" content="Galería de morfos de Boa: un recorrido visual por las mutaciones genéticas que definen su apariencia, con el detalle de cada una.">
+
+<link rel="icon" type="image/png" href="../img/favicon.png">
+
+<link rel="stylesheet" href="../css/design.css">
+<link rel="stylesheet" href="../css/styles.css">
+
+<style>
+/* ==========================================================================
+   Estilos específicos de boas/morfos.html — galería de morfos + modal
+   Mobile-first: base = móvil; escala con min-width 768px y 1024px.
+   Header, footer, .page-title, .container y .reveal viven en design.css y
+   styles.css y NO se duplican aquí. Prefijos propios: .morphs-*, .morph-*
+   ========================================================================== */
+
+/* Reserva el hueco de la scrollbar: al bloquear el scroll con el modal
+   abierto el contenido no "salta" hacia un lado en escritorio. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* === HERO CORTO: espacio header → título a la mitad, igual que boas.html ===
+   styles.css define padding-top: calc(64px + var(--space-xl)) para todas
+   las páginas con .page-title; aquí se reduce a la mitad. */
+.page-title {
+  padding-top: calc((64px + var(--space-xl)) / 2);
+  padding-bottom: var(--space-sm);
+}
+
+/* === INTRO CORTO === */
+.morphs-intro {
+  padding-bottom: var(--space-lg);
+}
+
+.morphs-intro p {
+  max-width: 65ch;
+  margin-inline: auto;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+/* === GALERÍA DE MORFOS ===
+   Móvil: 2 columnas → tablet (768px): 3 → desktop (1024px): 4. */
+.morphs-section {
+  padding-bottom: var(--space-xl);
+}
+
+.morphs-gallery {
+  list-style: none; /* se mantiene role="list" en el HTML para lectores de pantalla */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md) var(--space-sm);
+}
+
+/* Tarjeta = <button>: abre el modal, no navega. Se resetea el estilo
+   nativo del botón y se compone con imagen 1/1 + nombre en Bebas Neue. */
+.morph-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition-base);
+}
+
+.morph-card-media {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated); /* color de reserva mientras carga la imagen */
+  transition: box-shadow var(--transition-base);
+}
+
+.morph-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.morph-card-name {
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--text);
+  transition: color var(--transition-base);
+}
+
+/* Hover: elevación sutil + sombra suave + nombre dorado. Solo en
+   dispositivos con puntero real, para que en táctil no se quede
+   "pegado" el hover tras tocar. */
+@media (hover: hover) {
+  .morph-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .morph-card:hover .morph-card-media {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .morph-card:hover .morph-card-media img {
+    transform: scale(1.04);
+  }
+
+  .morph-card:hover .morph-card-name {
+    color: var(--accent);
+  }
+}
+
+/* Foco visible con teclado: contorno dorado + mismo color en el nombre */
+.morph-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: var(--radius-md);
+}
+
+.morph-card:focus-visible .morph-card-name {
+  color: var(--accent);
+}
+
+/* === MODAL DE MORFO ===
+   Un solo modal reutilizable, cuyo contenido rellena el script de la página. Cerrado:
+   visibility:hidden (no enfocable, fuera del árbol de accesibilidad) con
+   retardo igual a la transición, para que la salida se anime. */
+.morph-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000; /* por encima del header (1000) y del panel móvil (1001) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 0.3s;
+}
+
+.morph-modal.is-open {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+/* Bloqueo de scroll de la página con el modal abierto. Se aplica a html
+   Y a body: design.css pone overflow-x en html, y en ese caso el
+   overflow de body deja de propagarse al viewport. */
+html.morph-modal-open,
+html.morph-modal-open body {
+  overflow: hidden;
+}
+
+/* La franja reservada por scrollbar-gutter queda fuera del modal (que no
+   la cubre) y se vería clara junto al backdrop oscuro. Se pinta con el
+   tono que resulta de rgba(43,26,18,0.75) sobre el fondo hueso. */
+html.morph-modal-open {
+  background-color: #605044; /* respaldo */
+  background-color: color-mix(in srgb, var(--text) 75%, var(--bg));
+}
+
+.morph-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(43, 26, 18, 0.75);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.morph-modal.is-open .morph-modal-backdrop {
+  opacity: 1;
+}
+
+/* Móvil (base): pantalla completa, layout vertical (imagen arriba,
+   texto debajo). La imagen no se scrollea; solo el texto. */
+.morph-modal-dialog {
+  position: relative; /* también la pinta por encima del backdrop */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.morph-modal.is-open .morph-modal-dialog {
+  opacity: 1;
+  transform: none;
+}
+
+.morph-modal-media {
+  flex: 0 0 auto;
+  aspect-ratio: 3 / 2;
+  max-height: 45vh;
+  max-height: 45dvh;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.morph-modal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.morph-modal-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-md) var(--space-md) calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+}
+
+/* Si el texto no cabe, el script de la página le da tabindex="0" para poder
+   desplazarlo con el teclado; este es su indicador de foco. */
+.morph-modal-content:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+.morph-modal-content h2 {
+  font-size: clamp(2rem, 7vw, 2.5rem);
+  margin-bottom: var(--space-sm);
+}
+
+/* Filete dorado bajo el título: detalle editorial discreto */
+.morph-modal-content h2::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-top: 0.75rem;
+  background: var(--accent);
+}
+
+.morph-modal-content p {
+  max-width: none;
+  margin-bottom: 0;
+}
+
+/* Botón cerrar: círculo hueso semitransparente (legible sobre cualquier
+   foto), esquina superior derecha, 44px de área táctil. */
+.morph-modal-close {
+  position: absolute;
+  top: calc(var(--space-sm) + env(safe-area-inset-top, 0px));
+  right: var(--space-sm);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  background: rgba(255, 242, 217, 0.92);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.morph-modal-close:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.morph-modal-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* === TABLET (768px+) === */
+@media (min-width: 768px) {
+  .morphs-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-lg) var(--space-md);
+  }
+
+  .morphs-intro {
+    padding-bottom: var(--space-xl);
+  }
+}
+
+/* === DESKTOP (1024px+) === */
+@media (min-width: 1024px) {
+  .morphs-gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Modal en pantallas anchas y con altura suficiente: tarjeta centrada de
+   720px máx. Con fotos 3/2 la mejor composición es imagen arriba y texto
+   debajo; si la ventana es baja, la imagen se recorta (max-height) y el
+   texto hace scroll dentro del propio diálogo. */
+@media (min-width: 768px) and (min-height: 521px) {
+  .morph-modal {
+    padding: var(--space-md);
+  }
+
+  .morph-modal-dialog {
+    max-width: 720px;
+    height: auto;
+    max-height: 100%;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-strong);
+    transform: translateY(16px) scale(0.97);
+  }
+
+  .morph-modal-media {
+    max-height: 55vh;
+    max-height: 55dvh;
+  }
+
+  .morph-modal-content {
+    padding: var(--space-lg);
+  }
+}
+
+/* Pantallas muy bajas (móvil en horizontal): pantalla completa con la
+   imagen a la izquierda y el texto a la derecha, para que la foto 3/2
+   no ocupe más alto que la propia ventana. */
+@media (max-height: 520px) {
+  .morph-modal-dialog {
+    flex-direction: row;
+  }
+
+  .morph-modal-media {
+    flex: 0 0 46%;
+    aspect-ratio: auto;
+    max-height: none;
+    height: 100%;
+  }
+
+  .morph-modal-content {
+    /* deja libre la esquina donde está el botón de cerrar */
+    padding: var(--space-md) calc(var(--space-md) + 52px) var(--space-md) var(--space-md);
+  }
+}
+
+/* === MOVIMIENTO ===
+   Sin animación si el usuario pidió movimiento reducido: el modal
+   aparece y desaparece al instante y las tarjetas no se desplazan. */
+@media (prefers-reduced-motion: reduce) {
+  .morph-modal,
+  .morph-modal-backdrop,
+  .morph-modal-dialog,
+  .morph-card,
+  .morph-card-media,
+  .morph-card-media img,
+  .morph-card-name {
+    transition: none;
+  }
+
+  .morph-modal-dialog {
+    transform: none;
+  }
+
+  .morph-card:hover,
+  .morph-card:hover .morph-card-media img {
+    transform: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Header sólido, idéntico al de boas.html pero con rutas ../ porque la
+     página vive en /boas/. "Boas" y "Morfos" llevan class="active". -->
+<header class="main-header">
+  <div class="header-content">
+    <a href="../index.html" class="logo-link" aria-label="Philoreptiles">
+      <img src="../img/logo.png" alt="Philoreptiles" class="logo-img" width="180" height="180">
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-nosotros.html">Sobre nosotros</a></li>
+        <li class="dropdown">
+          <a href="../boas.html" class="nav-link active">Boas</a>
+          <button type="button" class="dropdown-toggle" aria-label="Abrir submenú de Boas" aria-expanded="false" aria-controls="dropdown-boas">
+            <span class="arrow" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown-menu" id="dropdown-boas">
+            <li><a href="../boas/taxonomia.html">Taxonomía</a></li>
+            <li><a href="../boas/cuidados.html">Cuidados en cautiverio</a></li>
+            <li><a href="../boas/genetica.html">Genética</a></li>
+            <li><a href="../boas/morfos.html" class="active">Morfos</a></li>
+            <li><a href="../boas/legalidad.html">Legalidad</a></li>
+          </ul>
+        </li>
+        <li><a href="../blog.html">Blog</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. HERO CORTO -->
+  <section class="page-title reveal">
+    <div class="container">
+      <h1>Morfos</h1>
+      <p>Un recorrido por las mutaciones genéticas que definen la apariencia de las boas.</p>
+    </div>
+  </section>
+
+  <!-- 2. INTRO CORTO -->
+  <section class="container morphs-intro reveal">
+    <p>Llamamos morfo a la mutación genética que transforma los colores o patrones tradicionales de la serpiente, 
+      mientras que un combo es la suma de dos o más morfos en un solo individuo, creando apariencias totalmente espectaculares e irrepetibles. Explora aquí la fascinante 
+      guía de mutaciones que definen la belleza de estos ejemplares.</p>
+  </section>
+
+  <!-- 3. GALERÍA DE MORFOS
+       Cada tarjeta es un <button> que abre el modal. data-morph debe
+       coincidir con una clave de morphsData (script al final del body).
+       Para añadir un morfo: 1) una entrada en morphsData y 2) un <li>
+       copiando cualquiera de los de abajo. -->
+  <section class="container morphs-section reveal">
+    <h2 class="sr-only">Galería de morfos</h2>
+    <ul class="morphs-gallery" role="list">
+
+      <li>
+        <button type="button" class="morph-card" data-morph="jungle" aria-haspopup="dialog" aria-label="Ver morfo Jungle">
+          <span class="morph-card-media">
+            <img src="/img/jungle.png" alt="Morfo Jungle" width="600" height="600" loading="lazy" decoding="async">
+          </span>
+          <span class="morph-card-name">Jungle</span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="morph-card" data-morph="hypo" aria-haspopup="dialog" aria-label="Ver morfo Hypo">
+          <span class="morph-card-media">
+            <img src="/img/hypo.png" alt="Morfo Hypo" width="600" height="600" loading="lazy" decoding="async">
+          </span>
+          <span class="morph-card-name">Hypo</span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="morph-card" data-morph="pastel" aria-haspopup="dialog" aria-label="Ver morfo Pastel">
+          <span class="morph-card-media">
+            <img src="/img/pastel.png" alt="Morfo Pastel" width="600" height="600" loading="lazy" decoding="async">
+          </span>
+          <span class="morph-card-name">Pastel</span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="morph-card" data-morph="albino" aria-haspopup="dialog" aria-label="Ver morfo Albino">
+          <span class="morph-card-media">
+            <img src="/img/albino_kahl.png" alt="Morfo Albino" width="600" height="600" loading="lazy" decoding="async">
+          </span>
+          <span class="morph-card-name">Albino (Kahl)</span>
+        </button>
+      </li>
+
+    </ul>
+  </section>
+
+</main>
+
+<!-- 4. MODAL DE MORFO (uno solo, reutilizable): su contenido lo rellena
+     el script según la tarjeta pulsada. Cerrado = aria-hidden="true". -->
+<div class="morph-modal" id="morph-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="morph-modal-title">
+  <div class="morph-modal-backdrop" data-close-modal></div>
+  <div class="morph-modal-dialog" role="document">
+    <button type="button" class="morph-modal-close" aria-label="Cerrar modal" data-close-modal>✕</button>
+    <div class="morph-modal-media">
+      <img id="morph-modal-img" src="" alt="">
+    </div>
+    <div class="morph-modal-content">
+      <h2 id="morph-modal-title"></h2>
+      <p id="morph-modal-desc"></p>
+    </div>
+  </div>
+</div>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <div class="social-links">
+      <a href="https://www.instagram.com/philoreptiles/" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.youtube.com/@philoreptiles" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.56 49.56 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+        YouTube
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590517358268" rel="noopener noreferrer" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+    <p>© 2026 Philoreptiles.</p>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  /* ==========================================================================
+     DATOS DE LOS MORFOS
+     Clave = valor de data-morph de la tarjeta. Campos:
+       name → título del modal   desc → descripción (texto plano)
+       img  → imagen grande      alt  → texto alternativo (opcional; si falta
+                                         se usa "Morfo [name]")
+     Para añadir un morfo: una entrada aquí + una tarjeta en la galería.
+     ========================================================================== */
+  const morphsData = {
+    jungle: {
+      name: "Jungle",
+      desc: "El morfo Jungle es una mutación de herencia dominante incompleta que aclara el color base de la boa y altera su patrón dorsal creando monturas redondeadas, franjas o eslabones y un marcado contraste de tonos. Es un pilar fundamental para combos populares como el Junglow, pero exige una crianza responsable: mientras que una sola copia del gen produce ejemplares sanos y llamativos, la forma homocigota (Super Jungle) se comenta que sufre de graves problemas metabólicos, digestivos y una reducida esperanza de vida, por lo que se debe evitar estrictamente el cruce de Jungle con Jungle.",
+      img: "/img/jungle.png",
+      alt: "Morfo Jungle [DESCRIPCIÓN DE LA IMAGEN]"
+    },
+
+    hypo: {
+      name: "Hypo",
+      desc: "Originado a partir de una hembra hallada en Gamboa (Panamá) por el Dr. David Hardy en los años 80 —siendo una mutación un tanto común en ejemplares silvestres— y popularizado como Salmon por Rich Ihle, el gen Hypo es una variación de herencia dominante incompleta que reduce drásticamente los pigmentos negros para resaltar intensos tonos naranjas y rojizos. La obtención de su forma homocigota (Super Hypo) en 1994 confirmó su potencial genético y convirtió a este morfo en un pilar fundamental de la herpetocultura moderna, clave para crear combinaciones icónicas como Ghost, Sunglow y Moonglow.",
+      img: "/img/hypo.png",
+      alt: "Morfo Hypo [DESCRIPCIÓN DE LA IMAGEN]"
+    },
+
+    pastel: {
+      name: "Pastel",
+      desc: "A diferencia de otros morfos, la Pastel no representa una mutación única, sino un concepto que abarca la selección poligénica por líneas (como la célebre línea Kubsch). Su característica principal es una drástica reducción del pigmento negro y pecas, que limpia las sillas del patrón y resalta fondos dorados, anaranjados, lavanda o rosados muy intensos. Es una herramienta muy valorada en la crianza para aportar saturación, contraste y una apariencia visualmente ligera y limpia a cualquier combinación.",
+      img: "/img/pastel.png",
+      alt: "Morfo Pastel [DESCRIPCIÓN DE LA IMAGEN]"
+    },
+
+    albino: {
+      name: "Albino (Kahl)",
+      desc: "Se trata de un gen recesivo, producido por primera vez en cautiverio en 1992 por Peter Kahl a partir de ejemplares de origen colombiano, el Albino Kahl es una mutación recesiva que elimina por completo la melanina (pigmento oscuro), resaltando vibrantes patrones amarillos, blancos y tonos rosados con característicos ojos rojos. Considerado el pilar histórico del hobby moderno, este morfo demostró la viabilidad de la genética en boas y se convirtió en la piedra angular para crear combos como Sunglow o Moonglow.",
+      img: "/img/albino_kahl.png",
+      alt: "Morfo Albino [DESCRIPCIÓN DE LA IMAGEN]"
+    },
+  };
+
+  /* ==========================================================================
+     MODAL: apertura, cierre, foco y bloqueo de scroll
+     ========================================================================== */
+  const modal     = document.getElementById('morph-modal');
+  const gallery   = document.querySelector('.morphs-gallery');
+  if (!modal || !gallery) return;
+
+  const dialog    = modal.querySelector('.morph-modal-dialog');
+  const closeBtn  = modal.querySelector('.morph-modal-close');
+  const contentEl = modal.querySelector('.morph-modal-content');
+  const imgEl     = document.getElementById('morph-modal-img');
+  const titleEl   = document.getElementById('morph-modal-title');
+  const descEl    = document.getElementById('morph-modal-desc');
+
+  const root = document.documentElement;
+  // Todo lo que queda detrás del modal: se marca inert mientras está abierto
+  // (nada de eso recibe foco ni clics; lectores de pantalla lo ignoran).
+  const pageRegions = document.querySelectorAll('.main-header, main, .main-footer');
+
+  // Debe ser ≥ a la duración de la transición CSS (0.3s): pasado ese tiempo
+  // se vacía la imagen para que al abrir otro morfo no asome la anterior.
+  const CLOSE_CLEANUP_MS = 350;
+
+  let lastTrigger = null;  // elemento que abrió el modal (para devolverle el foco)
+  let cleanupTimer = null;
+
+  const isOpen = () => modal.classList.contains('is-open');
+
+  // Si el texto es más alto que el espacio disponible, el área de texto
+  // se vuelve enfocable para poder desplazarla con el teclado.
+  const updateScrollable = () => {
+    const overflows = contentEl.scrollHeight > contentEl.clientHeight + 1;
+    if (overflows) {
+      contentEl.setAttribute('tabindex', '0');
+    } else {
+      contentEl.removeAttribute('tabindex');
+    }
+  };
+
+  const openModal = (id, trigger) => {
+    const data = morphsData[id];
+    if (!data) return;
+
+    window.clearTimeout(cleanupTimer);
+    lastTrigger = trigger || null;
+
+    imgEl.src = data.img;
+    imgEl.alt = data.alt || ('Morfo ' + data.name);
+    titleEl.textContent = data.name;
+    descEl.textContent = data.desc;
+    contentEl.scrollTop = 0;
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    root.classList.add('morph-modal-open');
+    pageRegions.forEach((el) => { el.inert = true; });
+
+    // El foco entra al modal por el botón de cerrar.
+    closeBtn.focus({ preventScroll: true });
+    window.requestAnimationFrame(updateScrollable);
+  };
+
+  const closeModal = () => {
+    if (!isOpen()) return;
+
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    root.classList.remove('morph-modal-open');
+    pageRegions.forEach((el) => { el.inert = false; });
+
+    // El foco vuelve a la tarjeta que abrió el modal.
+    if (lastTrigger && document.contains(lastTrigger)) {
+      lastTrigger.focus({ preventScroll: true });
+    }
+    lastTrigger = null;
+
+    cleanupTimer = window.setTimeout(() => {
+      imgEl.removeAttribute('src');
+    }, CLOSE_CLEANUP_MS);
+  };
+
+  // Apertura: un solo listener delegado en la galería (sirve para
+  // cualquier tarjeta que se añada con data-morph).
+  gallery.addEventListener('click', (event) => {
+    const card = event.target.closest('[data-morph]');
+    if (card) openModal(card.dataset.morph, card);
+  });
+
+  // Cierre: botón ✕ y backdrop (ambos llevan data-close-modal).
+  modal.addEventListener('click', (event) => {
+    if (event.target.closest('[data-close-modal]')) closeModal();
+  });
+
+  // Teclado: Escape cierra; Tab/Shift+Tab quedan atrapados dentro del modal.
+  const getFocusable = () => Array.from(dialog.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )).filter((el) => el.getClientRects().length > 0);
+
+  document.addEventListener('keydown', (event) => {
+    if (!isOpen()) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+
+    const focusable = getFocusable();
+    if (!focusable.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (!modal.contains(active)) {
+      event.preventDefault();
+      first.focus();
+    } else if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (isOpen()) updateScrollable();
+  });
+})();
+</script>
+</body>
+</html>
